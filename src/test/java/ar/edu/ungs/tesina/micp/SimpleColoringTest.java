@@ -58,7 +58,6 @@ public class SimpleColoringTest {
 		}
 		
 		conflictGraph.addEdge(V[0], V[1]);
-		conflictGraph.addEdge(V[0], V[2]);
 		conflictGraph.addEdge(V[0], V[3]);
 		conflictGraph.addEdge(V[2], V[3]);
 		conflictGraph.addEdge(V[4], V[3]);
