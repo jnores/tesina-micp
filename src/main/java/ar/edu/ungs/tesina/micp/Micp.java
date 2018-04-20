@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import org.jgrapht.Graph;
@@ -14,6 +15,7 @@ import org.jgrapht.Graph;
 import jscip.Constraint;
 import jscip.SCIP_Vartype;
 import jscip.Scip;
+import jscip.Solution;
 import jscip.Variable;
 
 /**
@@ -23,6 +25,7 @@ import jscip.Variable;
 public class Micp {
 
 	private Scip mSolver;
+	private int mNSols = 0;
 	
 	/**
 	 * Verifica que el Solver pasado por parametro no sea nulo
@@ -57,9 +60,9 @@ public class Micp {
 	 * @param relationshipGraph Grafo de relaciones entre vértices.
 	 * @param colors Lista de colores disponibles
 	 */
-	public void generateLPModel(Graph<Vertex,Edge> conflictGraph , Graph<Vertex,Edge> relationshipGraph, List<Color> colors) {
-		List<Vertex> V = new ArrayList<>( conflictGraph.vertexSet() );
-		Collections.sort(V);
+	public Map<Vertex,Color> findOptimal(Graph<Vertex,Edge> conflictGraph , Graph<Vertex,Edge> relationshipGraph, List<Color> colors) {
+		List<Vertex> vertices = new ArrayList<>( conflictGraph.vertexSet() );
+		Collections.sort(vertices);
 //		System.out.print( "[ " );
 //		for (Vertex v:V)
 //			System.out.print( v+" " );
@@ -71,7 +74,7 @@ public class Micp {
 		/**
 		 * 5. varX is Binary {0,1} 
 		 */
-		for (Vertex v : V)
+		for (Vertex v : vertices)
 		{
 			for (Color c: colors)
 			{
@@ -89,13 +92,16 @@ public class Micp {
 			Vertex s = relationshipGraph.getEdgeSource(e);
 			Vertex t = relationshipGraph.getEdgeTarget(e);
 			ComparablePair<Vertex, Vertex> p = new ComparablePair<Vertex, Vertex>(s,t);
-			Variable var;
+			
 			if (s.compareTo(t) < 0){
+				Variable var;
 				var = mSolver.createVar(s+"-"+t, 0, 1, 1, SCIP_Vartype.SCIP_VARTYPE_BINARY);
-			} else {
-				var = mSolver.createVar(s+"-"+t, 0, 1, 0, SCIP_Vartype.SCIP_VARTYPE_BINARY);
+				varY.put(p, var);	
 			}
-			varY.put(p, var);			
+//			else {
+//				var = mSolver.createVar(s+"-"+t, 0, 1, 0, SCIP_Vartype.SCIP_VARTYPE_BINARY);
+//			}
+					
 		}
 		
 		/**
@@ -105,7 +111,7 @@ public class Micp {
 		double[] colorFactor = new double[colors.size()];
 		for (int i = 0; i< colorFactor.length; i++)
 			colorFactor[i]=1;
-		for (Vertex v : V)
+		for (Vertex v : vertices)
 		{
 			Variable[] varsFromV = new Variable[colors.size()];
 			int indexC=0;
@@ -171,29 +177,50 @@ public class Micp {
 			}
 		}
 		
+		Map<Vertex,Color> optimal = solve(vertices,colors,varX);
 		
 		// Libero las variables creadas para definir el modelo.
 		for(Variable v: varX.values())
 			mSolver.releaseVar(v);
 		for(Variable v: varY.values())
 			mSolver.releaseVar(v);
+
+		mSolver.free();
+	
+		return optimal;
 		
 	}
 	
-	public void optimize() {
+	private Map<Vertex, Color> solve(List<Vertex> vertices, List<Color> colors, Map<ComparablePair<Vertex, Color>, Variable> varX) {
+		Map<Vertex, Color> optimal = null;
 		mSolver.setMaximize();
 		mSolver.solve();
-		if ( mSolver.getNSols() > 0  )
+		mNSols = mSolver.getNSols();
+		
+		if ( mNSols > 0  )
 		{
 			System.out.println("Tiene solucion y la mejor es: " + mSolver.getBestSol() );
-			mSolver.printBestSol(true);
+			mSolver.printBestSol(false);
+			optimal = new TreeMap<Vertex, Color>(); 
+			
+			Solution bestSol = mSolver.getBestSol();
+			for (Entry<ComparablePair<Vertex, Color>, Variable> entry: varX.entrySet()) {
+				
+				Variable var = entry.getValue();
+				
+				if ( mSolver.getSolVal(bestSol, var) == 1 ) {
+					ComparablePair<Vertex, Color> key = entry.getKey();
+					
+					optimal.put(key.getFirst(), key.getSecond());
+				}
+			}
+			
 		}
 		else
 		{
 			System.out.println("No tiene solucion!");
 		}
-			
-
-		mSolver.free();
+		
+		return optimal;
 	}
 }
