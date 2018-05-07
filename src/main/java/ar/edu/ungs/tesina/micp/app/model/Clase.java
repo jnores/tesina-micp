@@ -1,4 +1,4 @@
-package ar.edu.ungs.tesina.micp.instancia;
+package ar.edu.ungs.tesina.micp.app.model;
 
 import java.security.InvalidParameterException;
 
@@ -63,7 +63,7 @@ public class Clase extends Vertex {
 	}
 
 	public Clase(int id, String nombre, String docente, String dia, double horaInicio, double horaFin, int pabellon) {
-		super("v" + id);
+		super("v" + String.format("%04d", id));
 		mId = id;
 		mNombre = nombre;
 		mDocente = docente;
@@ -90,4 +90,42 @@ public class Clase extends Vertex {
 		return mNombre+"|"+mDocente+"|"+mDia+"|"+mHoraInicio+"|"+mHoraFin+"|"+mPabellon ;
 	}
 
+	public int getId() {
+		return mId;
+	}
+
+	public String getNombre() {
+		return mNombre;
+	}
+
+	public String getDocente() {
+		return mDocente;
+	}
+
+	public String getDia() {
+		return mDia;
+	}
+
+	public String getHoraInicio() {
+		return toHora(mHoraInicio);
+	}
+
+	public String getHoraFin() {
+		return toHora(mHoraFin);
+	}
+
+	private String toHora(double horaEncoded) {
+		horaEncoded *= 24;
+		int hora = (int)Math.round(horaEncoded);
+		horaEncoded -= hora;
+		int minutos =  (int)horaEncoded*60;
+		
+		return String.format("%02d:%02dhs", hora,minutos);
+	}
+
+	public int getPabellon() {
+		return mPabellon;
+	}
+	
+	
 }

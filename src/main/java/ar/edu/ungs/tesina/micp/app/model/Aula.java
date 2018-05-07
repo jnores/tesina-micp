@@ -1,4 +1,4 @@
-package ar.edu.ungs.tesina.micp.instancia;
+package ar.edu.ungs.tesina.micp.app.model;
 
 import ar.edu.ungs.tesina.micp.Color;
 

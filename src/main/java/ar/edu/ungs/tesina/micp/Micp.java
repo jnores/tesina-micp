@@ -50,7 +50,9 @@ public class Micp {
 	 */
 	private Micp(Scip solver) {
 		
-		mSolver = solver;
+		mSolver = solver;		
+//		mSolver.hideOutput(true);
+
 	}
 	
 	/**
@@ -61,12 +63,19 @@ public class Micp {
 	 * @param colors Lista de colores disponibles
 	 */
 	public Map<Vertex,Color> findOptimal(Graph<Vertex,Edge> conflictGraph , Graph<Vertex,Edge> relationshipGraph, List<Color> colors) {
-		List<Vertex> vertices = new ArrayList<>( conflictGraph.vertexSet() );
+
+		List<Vertex> vertices = new ArrayList<Vertex>( conflictGraph.vertexSet() );
 		Collections.sort(vertices);
-//		System.out.print( "[ " );
-//		for (Vertex v:V)
-//			System.out.print( v+" " );
-//		System.out.println( "]" );
+		System.out.print( "Vertices: [ " );
+		for (Vertex v:vertices)
+			System.out.print( v+" " );
+		System.out.println( "]" );
+		System.out.print( "Colors: [ " );
+		for (Color c: colors)
+			System.out.print( c+" " );
+		System.out.println( "]" );
+		System.out.println( "CONFLICTO: "+conflictGraph );
+		System.out.println( "RELACION: "+relationshipGraph );
 //		Variable[][] varX = new Variable[V.size()][colors.size()];
 		Map< ComparablePair<Vertex, Color> , Variable> varX = new TreeMap< ComparablePair<Vertex, Color> , Variable>();
 		Map< ComparablePair<Vertex, Vertex> , Variable> varY = new TreeMap< ComparablePair<Vertex, Vertex> , Variable>();
@@ -180,15 +189,14 @@ public class Micp {
 		Map<Vertex,Color> optimal = solve(vertices,colors,varX);
 		
 		// Libero las variables creadas para definir el modelo.
-		for(Variable v: varX.values())
+		for(Variable v: varX.values() )
 			mSolver.releaseVar(v);
-		for(Variable v: varY.values())
+		for(Variable v: varY.values() )
 			mSolver.releaseVar(v);
 
 		mSolver.free();
 	
 		return optimal;
-		
 	}
 	
 	private Map<Vertex, Color> solve(List<Vertex> vertices, List<Color> colors, Map<ComparablePair<Vertex, Color>, Variable> varX) {
@@ -222,5 +230,14 @@ public class Micp {
 		}
 		
 		return optimal;
+	}
+
+	public void free() {
+		if (mSolver != null) {
+			mSolver.printBestSol(true);
+			mSolver.free();
+		}
+		mSolver = null;
+		
 	}
 }

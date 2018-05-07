@@ -1,9 +1,10 @@
-package ar.edu.ungs.tesina.micp.instancia;
+package ar.edu.ungs.tesina.micp.app.model;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.SimpleGraph;
@@ -12,16 +13,18 @@ import ar.edu.ungs.tesina.micp.Color;
 import ar.edu.ungs.tesina.micp.Edge;
 import ar.edu.ungs.tesina.micp.Vertex;
 
-public class Instancia {
+public class Instancia extends Observable{
 
+	private String mName;
 	private List<Clase> mClases;
 	private List<Color> mAulas;
 	private Graph<Vertex, Edge> mConflictGraph;
 	private Graph<Vertex, Edge> mRelationshipGraph;
 	private Map<Vertex, Color> mSolution;
 
-	public Instancia(List<Clase> clases, List<Aula> aulas) {
+	public Instancia(String name, List<Clase> clases, List<Aula> aulas) {
 
+		mName = name;
 		if (clases == null || clases.isEmpty())
 			throw new InvalidParameterException("Error al crear la instancia. El listado de clases no puede ser vacio");
 		if (aulas == null || aulas.isEmpty())
@@ -42,15 +45,22 @@ public class Instancia {
 	}
 
 	public boolean addConflicto(Clase c1, Clase c2) {
-		if (mConflictGraph.addEdge(c1, c2) != null)
+		if (mConflictGraph.addEdge(c1, c2) != null) {
+			setChanged();
+			notifyObservers();
 			return true;
+		}
 		else
 			return false;
 	}
 	
 	public boolean addRelacion(Clase c1, Clase c2) {
 		if (mRelationshipGraph.addEdge(c1, c2) != null)
+		{
+			setChanged();
+			notifyObservers();
 			return true;
+		}
 		else
 			return false;
 	}
@@ -69,7 +79,8 @@ public class Instancia {
 
 	public void setSolution(Map<Vertex, Color> optimal) {
 		mSolution = optimal;
-		
+		setChanged();
+		notifyObservers();
 	}
 
 	public boolean hasSolution() {
@@ -84,5 +95,8 @@ public class Instancia {
 		return (Aula) mSolution.get(c);
 	}
 	
+	public String getName() {
+		return mName;
+	}
 	
 }

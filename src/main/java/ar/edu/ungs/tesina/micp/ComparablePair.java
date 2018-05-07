@@ -4,6 +4,11 @@ import org.jgrapht.alg.util.Pair;
 
 public class ComparablePair<A extends Comparable<A>, B extends Comparable<B>> extends Pair<A, B>  implements Comparable< ComparablePair<A, B> >{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7313302100585983151L;
+
 	public ComparablePair(A a, B b) {
 		super(a,b);
 	}

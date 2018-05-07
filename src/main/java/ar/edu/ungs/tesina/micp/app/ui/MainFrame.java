@@ -15,17 +15,22 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.JWindow;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import ar.edu.ungs.tesina.micp.app.MainApp;
-import ar.edu.ungs.tesina.micp.instancia.Aula;
+import ar.edu.ungs.tesina.micp.app.model.Aula;
+import ar.edu.ungs.tesina.micp.app.ui.uimodel.InstanciaTableModel;
+import java.awt.FlowLayout;
 
 public class MainFrame extends JFrame implements ActionListener {
 
@@ -44,7 +49,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private MainApp mApp;
 
 	private JPanel contentPane;
-	private JTable table;
+	private JTable mCursosTable;
 	private JFileChooser mFileChooser;
 
 	private JSpinner mSpinner;
@@ -54,6 +59,10 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JButton mBtnOptimizar;
 	private JButton mBtnExportar;
 	private JButton mBtnImportarCursos;
+
+	private int mPabellon = 1;
+
+	private InstanciaTableModel mCursosTableModel;
 
 	/**
 	 * Create the frame.
@@ -112,11 +121,6 @@ public class MainFrame extends JFrame implements ActionListener {
 		JMenuItem mntmAcercaDe = new JMenuItem("Acerca de...");
 		mnAyuda.add(mntmAcercaDe);
 
-		table = new JTable();
-		contentPane.add(table);
-
-		setContentPane(contentPane);
-
 		JPanel panel = new JPanel();
 		panel.setToolTipText("Cantidad de aulas");
 		contentPane.add(panel, BorderLayout.NORTH);
@@ -161,6 +165,22 @@ public class MainFrame extends JFrame implements ActionListener {
 		mBtnExportar.setActionCommand(ACTION_EXPORTAR_SOLUCION);
 		mBtnExportar.addActionListener(this);
 		panel_3.add(mBtnExportar);
+
+		setContentPane(contentPane);
+
+		JPanel panel_4 = new JPanel();
+		panel_4.setBorder(
+				new TitledBorder(null, "Listado de cursos", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		contentPane.add(panel_4);
+
+		mCursosTable = new JTable();
+		mCursosTableModel = new InstanciaTableModel(null);
+		mCursosTable.setModel(mCursosTableModel);
+		panel_4.add(mCursosTable.getTableHeader());
+		panel_4.setLayout(new BorderLayout(0, 0));
+		panel_4.add(new JScrollPane(mCursosTable));
+		
+		
 
 	}
 
@@ -212,15 +232,16 @@ public class MainFrame extends JFrame implements ActionListener {
 				String path = f.getAbsolutePath();
 				boolean result;
 				if (mAulasCargadas == null)
-					result = mApp.loadInstanceFCEN(path, (int) mSpinner.getValue());
+					result = mApp.loadInstanceFCEN(path, mPabellon, (int) mSpinner.getValue());
 				else
-					result = mApp.loadInstanceFCEN(path, mAulasCargadas);
+					result = mApp.loadInstanceFCEN(path, mPabellon, mAulasCargadas);
 
 				if (result) {
 					// Colocamos en el titulo de la aplicacion el
 					// nombre del archivo
 					setTitle(getTitleName(nombre));
 					mBtnOptimizar.setEnabled(true);
+					mCursosTableModel.setInstancia(mApp.getInstancia());
 				} else {
 					JOptionPane.showMessageDialog(this, "No se pudo parsear el archivo seleccionado.");
 				}
@@ -263,13 +284,9 @@ public class MainFrame extends JFrame implements ActionListener {
 	}
 
 	private void optimizar() {
-		if (mApp.optimize()) {
-			mBtnExportar.setEnabled(true);
-			JOptionPane.showMessageDialog(this, "Asignacion optimizada.");
-		} else {
-			mBtnExportar.setEnabled(false);
-			JOptionPane.showMessageDialog(this, "La instancia no tiene solucion");
-		}
+		JFrame f = new SolvingFrame(this, mApp.getRunnable());
+		setEnabled(false);
+		f.setVisible(true);
 	}
 
 	private void exportarSolucion() {
@@ -296,5 +313,16 @@ public class MainFrame extends JFrame implements ActionListener {
 				System.out.println("ERROR: " + exp);
 			}
 		}
+	}
+
+	public void resumeFromOptimization() {
+		setEnabled(true);
+		if (mApp.getInstancia().hasSolution()) {
+			mBtnExportar.setEnabled(true);
+			JOptionPane.showMessageDialog(this, "Asignacion optimizada.");
+		} else {
+			mBtnExportar.setEnabled(false);
+			JOptionPane.showMessageDialog(this, "La instancia no tiene solucion");
+		}		
 	}
 }
