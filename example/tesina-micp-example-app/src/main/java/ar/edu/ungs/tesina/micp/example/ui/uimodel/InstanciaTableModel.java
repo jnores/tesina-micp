@@ -1,4 +1,4 @@
-package ar.edu.ungs.tesina.micp.app.ui.uimodel;
+package ar.edu.ungs.tesina.micp.example.ui.uimodel;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -6,8 +6,8 @@ import java.util.Observer;
 import javax.swing.table.AbstractTableModel;
 
 import ar.edu.ungs.tesina.micp.Instancia;
-import ar.edu.ungs.tesina.micp.app.model.Aula;
-import ar.edu.ungs.tesina.micp.app.model.Clase;
+import ar.edu.ungs.tesina.micp.example.model.Aula;
+import ar.edu.ungs.tesina.micp.example.model.Clase;
 
 public class InstanciaTableModel extends AbstractTableModel implements Observer{
 

@@ -1,4 +1,4 @@
-package ar.edu.ungs.tesina.micp.app;
+package ar.edu.ungs.tesina.micp.example;
 
 import java.awt.EventQueue;
 import java.io.BufferedReader;
@@ -15,10 +15,10 @@ import java.util.Set;
 import javax.swing.JOptionPane;
 
 import ar.edu.ungs.tesina.micp.Instancia;
-import ar.edu.ungs.tesina.micp.app.model.Aula;
-import ar.edu.ungs.tesina.micp.app.model.Clase;
-import ar.edu.ungs.tesina.micp.app.runnable.SolveRunnable;
-import ar.edu.ungs.tesina.micp.app.ui.MainFrame;
+import ar.edu.ungs.tesina.micp.example.model.Aula;
+import ar.edu.ungs.tesina.micp.example.model.Clase;
+import ar.edu.ungs.tesina.micp.example.runnable.SolveRunnable;
+import ar.edu.ungs.tesina.micp.example.ui.MainFrame;
 
 public class MainApp {
 

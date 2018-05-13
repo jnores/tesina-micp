@@ -1,4 +1,4 @@
-package ar.edu.ungs.tesina.micp.app.runnable;
+package ar.edu.ungs.tesina.micp.example.runnable;
 
 import ar.edu.ungs.tesina.micp.Instancia;
 import ar.edu.ungs.tesina.micp.MicpScipSolver;

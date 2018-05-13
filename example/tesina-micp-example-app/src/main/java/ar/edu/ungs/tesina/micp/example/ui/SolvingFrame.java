@@ -1,4 +1,4 @@
-package ar.edu.ungs.tesina.micp.app.ui;
+package ar.edu.ungs.tesina.micp.example.ui;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import ar.edu.ungs.tesina.micp.Instancia;
-import ar.edu.ungs.tesina.micp.app.runnable.SolveRunnable;
+import ar.edu.ungs.tesina.micp.example.runnable.SolveRunnable;
 
 import java.awt.Window.Type;
 import java.awt.event.ActionEvent;

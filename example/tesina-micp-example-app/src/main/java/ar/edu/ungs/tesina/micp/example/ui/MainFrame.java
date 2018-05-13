@@ -1,4 +1,4 @@
-package ar.edu.ungs.tesina.micp.app.ui;
+package ar.edu.ungs.tesina.micp.example.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -27,9 +27,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import ar.edu.ungs.tesina.micp.app.MainApp;
-import ar.edu.ungs.tesina.micp.app.model.Aula;
-import ar.edu.ungs.tesina.micp.app.ui.uimodel.InstanciaTableModel;
+import ar.edu.ungs.tesina.micp.example.MainApp;
+import ar.edu.ungs.tesina.micp.example.model.Aula;
+import ar.edu.ungs.tesina.micp.example.ui.uimodel.InstanciaTableModel;
+
 import java.awt.FlowLayout;
 
 public class MainFrame extends JFrame implements ActionListener {
