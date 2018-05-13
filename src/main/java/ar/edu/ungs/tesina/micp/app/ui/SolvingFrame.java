@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import ar.edu.ungs.tesina.micp.app.model.Instancia;
+import ar.edu.ungs.tesina.micp.Instancia;
 import ar.edu.ungs.tesina.micp.app.runnable.SolveRunnable;
 
 import java.awt.Window.Type;

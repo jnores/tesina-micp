@@ -22,7 +22,7 @@ import jscip.Variable;
  * @author yoshknight
  *
  */
-public class Micp {
+public class MicpScipSolver {
 
 	private Scip mSolver;
 	private int mNSols = 0;
@@ -36,19 +36,19 @@ public class Micp {
 	 * @param solver una implementacion de la interfaz Solver
 	 * @return
 	 */
-	public static Micp createMicp(Scip solver) {
+	public static MicpScipSolver createMicp(Scip solver) {
 		
 		if (solver == null)
 			throw new NullPointerException("El parametro solver no puede ser null.");
 		else
-			return new Micp(solver);
+			return new MicpScipSolver(solver);
 	}
 	
 	/**
 	 *  
 	 * @param solver
 	 */
-	private Micp(Scip solver) {
+	private MicpScipSolver(Scip solver) {
 		
 		mSolver = solver;		
 //		mSolver.hideOutput(true);
@@ -195,7 +195,7 @@ public class Micp {
 			mSolver.releaseVar(v);
 
 		mSolver.free();
-	
+		mSolver = null;
 		return optimal;
 	}
 	
@@ -236,8 +236,9 @@ public class Micp {
 		if (mSolver != null) {
 			mSolver.printBestSol(true);
 			mSolver.free();
+			mSolver = null;
 		}
-		mSolver = null;
+		
 		
 	}
 }

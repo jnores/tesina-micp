@@ -1,20 +1,20 @@
 package ar.edu.ungs.tesina.micp.app.runnable;
 
-import ar.edu.ungs.tesina.micp.Micp;
-import ar.edu.ungs.tesina.micp.app.model.Instancia;
+import ar.edu.ungs.tesina.micp.Instancia;
+import ar.edu.ungs.tesina.micp.MicpScipSolver;
 import jscip.SCIP_ParamEmphasis;
 import jscip.Scip;
 
 public class SolveRunnable implements Runnable {
-	private Micp mMicp;
+	private MicpScipSolver mMicp;
 	private Instancia mInstance;
 
 	public SolveRunnable(Instancia instancia) {
 		mInstance = instancia;
 		Scip solver = new Scip();
 		solver.create("micp_app-"+instancia.getName());
-		solver.setEmphasis(SCIP_ParamEmphasis.SCIP_PARAMEMPHASIS_EASYCIP, true);
-		mMicp = Micp.createMicp(solver);
+		solver.setRealParam("limits/time", 300);
+		mMicp = MicpScipSolver.createMicp(solver);
 	}
 	@Override
 	public void run() {

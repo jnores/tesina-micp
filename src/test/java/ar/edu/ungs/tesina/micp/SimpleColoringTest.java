@@ -22,7 +22,7 @@ import jscip.Scip;
  */
 public class SimpleColoringTest {
 
-	Micp mMicp;
+	MicpScipSolver mMicp;
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -35,7 +35,7 @@ public class SimpleColoringTest {
 		solver.create("SimpleColoringTest");
 		solver.hideOutput(true);
 		
-		mMicp = Micp.createMicp(solver);
+		mMicp = MicpScipSolver.createMicp(solver);
 		
 	}
 

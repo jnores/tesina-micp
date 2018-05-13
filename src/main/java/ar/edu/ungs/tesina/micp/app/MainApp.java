@@ -14,17 +14,15 @@ import java.util.Set;
 
 import javax.swing.JOptionPane;
 
-import ar.edu.ungs.tesina.micp.Micp;
+import ar.edu.ungs.tesina.micp.Instancia;
 import ar.edu.ungs.tesina.micp.app.model.Aula;
 import ar.edu.ungs.tesina.micp.app.model.Clase;
-import ar.edu.ungs.tesina.micp.app.model.Instancia;
 import ar.edu.ungs.tesina.micp.app.runnable.SolveRunnable;
 import ar.edu.ungs.tesina.micp.app.ui.MainFrame;
-import jscip.Scip;
 
 public class MainApp {
 
-	private Instancia mInstance;
+	private Instancia<Clase,Aula> mInstance;
 
 
 	/**
@@ -174,7 +172,7 @@ public class MainApp {
 //			}
 //		}
 		if (!clases.isEmpty()) {
-			Instancia instance = new Instancia(file.getName(),clases, aulas);
+			Instancia<Clase,Aula> instance = new Instancia<Clase,Aula>(file.getName(),clases, aulas);
 			for (int i = 0; i < clases.size(); ++i) {
 				for (int j = i + 1; j < clases.size(); ++j) {
 					Clase c1 = clases.get(i);
@@ -237,13 +235,13 @@ public class MainApp {
 		
 		System.out.println("================================ ");
 		System.out.println("SOLUCION ENCONTRADA POR EL MICP: ");
-		for(Clase c : mInstance.getClases())
+		for(Clase c : mInstance.getVertices())
 			System.out.println(mInstance.getOptimal(c)+"|"+c.serialize());
 			
 		return false;
 	}
 
-	public Instancia getInstancia() {
+	public Instancia<Clase,Aula> getInstancia() {
 		// TODO Auto-generated method stub
 		return mInstance;
 	}
