@@ -24,3 +24,21 @@ Para poder usar el solver en el proyecto es necesario compilar la interfaz JSCIP
 
 ## Ejemplo de uso
 En la sección de test se puede encontrar un ejemplo uso de la implementación.
+
+## Estado del desarrollo
+Listado de las familias de desigualdades soportadas:
+	- Partitioned Inequalities:
+		- [x] 2. partitioned inequalities
+		- [x] 3. 3-partitioned inequalities
+		- [ ] 4. k-partitioned inequalities
+	- Clique Inequalities:
+		- [x] 5. vertex-clique inequalities
+		- [x] 6. clique-partitioned inequalities
+		- [ ] 7. sub-clique inequalities
+		- [ ] 8. two-color sub-clique inequalities
+	- Triangle and diamonds:
+		- [x] 9. semi-triangle inequalities
+		- [x] 10. semi-diamond inequalities
+	- Valid inequalities:
+		- [x] 11. bounding inequalities
+		- [x] 12. reinforced bounding inequalities 
