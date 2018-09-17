@@ -1,35 +1,29 @@
 package ar.edu.ungs.tesina.micp.example.ui;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import ar.edu.ungs.tesina.micp.Instancia;
-import ar.edu.ungs.tesina.micp.example.runnable.SolveRunnable;
-
-import java.awt.Window.Type;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.Closeable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
-import java.awt.FlowLayout;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
 
 public class SolvingFrame extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private Instancia mInstancia;
 	private JButton btnCancel;
 	private ScheduledThreadPoolExecutor mExecutor;
 	private ScheduledFuture<?> mFuture;
@@ -84,7 +78,7 @@ public class SolvingFrame extends JFrame {
 	
 	private void initSolver(Runnable runnable ) {
 		mExecutor = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(1);
-		mFuture = mExecutor.schedule(runnable, 10, TimeUnit.SECONDS);
+		mFuture = mExecutor.schedule(runnable, 1, TimeUnit.SECONDS);
 	}
 	
 	private void verifySolverFinish() {
@@ -93,7 +87,7 @@ public class SolvingFrame extends JFrame {
 			@Override
 			protected Object doInBackground() throws Exception {
 				while ( ! mFuture.isDone() )
-					Thread.sleep(10000);
+					Thread.sleep(2000);
 				if ( mFuture.isCancelled() )
 					showMessage("Trabajo cancelado");
 				else

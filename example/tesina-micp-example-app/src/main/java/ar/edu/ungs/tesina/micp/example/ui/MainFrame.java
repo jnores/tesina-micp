@@ -19,9 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
-import javax.swing.JWindow;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -30,8 +28,6 @@ import javax.swing.border.TitledBorder;
 import ar.edu.ungs.tesina.micp.example.MainApp;
 import ar.edu.ungs.tesina.micp.example.model.Aula;
 import ar.edu.ungs.tesina.micp.example.ui.uimodel.InstanciaTableModel;
-
-import java.awt.FlowLayout;
 
 public class MainFrame extends JFrame implements ActionListener {
 
@@ -60,8 +56,6 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JButton mBtnOptimizar;
 	private JButton mBtnExportar;
 	private JButton mBtnImportarCursos;
-
-	private int mPabellon = 1;
 
 	private InstanciaTableModel mCursosTableModel;
 
@@ -127,7 +121,8 @@ public class MainFrame extends JFrame implements ActionListener {
 		contentPane.add(panel, BorderLayout.NORTH);
 
 		JPanel panel_2 = new JPanel();
-		panel_2.setBorder(new TitledBorder(null, "Aulas", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_2.setBorder(new TitledBorder(null, "Aulas", TitledBorder.LEADING, TitledBorder.TOP,
+				null, null));
 		panel.add(panel_2);
 
 		mSpinner = new JSpinner();
@@ -140,8 +135,8 @@ public class MainFrame extends JFrame implements ActionListener {
 		panel_2.add(mBtnImportAulas);
 
 		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(new TitledBorder(new LineBorder(new Color(184, 207, 229)), "Cursos", TitledBorder.LEADING,
-				TitledBorder.TOP, null, new Color(51, 51, 51)));
+		panel_1.setBorder(new TitledBorder(new LineBorder(new Color(184, 207, 229)), "Cursos",
+				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(51, 51, 51)));
 		panel_1.setToolTipText("");
 		panel.add(panel_1);
 
@@ -151,8 +146,9 @@ public class MainFrame extends JFrame implements ActionListener {
 		panel_1.add(mBtnImportarCursos);
 
 		JPanel panel_3 = new JPanel();
-		panel_3.setBorder(new TitledBorder(new LineBorder(new Color(184, 207, 229)), "Optimizaci\u00F3n",
-				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(51, 51, 51)));
+		panel_3.setBorder(
+				new TitledBorder(new LineBorder(new Color(184, 207, 229)), "Optimizaci\u00F3n",
+						TitledBorder.LEADING, TitledBorder.TOP, null, new Color(51, 51, 51)));
 		panel.add(panel_3);
 
 		mBtnOptimizar = new JButton("Optimizar");
@@ -170,8 +166,8 @@ public class MainFrame extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 
 		JPanel panel_4 = new JPanel();
-		panel_4.setBorder(
-				new TitledBorder(null, "Listado de cursos", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_4.setBorder(new TitledBorder(null, "Listado de cursos", TitledBorder.LEADING,
+				TitledBorder.TOP, null, null));
 		contentPane.add(panel_4);
 
 		mCursosTable = new JTable();
@@ -180,8 +176,6 @@ public class MainFrame extends JFrame implements ActionListener {
 		panel_4.add(mCursosTable.getTableHeader());
 		panel_4.setLayout(new BorderLayout(0, 0));
 		panel_4.add(new JScrollPane(mCursosTable));
-		
-		
 
 	}
 
@@ -233,9 +227,9 @@ public class MainFrame extends JFrame implements ActionListener {
 				String path = f.getAbsolutePath();
 				boolean result;
 				if (mAulasCargadas == null)
-					result = mApp.loadInstanceFCEN(path, mPabellon, (int) mSpinner.getValue());
+					result = mApp.loadInstanceFCEN(path, (int) mSpinner.getValue());
 				else
-					result = mApp.loadInstanceFCEN(path, mPabellon, mAulasCargadas);
+					result = mApp.loadInstanceFCEN(path, mAulasCargadas);
 
 				if (result) {
 					// Colocamos en el titulo de la aplicacion el
@@ -244,10 +238,10 @@ public class MainFrame extends JFrame implements ActionListener {
 					mBtnOptimizar.setEnabled(true);
 					mCursosTableModel.setInstancia(mApp.getInstancia());
 				} else {
-					JOptionPane.showMessageDialog(this, "No se pudo parsear el archivo seleccionado.");
+					JOptionPane.showMessageDialog(this,
+							"No se pudo parsear el archivo de Cursos seleccionado.");
 				}
 			} catch (Exception exp) {
-				// TODO: Reportar que paso en caso de error
 				JOptionPane.showMessageDialog(this, "No se pudo cargar el archivo seleccionado");
 				System.out.println("ERROR: " + exp);
 			}
@@ -274,11 +268,12 @@ public class MainFrame extends JFrame implements ActionListener {
 					mAulasCargadas = result;
 					mSpinner.setValue(mAulasCargadas.size());
 				} else {
-					JOptionPane.showMessageDialog(this, "No se pudo parsear el archivo seleccionado.");
+					JOptionPane.showMessageDialog(this,
+							"No se pudo parsear el archivo seleccionado.");
 				}
 			} catch (Exception exp) {
-				// TODO: Reportar que paso en caso de error
-				JOptionPane.showMessageDialog(this, "No se pudo cargar el archivo seleccionado");
+				JOptionPane.showMessageDialog(this,
+						"No se pudo cargar el archivo de Aulas seleccionado");
 				System.out.println("ERROR: " + exp);
 			}
 		}
@@ -304,13 +299,12 @@ public class MainFrame extends JFrame implements ActionListener {
 				String path = f.getAbsolutePath();
 
 				if (mApp.saveSolution(path)) {
-					JOptionPane.showMessageDialog(this, "Solucion Guardad exitosamente.");
+					JOptionPane.showMessageDialog(this, "Solucion Guardada exitosamente.");
 				} else {
-					JOptionPane.showMessageDialog(this, "No se pudo parsear el archivo seleccionado.");
+					JOptionPane.showMessageDialog(this, "No se pudo guardar la solucion.");
 				}
 			} catch (Exception exp) {
-				// TODO: Reportar que paso en caso de error
-				JOptionPane.showMessageDialog(this, "No se pudo cargar el archivo seleccionado");
+				JOptionPane.showMessageDialog(this, "Hubo un error guardando la solucion.");
 				System.out.println("ERROR: " + exp);
 			}
 		}
@@ -324,6 +318,6 @@ public class MainFrame extends JFrame implements ActionListener {
 		} else {
 			mBtnExportar.setEnabled(false);
 			JOptionPane.showMessageDialog(this, "La instancia no tiene solucion");
-		}		
+		}
 	}
 }

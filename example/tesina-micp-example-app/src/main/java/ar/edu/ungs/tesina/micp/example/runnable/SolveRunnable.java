@@ -1,29 +1,33 @@
 package ar.edu.ungs.tesina.micp.example.runnable;
 
-import ar.edu.ungs.tesina.micp.Instancia;
+import java.util.Properties;
+
+import ar.edu.ungs.tesina.micp.Instance;
 import ar.edu.ungs.tesina.micp.MicpScipSolver;
-import jscip.SCIP_ParamEmphasis;
-import jscip.Scip;
 
 public class SolveRunnable implements Runnable {
 	private MicpScipSolver mMicp;
-	private Instancia mInstance;
+	private Instance mInstance;
 
-	public SolveRunnable(Instancia instancia) {
+	public SolveRunnable(Instance instancia,Properties prop) {
 		mInstance = instancia;
-		Scip solver = new Scip();
-		solver.create("micp_app-"+instancia.getName());
-		solver.setRealParam("limits/time", 300);
-		mMicp = MicpScipSolver.createMicp(solver);
+		mMicp = MicpScipSolver.createMicp(instancia.getName(), prop);
 	}
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		try {
-			mInstance.setSolution(  mMicp.findOptimal(mInstance.getConflictGraph(), mInstance.getRelationshipGraph(), mInstance.getAulas()) );
+			
+			mInstance.setSolution(		
+					mMicp.searchOptimal(
+							mInstance.getConflictGraph(),
+							mInstance.getRelationshipGraph(),
+							mInstance.getAulas()
+							)
+					);
 		} catch (Exception e)
 		{
 			System.out.println("debug - La optimizacion fue interrumpida!");
+			e.printStackTrace();
 			mMicp.free();
 		}
 		mMicp.free();

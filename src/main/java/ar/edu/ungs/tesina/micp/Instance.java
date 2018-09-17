@@ -9,7 +9,7 @@ import java.util.Observable;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.SimpleGraph;
 
-public class Instancia<T extends Vertex, U extends Color> extends Observable{
+public class Instance<T extends Vertex, U extends Color> extends Observable{
 
 	private String mName;
 	private List<T> mVertices;
@@ -18,7 +18,7 @@ public class Instancia<T extends Vertex, U extends Color> extends Observable{
 	private Graph<T, Edge> mRelationshipGraph;
 	private Map<T, U> mSolution;
 
-	public Instancia(String name, List<T> vertices, List<U> colors) {
+	public Instance(String name, List<T> vertices, List<U> colors) {
 
 		mName = name;
 		if (vertices == null || vertices.isEmpty())
@@ -88,7 +88,7 @@ public class Instancia<T extends Vertex, U extends Color> extends Observable{
 	}
 
 	public U getOptimal(T c) {
-		return mSolution.get(c);
+		return (mSolution != null) ? mSolution.get(c) : null;
 	}
 	
 	public String getName() {

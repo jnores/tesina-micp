@@ -5,7 +5,7 @@ import java.util.Observer;
 
 import javax.swing.table.AbstractTableModel;
 
-import ar.edu.ungs.tesina.micp.Instancia;
+import ar.edu.ungs.tesina.micp.Instance;
 import ar.edu.ungs.tesina.micp.example.model.Aula;
 import ar.edu.ungs.tesina.micp.example.model.Clase;
 
@@ -15,9 +15,9 @@ public class InstanciaTableModel extends AbstractTableModel implements Observer{
 
 	private String[] mHeaders = { "id", "Aula", "Materia", "Docente", "Dia", "Horario" };
 
-	private Instancia<Clase,Aula> mInstancia;
+	private Instance<Clase,Aula> mInstancia;
 
-	public InstanciaTableModel(Instancia<Clase,Aula> instancia) {
+	public InstanciaTableModel(Instance<Clase,Aula> instancia) {
 		mInstancia = instancia;
 		if (instancia != null)
 			instancia.addObserver(this);
@@ -25,7 +25,6 @@ public class InstanciaTableModel extends AbstractTableModel implements Observer{
 
 	@Override
 	public int getRowCount() {
-		// TODO Auto-generated method stub
 		if (mInstancia == null)
 			return 0;
 		return mInstancia.getVertices().size();
@@ -33,13 +32,11 @@ public class InstanciaTableModel extends AbstractTableModel implements Observer{
 
 	@Override
 	public int getColumnCount() {
-		// TODO Auto-generated method stub
 		return mHeaders.length;
 	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		// TODO Auto-generated method stub
 		Clase c = mInstancia.getVertices().get(rowIndex);
 		Object ret = null;
 		switch (columnIndex)
@@ -75,7 +72,7 @@ public class InstanciaTableModel extends AbstractTableModel implements Observer{
 		return mHeaders[index];
 	}
 
-	public void setInstancia(Instancia<Clase,Aula> instancia) {
+	public void setInstancia(Instance<Clase,Aula> instancia) {
 		mInstancia = instancia;
 		if (instancia != null)
 			instancia.addObserver(this);

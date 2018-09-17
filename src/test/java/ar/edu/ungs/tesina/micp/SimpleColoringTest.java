@@ -8,6 +8,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.SimpleGraph;
@@ -35,7 +36,7 @@ public class SimpleColoringTest {
 		solver.create("SimpleColoringTest");
 		solver.hideOutput(true);
 		
-		mMicp = MicpScipSolver.createMicp(solver);
+		mMicp = MicpScipSolver.createMicp("Test 1", new Properties());
 		
 	}
 
@@ -67,12 +68,15 @@ public class SimpleColoringTest {
 		relationshipGraph.addEdge(vertices[1],vertices[5]);
 		relationshipGraph.addEdge(vertices[2],vertices[4]);
 		
+		assertTrue(relationshipGraph.containsEdge(vertices[1],vertices[5]));
+		assertTrue(relationshipGraph.containsEdge(vertices[5],vertices[1]));
+		
 		List<Color> colors = new ArrayList<Color>();
 		colors.add(new Color("c1"));
 		colors.add(new Color("c2"));
 		
 		
-		Map<Vertex,Color> optimal = mMicp.findOptimal(conflictGraph, relationshipGraph, colors);
+		Map<Vertex,Color> optimal = mMicp.searchOptimal(conflictGraph, relationshipGraph, colors);
 		
 		assertNotNull(optimal);
 		
