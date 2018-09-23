@@ -34,8 +34,8 @@ Listado de las familias de desigualdades soportadas:
 * Clique Inequalities:
 	* [x] 5. vertex-clique inequalities
 	* [x] 6. clique-partitioned inequalities
-	* [ ] 7. sub-clique inequalities
-	* [ ] 8. two-color sub-clique inequalities
+	* [x] 7. sub-clique inequalities
+	* [x] 8. two-color sub-clique inequalities
 * Triangle and diamonds:
 	* [x] 9. semi-triangle inequalities
 	* [x] 10. semi-diamond inequalities
