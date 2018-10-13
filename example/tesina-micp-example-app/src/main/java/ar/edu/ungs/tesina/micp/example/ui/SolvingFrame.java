@@ -10,7 +10,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
@@ -72,7 +71,7 @@ public class SolvingFrame extends JFrame {
 			initSolver(runnable);
 			verifySolverFinish();
 		} else {
-			showMessage("La instancia recibida es invalida!");
+			showMessage("La instancia recibida es invalida!",false);
 		}
 	}
 	
@@ -82,25 +81,25 @@ public class SolvingFrame extends JFrame {
 	}
 	
 	private void verifySolverFinish() {
-		final SwingWorker worker = new SwingWorker(){
+		final SwingWorker<Object,Object> worker = new SwingWorker<Object,Object>(){
 			 
 			@Override
 			protected Object doInBackground() throws Exception {
 				while ( ! mFuture.isDone() )
 					Thread.sleep(2000);
-				if ( mFuture.isCancelled() )
-					showMessage("Trabajo cancelado");
-				else
-					showMessage("Optimización completa!");
+				
+				showMessage(null, mFuture.isCancelled());
+				
 				return null;
 			}	
 		};
 		worker.execute();
 	}
 	
-	private void showMessage(String message) {
-		JOptionPane.showMessageDialog(this, message,"Optimización finalizada!",JOptionPane.INFORMATION_MESSAGE);
-		mParent.resumeFromOptimization();
+	private void showMessage(String message, boolean isCancelled) {
+		// JOptionPane.showMessageDialog(this, message,"Optimización finalizada!",
+		//                               JOptionPane.INFORMATION_MESSAGE);
+		mParent.resumeFromOptimization( message, isCancelled);
 		dispose();
 	}
 	

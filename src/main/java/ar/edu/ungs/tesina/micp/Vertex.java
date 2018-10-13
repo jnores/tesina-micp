@@ -1,5 +1,12 @@
 package ar.edu.ungs.tesina.micp;
 
+
+/**
+ * Representacion de un vertice para resolver el problea del Coloreo de maximo impacto.
+ * 
+ * @author yoshknight
+ *
+ */
 public class Vertex implements Comparable<Vertex>{
 	
 	private String mName;

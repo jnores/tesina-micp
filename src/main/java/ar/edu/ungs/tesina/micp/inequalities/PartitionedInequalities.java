@@ -21,7 +21,7 @@ import jscip.Variable;
  * @author yoshknight
  *
  */
-public class PartitionedInequalities extends CustomInequalities {
+public class PartitionedInequalities<T extends Vertex,U extends Color> extends CustomInequalities<T,U> {
 
 	public static final long PARTITIONED_INEQUALITIES = 1;
 	public static final long THREE_PARTITIONED_INEQUALITIES = 2;
@@ -35,9 +35,8 @@ public class PartitionedInequalities extends CustomInequalities {
 	}
 
 	@Override
-	public void addInequalities(MicpScipSolver micpSolver, List<Vertex> vertices,
-			List<Color> colors, Graph<Vertex, Edge> conflictGraph,
-			Graph<Vertex, Edge> relationshipGraph) {
+	public void addInequalities(MicpScipSolver<T,U> micpSolver, List<T> vertices,
+			List<U> colors, Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
 
 		// Si no se selecciono ninguna inequality, se termina el metodo.
 		if ((mInequalitiesEnabled & ALL_INEQUALITIES) == 0)
@@ -69,13 +68,13 @@ public class PartitionedInequalities extends CustomInequalities {
 	 * @param conflictGraph
 	 * @param relationshipGraph
 	 */
-	private void addPartitionedInequality(MicpScipSolver micpSolver, List<Vertex> vertices,
-			List<Color> colors, Graph<Vertex, Edge> conflictGraph,
-			Graph<Vertex, Edge> relationshipGraph) {
+	private void addPartitionedInequality(MicpScipSolver<T,U> micpSolver, List<T> vertices,
+			List<U> colors, Graph<T, Edge<T>> conflictGraph,
+			Graph<T, Edge<T>> relationshipGraph) {
 
 		int len = colors.size() - 1; // 1 <= len <= |colors|-1
-		Set<Color> D = generateColorsSubset(colors, len);
-		Set<Color> Dcomplement = generateComplement(colors, D);
+		Set<U> D = generateColorsSubset(colors, len);
+		Set<U> Dcomplement = generateComplement(colors, D);
 
 		int cantFactors = 1 + colors.size();
 
@@ -86,19 +85,19 @@ public class PartitionedInequalities extends CustomInequalities {
 		double[] factors = new double[cantFactors];
 		int i;
 
-		for (Edge e : relationshipGraph.edgeSet()) {
-			Vertex vi = e.getSource();
-			Vertex vj = e.getTarget();
+		for (Edge<T> e : relationshipGraph.edgeSet()) {
+			T vi = e.getSource();
+			T vj = e.getTarget();
 			i = 0;
 			factors[i] = 1;
 			vars[i++] = micpSolver.getVarY(vi, vj);
 
-			for (Color c : D) {
+			for (U c : D) {
 				factors[i] = -1;
 				vars[i++] = micpSolver.getVarX(vj, c);
 			}
 
-			for (Color c : Dcomplement) {
+			for (U c : Dcomplement) {
 				factors[i] = -1;
 				vars[i++] = micpSolver.getVarX(vi, c);
 			}
@@ -111,14 +110,14 @@ public class PartitionedInequalities extends CustomInequalities {
 
 	}
 
-	private void addThreePartitionedInequality(MicpScipSolver micpSolver, List<Vertex> vertices,
-			List<Color> colors, Graph<Vertex, Edge> conflictGraph,
-			Graph<Vertex, Edge> relationshipGraph) {
+	private void addThreePartitionedInequality(MicpScipSolver<T,U> micpSolver, List<T> vertices,
+			List<U> colors, Graph<T, Edge<T>> conflictGraph,
+			Graph<T, Edge<T>> relationshipGraph) {
 
 		int len = colors.size() - 1; // 2 <= len <= |colors|-1
-		Set<Color> D = generateColorsSubset(colors, len);
-		Set<Color> D1 = generateColorsSubset(D, D.size() / 2);
-		Set<Color> D2 = generateComplement(D, D1);
+		Set<U> D = generateColorsSubset(colors, len);
+		Set<U> D1 = generateColorsSubset(D, D.size() / 2);
+		Set<U> D2 = generateComplement(D, D1);
 
 		int cantFactors = 3 + 2 * D.size();
 
@@ -129,11 +128,11 @@ public class PartitionedInequalities extends CustomInequalities {
 		double[] factors = new double[cantFactors];
 		int i;
 
-		for (Edge e : relationshipGraph.edgeSet()) {
-			Vertex vi = e.getSource();
-			Vertex vj = e.getTarget();
+		for (Edge<T> e : relationshipGraph.edgeSet()) {
+			T vi = e.getSource();
+			T vj = e.getTarget();
 
-			for (Vertex vk : Graphs.neighborListOf(relationshipGraph, vj)) {
+			for (T vk : Graphs.neighborListOf(relationshipGraph, vj)) {
 				if (!vk.equals(vi) && !relationshipGraph.containsEdge(vk, vi)) {
 
 					i = 0;
@@ -144,14 +143,14 @@ public class PartitionedInequalities extends CustomInequalities {
 					factors[i] = 1;
 					vars[i++] = micpSolver.getVarY(vi, vk);
 
-					for (Color c : D1) {
+					for (U c : D1) {
 						factors[i] = -2;
 						vars[i++] = micpSolver.getVarX(vj, c);
 						factors[i] = 2;
 						vars[i++] = micpSolver.getVarX(vi, c);
 					}
 
-					for (Color c : D2) {
+					for (U c : D2) {
 						factors[i] = -2;
 						vars[i++] = micpSolver.getVarX(vk, c);
 						factors[i] = 2;
@@ -169,9 +168,8 @@ public class PartitionedInequalities extends CustomInequalities {
 
 	}
 
-	private void addKPartitionedInequality(MicpScipSolver micpSolver, List<Vertex> vertices,
-			List<Color> colors, Graph<Vertex, Edge> conflictGraph,
-			Graph<Vertex, Edge> relationshipGraph) {
+	private void addKPartitionedInequality(MicpScipSolver<T,U> micpSolver, List<T> vertices,
+			List<U> colors, Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
 
 		throw new RuntimeException(
 				"ERROR - Not Implemented Method PartitionedInequalities::addKPartitionedInequality ");

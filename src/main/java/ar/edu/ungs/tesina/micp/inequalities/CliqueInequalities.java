@@ -19,7 +19,7 @@ import ar.edu.ungs.tesina.micp.Vertex;
 import jscip.Constraint;
 import jscip.Variable;
 
-public class CliqueInequalities extends CustomInequalities {
+public class CliqueInequalities<T extends Vertex, U extends Color> extends CustomInequalities<T,U> {
 	public static final long VERTEX_CLIQUE_INEQUALITIES = 8;
 	public static final long CLIQUE_PARTITIONED_INEQUALITIES = 16;
 	public static final long SUB_CLIQUE_INEQUALITIES = 32;
@@ -45,33 +45,33 @@ public class CliqueInequalities extends CustomInequalities {
 	 * @param relationshipGraph
 	 */
 	@Override
-	public void addInequalities(MicpScipSolver micpSolver, List<Vertex> vertices,
-			List<Color> colors, Graph<Vertex, Edge> conflictGraph,
-			Graph<Vertex, Edge> relationshipGraph) {
+	public void addInequalities(MicpScipSolver<T,U> micpSolver, List<T> vertices,
+			List<U> colors, Graph<T, Edge<T>> conflictGraph,
+			Graph<T, Edge<T>> relationshipGraph) {
 
 		// Si no se selecciono ninguna inequality, se termina el metodo.
 		if ((mInequalitiesEnabled & ALL_INEQUALITIES) == 0)
 			return;
 
 		// Busco todas las cliques que cumplan con Figure 1.
-		for (Vertex v : vertices) {
+		for (T v : vertices) {
 
-			List<Vertex> neighborList = Graphs.neighborListOf(relationshipGraph, v);
-			TreeSet<Vertex> vertexSubset = new TreeSet<Vertex>(neighborList);
-			Graph<Vertex, Edge> g = new AsSubgraph<Vertex, Edge>(conflictGraph, vertexSubset);
+			List<T> neighborList = Graphs.neighborListOf(relationshipGraph, v);
+			TreeSet<T> vertexSubset = new TreeSet<T>(neighborList);
+			Graph<T, Edge<T>> g = new AsSubgraph<T, Edge<T>>(conflictGraph, vertexSubset);
 
 			System.out.print("-- cliques from " + v + " -> vecinos: ");
 			System.out.println(vertexSubset.size() + " ]");
 
 			if (vertexSubset.size() > 0) {
-				BronKerboschCliqueFinder<Vertex, Edge> cliqueFinder;
-				cliqueFinder = new BronKerboschCliqueFinder<Vertex, Edge>(g);
-				Iterator<Set<Vertex>> it = cliqueFinder.iterator();
+				BronKerboschCliqueFinder<T, Edge<T>> cliqueFinder;
+				cliqueFinder = new BronKerboschCliqueFinder<T, Edge<T>>(g);
+				Iterator<Set<T>> it = cliqueFinder.iterator();
 
 				while (it.hasNext()) {
 
 					System.out.print("---- clique: [");
-					Set<Vertex> cliqueVertex = it.next();
+					Set<T> cliqueVertex = it.next();
 					for (Vertex vFromClique : cliqueVertex) {
 						System.out.print(" " + vFromClique);
 					}
@@ -99,8 +99,8 @@ public class CliqueInequalities extends CustomInequalities {
 
 	}
 
-	private void addVertexCliqueInequality(MicpScipSolver micpSolver, Vertex v,
-			Set<Vertex> clique) {
+	private void addVertexCliqueInequality(MicpScipSolver<T,U> micpSolver, T v,
+			Set<T> clique) {
 
 		// Si tengo menos de 2 elementos en la clique, no es necesario agregar
 		// la restricción.
@@ -113,7 +113,7 @@ public class CliqueInequalities extends CustomInequalities {
 		Variable[] vars = new Variable[clique.size()];
 		double[] factors = new double[clique.size()];
 		int i = 0;
-		for (Vertex auxV : clique) {
+		for (T auxV : clique) {
 			factors[i] = 1;
 			vars[i++] = micpSolver.getVarY(v, auxV);
 
@@ -124,8 +124,8 @@ public class CliqueInequalities extends CustomInequalities {
 		micpSolver.getSolver().releaseCons(constranint);
 	}
 
-	private void addCliquePartitionedInequality(MicpScipSolver micpSolver, Vertex v,
-			Set<Vertex> clique, List<Color> colors) {
+	private void addCliquePartitionedInequality(MicpScipSolver<T,U> micpSolver, T v,
+			Set<T> clique, List<U> colors) {
 		// TODO reescribir la funcion para poder armar la constraint
 		// dinamicamente.
 		// if clique.size() == 1, use el theorem 7
@@ -137,8 +137,8 @@ public class CliqueInequalities extends CustomInequalities {
 		if (clique.size() > colors.size())
 			return;
 
-		Set<Color> D = generateD(colors, clique);
-		Set<Color> Dcomplement = generateComplement(colors, D);
+		Set<U> D = generateD(colors, clique);
+		Set<U> Dcomplement = generateComplement(colors, D);
 
 		int cantFactors = clique.size() * (D.size() + 1) + Dcomplement.size();
 
@@ -149,19 +149,19 @@ public class CliqueInequalities extends CustomInequalities {
 		Variable[] vars = new Variable[cantFactors];
 		double[] factors = new double[cantFactors];
 		int i = 0;
-		for (Vertex auxV : clique) {
+		for (T auxV : clique) {
 			factors[i] = 1;
 			vars[i++] = micpSolver.getVarY(v, auxV);
 		}
 
-		for (Color c : D) {
-			for (Vertex auxV : clique) {
+		for (U c : D) {
+			for (T auxV : clique) {
 				factors[i] = -1;
 				vars[i++] = micpSolver.getVarX(auxV, c);
 			}
 		}
 
-		for (Color c : Dcomplement) {
+		for (U c : Dcomplement) {
 			factors[i] = -1;
 			vars[i++] = micpSolver.getVarX(v, c);
 		}
@@ -174,8 +174,8 @@ public class CliqueInequalities extends CustomInequalities {
 
 	}
 
-	private void addSubCliqueInequality(MicpScipSolver micpSolver, Vertex vi, Set<Vertex> clique,
-			List<Color> colors) {
+	private void addSubCliqueInequality(MicpScipSolver<T,U> micpSolver, T vi, Set<T> clique,
+			List<U> colors) {
 
 		if (vi == null || clique == null || colors == null)
 			return;
@@ -184,16 +184,18 @@ public class CliqueInequalities extends CustomInequalities {
 		// la restricción.
 		if (clique == null || clique.size() <= 1)
 			return;
-		Set<Vertex> subclique = clique;
+		Set<T> subclique = clique;
 		System.out.println("Agrego SubCliqueInequality al vector: " + vi);
 		int jPos = 0;
-		Vertex vj = (Vertex) clique.toArray()[jPos];
+		// TODO: Corregir esto pasando un array donde recibir el contenido.
+		T vj = (T) clique.toArray()[jPos];
 		subclique.remove(vj);
 
 		// Necesitamos |D| <= |C| - ( |K'| + 1 )
-		Set<Color> D = generateColorsSubset(colors, colors.size() - subclique.size() + 1);
-		Set<Color> Dcomplement = generateComplement(colors, D);
-		Color c = (Color) Dcomplement.toArray()[0];
+		Set<U> D = generateColorsSubset(colors, colors.size() - subclique.size() + 1);
+		Set<U> Dcomplement = generateComplement(colors, D);
+		// TODO: Corregir esto pasando un array donde recibir el contenido.
+		U c = (U) Dcomplement.toArray()[0];
 
 		int cantFactors = 3 + subclique.size() + D.size() * (1 + subclique.size());
 		Variable[] vars = new Variable[cantFactors];
@@ -203,7 +205,7 @@ public class CliqueInequalities extends CustomInequalities {
 		factors[i] = 1;
 		vars[i++] = micpSolver.getVarY(vi, vj);
 
-		for (Vertex auxV : subclique) {
+		for (T auxV : subclique) {
 			factors[i] = 2;
 			vars[i++] = micpSolver.getVarY(vi, auxV);
 
@@ -215,8 +217,8 @@ public class CliqueInequalities extends CustomInequalities {
 		factors[i] = 1;
 		vars[i++] = micpSolver.getVarX(vj, c);
 
-		for (Color d : D) {
-			for (Vertex auxV : subclique) {
+		for (U d : D) {
+			for (T auxV : subclique) {
 				factors[i] = -2;
 				vars[i++] = micpSolver.getVarX(auxV, d);
 			}
@@ -233,8 +235,8 @@ public class CliqueInequalities extends CustomInequalities {
 		micpSolver.getSolver().releaseCons(constranint);
 	}
 
-	private void addTwoColorSubCliqueInequality(MicpScipSolver micpSolver, Vertex vi,
-			Set<Vertex> clique, List<Color> colors) {
+	private void addTwoColorSubCliqueInequality(MicpScipSolver<T,U> micpSolver, T vi,
+			Set<T> clique, List<U> colors) {
 		// TODO Armar la desigualdad correspondiente en base de
 		// CliquePartitionedInequality.
 		// if clique.size() == 1, use el theorem 7
@@ -248,14 +250,16 @@ public class CliqueInequalities extends CustomInequalities {
 
 		System.out.println("Agrego TwoColorSubCliqueInequality al vector: " + vi);
 
-		Set<Vertex> subclique = clique;
+		Set<T> subclique = clique;
 		int jPos = 0;
-		Vertex vj = (Vertex) clique.toArray()[jPos];
+		
+		// TODO Ver como corregir este warning
+		T vj = (T) clique.toArray()[jPos];
 		subclique.remove(vj);
 
 		// D != 0 y |D'| = |K'| Y |D| <= |C| - ( |D'| + 1 )
-		Set<Color> Dprima = generateColorsSubset(colors, subclique.size());
-		Set<Color> D = generateComplement(colors, Dprima); // Esto no deberia
+		Set<U> Dprima = generateColorsSubset(colors, subclique.size());
+		Set<U> D = generateComplement(colors, Dprima); // Esto no deberia
 															// ser un
 															// complement.
 															// deberia tener una
@@ -272,14 +276,14 @@ public class CliqueInequalities extends CustomInequalities {
 		factors[i] = 2;
 		vars[i++] = micpSolver.getVarY(vi, vj);
 
-		for (Vertex auxV : subclique) {
+		for (T auxV : subclique) {
 			factors[i] = 1;
 			vars[i++] = micpSolver.getVarY(vi, auxV);
 
 		}
 
-		Vertex aux;
-		for (Color c : colors) {
+		T aux;
+		for (U c : colors) {
 			factors[i] = -2;
 
 			if (D.contains(c))
@@ -290,14 +294,14 @@ public class CliqueInequalities extends CustomInequalities {
 			vars[i++] = micpSolver.getVarX(aux, c);
 		}
 
-		for (Color c : Dprima) {
+		for (U c : Dprima) {
 			factors[i] = -1;
 			vars[i++] = micpSolver.getVarX(vi, c);
 			
 			factors[i] = 2;
 			vars[i++] = micpSolver.getVarX(vj, c);
 			
-			for (Vertex auxV : subclique) {
+			for (T auxV : subclique) {
 				factors[i] = 1;
 				vars[i++] = micpSolver.getVarX(auxV, c);
 			}
@@ -318,7 +322,7 @@ public class CliqueInequalities extends CustomInequalities {
 	 * @param clique
 	 * @return
 	 */
-	private Set<Color> generateD(Collection<Color> colors, Collection<Vertex> clique) {
+	private Set<U> generateD(Collection<U> colors, Collection<T> clique) {
 
 		int len = colors.size() - clique.size();
 

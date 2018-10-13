@@ -15,7 +15,7 @@ import ar.edu.ungs.tesina.micp.Vertex;
 import jscip.Constraint;
 import jscip.Variable;
 
-public class TriangleDiamondInequalities extends CustomInequalities {
+public class TriangleDiamondInequalities<T extends Vertex, U extends Color> extends CustomInequalities<T,U> {
 
 	public static final long SEMI_TRIANGLE_INEQUALITIES = 128;
 	public static final long SEMI_DIAMOND_INEQUALITIES = 256;
@@ -28,9 +28,8 @@ public class TriangleDiamondInequalities extends CustomInequalities {
 	}
 
 	@Override
-	public void addInequalities(MicpScipSolver micpSolver, List<Vertex> vertices,
-			List<Color> colors, Graph<Vertex, Edge> conflictGraph,
-			Graph<Vertex, Edge> relationshipGraph) {
+	public void addInequalities(MicpScipSolver<T,U> micpSolver, List<T> vertices,
+			List<U> colors, Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
 
 		// Si no se selecciono ninguna inequality, se termina el metodo.
 		if ((mInequalitiesEnabled & ALL_INEQUALITIES) == 0)
@@ -48,15 +47,14 @@ public class TriangleDiamondInequalities extends CustomInequalities {
 
 	}
 
-	private void addSemiTriangleInequalities(MicpScipSolver micpSolver, List<Vertex> vertices,
-			List<Color> colors, Graph<Vertex, Edge> conflictGraph,
-			Graph<Vertex, Edge> relationshipGraph) {
+	private void addSemiTriangleInequalities(MicpScipSolver<T,U> micpSolver, List<T> vertices,
+			List<U> colors, Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
 
-		for (Edge e : relationshipGraph.edgeSet()) {
-			Vertex vi = e.getSource();
-			Vertex vj = e.getTarget();
+		for (Edge<T> e : relationshipGraph.edgeSet()) {
+			T vi = e.getSource();
+			T vj = e.getTarget();
 
-			for (Vertex vk : Graphs.neighborListOf(conflictGraph, vj)) {
+			for (T vk : Graphs.neighborListOf(conflictGraph, vj)) {
 				if (!vk.equals(vi) && conflictGraph.containsEdge(vi, vk)) {
 					// aqui tengo un semi-triangulo.
 					addSemiTriangleInequalitiesForTriangle(micpSolver, vi, vj, vk, colors);
@@ -66,13 +64,13 @@ public class TriangleDiamondInequalities extends CustomInequalities {
 		}
 	}
 
-	private void addSemiTriangleInequalitiesForTriangle(MicpScipSolver micpSolver, Vertex vi,
-			Vertex vj, Vertex vk, List<Color> colors) {
+	private void addSemiTriangleInequalitiesForTriangle(MicpScipSolver<T,U> micpSolver, T vi,
+			T vj, T vk, List<U> colors) {
 		final double[] factors = { 1, 1, 1, 1, 1, -1, -1 };
 		Variable[] vars = new Variable[7];
 		vars[0] = micpSolver.getVarY(vi, vj);
-		for (Color d1 : colors) {
-			for (Color d2 : colors) {
+		for (U d1 : colors) {
+			for (U d2 : colors) {
 				if (!d1.equals(d2)) {
 					// TODO: acá tengo vi, vj, vk, d1 y d2 . Debo agregar la
 					// inequalitie.
@@ -95,19 +93,18 @@ public class TriangleDiamondInequalities extends CustomInequalities {
 
 	}
 
-	private void addSemiDiamondInequalities(MicpScipSolver micpSolver, List<Vertex> vertices,
-			List<Color> colors, Graph<Vertex, Edge> conflictGraph,
-			Graph<Vertex, Edge> relationshipGraph) {
+	private void addSemiDiamondInequalities(MicpScipSolver<T,U> micpSolver, List<T> vertices,
+			List<U> colors, Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
 
-		for (Edge e : conflictGraph.edgeSet()) {
-			Vertex vj = e.getTarget();
-			Vertex vk = e.getSource();
+		for (Edge<T> e : conflictGraph.edgeSet()) {
+			T vj = e.getTarget();
+			T vk = e.getSource();
 
-			for (Vertex vl : Graphs.neighborListOf(conflictGraph, vj)) {
+			for (T vl : Graphs.neighborListOf(conflictGraph, vj)) {
 				if (!vl.equals(vk) && conflictGraph.containsEdge(vk, vl)) {
 					// Aqui tengo un triangulo en G y Busco un vector i que
 					// forme el semi-Diamond.
-					for (Vertex vi : Graphs.neighborListOf(relationshipGraph, vj)) {
+					for (T vi : Graphs.neighborListOf(relationshipGraph, vj)) {
 						if (!vi.equals(vk) && relationshipGraph.containsEdge(vi, vk)
 								&& !conflictGraph.containsEdge(vi, vl)) {
 							// Aqui tengo el Semi-Diamond
@@ -121,19 +118,19 @@ public class TriangleDiamondInequalities extends CustomInequalities {
 		}
 	}
 
-	private void addSemiDiamondInequalitiesForDiamond(MicpScipSolver micpSolver, Vertex vi,
-			Vertex vj, Vertex vk, Vertex vl, List<Color> colors) {
+	private void addSemiDiamondInequalitiesForDiamond(MicpScipSolver<T,U> micpSolver, T vi,
+			T vj, T vk, T vl, List<U> colors) {
 
-		Set<Color> Daux = new HashSet<Color>(colors);
-		Set<Color> D;
+		Set<U> Daux = new HashSet<U>(colors);
+		Set<U> D;
 		int len = colors.size() - 3; // 1 <= len <= |colors|-3
 		
 		double[] factors;
 		Variable[] vars;
 		int i, cant;
 
-		for (Color d1 : colors) {
-			for (Color d2 : colors) {
+		for (U d1 : colors) {
+			for (U d2 : colors) {
 				if (!d1.equals(d2)) {
 					Daux.remove(d1);
 					Daux.remove(d2);
@@ -171,9 +168,9 @@ public class TriangleDiamondInequalities extends CustomInequalities {
 					factors[i] = 1;
 					vars[i++] = micpSolver.getVarX(vl, d2);
 					
-					
-					
-					for (Color d : D) {
+
+
+					for (U d : D) {
 						factors[i] = -1;
 						vars[i++] = micpSolver.getVarX(vj, d);
 						

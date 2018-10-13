@@ -11,19 +11,19 @@ import org.jgrapht.alg.util.Pair;
  * @param <A>
  * @param <B>
  */
-class ComparablePair<A extends Comparable<A>, B extends Comparable<B>> extends Pair<A, B>  implements Comparable< ComparablePair<A, B> >{
+class ComparableVertexPair<A extends Vertex, B extends Vertex> extends Pair<A, B>  implements Comparable< ComparableVertexPair<A, B> >{
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7313302100585983151L;
 
-	ComparablePair(A a, B b) {
+	ComparableVertexPair(A a, B b) {
 		super(a,b);
 	}
 
 	@Override
-	public int compareTo(ComparablePair<A, B> o) {
+	public int compareTo(ComparableVertexPair<A, B> o) {
 		int diff = first.compareTo(o.first);
 		if ( diff == 0 )
 			diff =  second.compareTo(o.second);

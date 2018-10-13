@@ -2,9 +2,10 @@ package ar.edu.ungs.tesina.micp;
 
 import java.util.Properties;
 
+// TODO: Cambiar la definiion de ls desigualdades y armarle un factory y/o algun Helper. ahora es id1|id2|id3... 
 public class SolverConfig {
 	static final double DEFAULT_GAP_LIMIT = 0.0;
-	static final int DEFAULT_TIME_LIMIT = 240; // 3600;
+	static final int DEFAULT_TIME_LIMIT = 3600;
 	static final boolean DEFAULT_IS_VERBOSE = true; // false;
 	static final long DEFAULT_INEQUALITIES_ENABLED = 24; // WITHOUT_INEQUALITIES
 	private double gapLimit = DEFAULT_GAP_LIMIT;

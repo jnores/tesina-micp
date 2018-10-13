@@ -36,7 +36,7 @@ public class SimpleColoringTest {
 		solver.create("SimpleColoringTest");
 		solver.hideOutput(true);
 		
-		mMicp = MicpScipSolver.createMicp("Test 1", new Properties());
+		mMicp = null;//;MicpScipSolver.createMicp("Test 1", new Properties());
 		
 	}
 

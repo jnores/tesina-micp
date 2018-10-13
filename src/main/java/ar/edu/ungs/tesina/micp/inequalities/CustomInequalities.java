@@ -13,7 +13,7 @@ import ar.edu.ungs.tesina.micp.MicpScipSolver;
 import ar.edu.ungs.tesina.micp.SolverConfig;
 import ar.edu.ungs.tesina.micp.Vertex;
 
-abstract public class CustomInequalities {
+abstract public class CustomInequalities<T extends Vertex,U extends Color> {
 	
 	public static final long WITHOUT_INEQUALITIES = 0;
 
@@ -25,11 +25,11 @@ abstract public class CustomInequalities {
 		mInequalitiesEnabled = solverConfig.getInequalitiesEnabled();
 	}
 	
-	abstract public void addInequalities(MicpScipSolver micpSolver, List<Vertex> vertices, List<Color> colors,
-			Graph<Vertex, Edge> conflictGraph, Graph<Vertex, Edge> relationshipGraph);
+	abstract public void addInequalities(MicpScipSolver<T,U> micpSolver, List<T> vertices, List<U> colors,
+			Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph);
 
 	
-	static public Set<Color> generateColorsSubset(Collection<Color> colors, int len) {
+	public Set<U> generateColorsSubset(Collection<U> colors, int len) {
 
 		if (len < 1)
 			throw new RuntimeException("MicpScipSolver.generateColorsSubset La cantidad de colores solicitada debe ser mayor a 1");
@@ -37,9 +37,9 @@ abstract public class CustomInequalities {
 		if (len > colors.size())
 			throw new RuntimeException("MicpScipSolver.generateColorsSubset La cantidad de colores es mayor a la cantidad disponible");
 
-		Set<Color> conj = new TreeSet<Color>();
+		Set<U> conj = new TreeSet<U>();
 		int i = 0;
-		for (Color c : colors) {
+		for (U c : colors) {
 			if (i >= len)
 				break;
 			conj.add(c);
@@ -57,9 +57,9 @@ abstract public class CustomInequalities {
 	 * @param set
 	 * @return
 	 */
-	static public Set<Color> generateComplement(Collection<Color> colors, Collection<Color> set) {
-		Set<Color> comp = new TreeSet<Color>();
-		for (Color elem : set)
+	public Set<U> generateComplement(Collection<U> colors, Collection<U> set) {
+		Set<U> comp = new TreeSet<U>();
+		for (U elem : set)
 			if (!colors.contains(elem))
 				comp.add(elem);
 		return comp;

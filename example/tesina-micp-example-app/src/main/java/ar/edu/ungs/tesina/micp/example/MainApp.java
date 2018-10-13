@@ -1,20 +1,13 @@
 package ar.edu.ungs.tesina.micp.example;
 
 import java.awt.EventQueue;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.io.StringWriter;
 import java.util.Properties;
-import java.util.Scanner;
-import java.util.Set;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -23,305 +16,285 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import ar.edu.ungs.tesina.micp.Instance;
-import ar.edu.ungs.tesina.micp.example.model.Aula;
-import ar.edu.ungs.tesina.micp.example.model.Clase;
-import ar.edu.ungs.tesina.micp.example.runnable.SolveRunnable;
 import ar.edu.ungs.tesina.micp.example.ui.MainFrame;
 
 public class MainApp {
-	public static final int DEFAULT_PABELLON = 1;
-	private Instance<Clase, Aula> mInstance;
-	private Properties mProperties;
-	private int mPabellon = DEFAULT_PABELLON;
 
+	private static Options getOptions() {
+		Options opts = new Options();
+
+		opts.addOption("x", "No abrir la interfaz gráfica. Depende de -c -a y -s");
+		opts.addOption("c", "cursos", true, "La ruta al archivo que contiene los cursos con los "
+											+ "horarios en formato de instancia FCEN");
+		opts.addOption("a", "aulas", true, "Puede ser el numero de aulas dispnibles o la ruta al "
+											+ "archivo que contiene las aulas disponibles");
+		opts.addOption("s", "solucion", true, "La ruta al archivo donde se desea guardar la "
+												+ "solución");
+		opts.addOption("i", "add-inequality", true, "Agregar desigualdad ##. Repetir el parametro "
+													+ "para agregar más de una desigualdad.[2-12]");
+		// agrego las que se superponen con la configuracion por archivo.
+		opts.addOption("v", "verbose", false, "Imprimir por STDOUT información detallada de la "
+				+ "ejecución");
+		
+		opts.addOption("p", "pabellon", true, "Número entero que identifica el pabellon que se "
+												+ "debe procesar. Default: 1");
+		opts.addOption("g", "gap", true, "Valor de corte del GAP para conciderar una solucion como "
+											+ "aceptable con valores entre 0 y 1. Por ejemplo, para"
+											+ " conciderar un gap de 15% se debe poner: '-g 0.15'. "
+											+ "Default: 0");
+		opts.addOption("t", "timeout", true, "Tiempo maximo de ejecución del solver en segundos. "
+												+ "Default: 3600");
+		
+		opts.addOption("h", "help", false, "Mostrar este texto de ayuda");
+		
+		return opts;
+	}
+
+	private static CommandLine getCommand(Options opts, String[] args) throws ParseException {
+		if (args == null || args.length < 1 || args[0] == null) {
+			return null;
+		}
+		CommandLineParser parser = new DefaultParser();
+		return parser.parse(opts, args);
+	}
+
+	private static Properties loadProperties() {
+
+		Properties prop = new Properties();
+
+		InputStream input = null;
+		String propertiesPath = "config.properties";
+		
+		File f = new File(propertiesPath);
+		if ( !f.exists() || !f.isFile() ) {
+			System.out.println( "Error al intentar cargar el archivo de configuracion: " 
+								+ f.getAbsolutePath() );
+		} else {
+			System.out.println("Cargando archivo de configuracion: " + f.getAbsolutePath() );
+			try {
+	
+				input = new FileInputStream(propertiesPath);
+	
+				// load a properties file
+				prop.load(input);			
+	
+			} catch (IOException ex) {
+				System.out.println("Error inesperado cargando el archivo de configuracion: ");
+				ex.printStackTrace();
+			} finally {
+				if (input != null) {
+					try {
+						input.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		return prop;
+	}
+	
+	/**
+	 * Carga los parametros por linea de comandos sobre la instancia properties que se genera a 
+	 * partir del arhivo de configuraicon.
+	 * 
+	 * @param prop
+	 * @param cmd
+	 * @return Boolean TRUE si el conjunto de parametros es valido. Sino, retorna false.
+	 */
+	private static boolean loadCliProperties(Properties prop, CommandLine cmd) {
+		if (prop == null) 
+			prop = new Properties();
+		if ( cmd.hasOption('x') ) {
+			if ( cmd.hasOption('c') )
+				prop.setProperty("cursos_path", cmd.getOptionValue('c'));
+			else
+				return false;
+			
+			if (  cmd.hasOption('a')  )
+				prop.setProperty("aulas_path", cmd.getOptionValue('a'));
+			else
+				return false;
+			
+			if ( cmd.hasOption('s') )
+				prop.setProperty("solucion_path", cmd.getOptionValue('s'));
+			else
+				return false;
+		}
+		
+		if ( cmd.hasOption('v') ) 
+			prop.setProperty("verbose", "true");
+		
+		// Valido que sea un decimal valido
+		if (cmd.hasOption('g'))
+		{
+			String cliGap = cmd.getOptionValue('g');
+			double gapValue = -1;
+			try {
+				gapValue = Double.parseDouble(cliGap);
+			} catch (Exception e) {
+			}
+			if (gapValue < 0) {
+				return false;
+			} else {
+				prop.setProperty("gap_limit", cliGap);
+			}
+		}
+				
+		// Valido que sea un entero valido.
+		if (cmd.hasOption('t'))
+		{
+			String cliT = cmd.getOptionValue('t');
+			double tValue = -1;
+			try {
+				tValue = Integer.parseInt(cliT);
+			} catch (Exception e) {
+			}
+			if (tValue < 0) {
+				return false;
+			} else {
+				prop.setProperty("time_limit", cliT);
+			}
+		}
+		
+		// Valido que sea un entero valido.
+		if (cmd.hasOption('p'))
+		{
+			String cliP = cmd.getOptionValue('p');
+			double pValue = -1;
+			try {
+				pValue = Integer.parseInt(cliP);
+			} catch (Exception e) {
+			}
+			if (pValue < 0) {
+				return false;
+			} else {
+				prop.setProperty("pabellon", cliP);
+			}
+		}
+
+		
+		if (cmd.hasOption('i'))
+		{
+			String[] cliIneq = cmd.getOptionValues('i');
+			String inequalities = String.join("|",cliIneq);
+
+			prop.setProperty("inequalities_enabled", inequalities);
+		}
+		
+		System.out.println("PROPERTIES: " + getPropertyAsString(prop));
+		
+		return true;
+	}
+	
+	public static String getPropertyAsString(Properties prop) {    
+		  StringWriter writer = new StringWriter();
+		  prop.list(new PrintWriter(writer));
+		  return writer.getBuffer().toString();
+		}
+	
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-
-		Options opt = new Options();
-		opt.addOption("hola", "Hola Mundo");
-		CommandLineParser parser = new DefaultParser();
+		args = new String[]{"--help"};
+		// args = new String[]{"-x","-cpath/to/cursos","-a","24","-s","path/to/solucion","-i2",
+		//                     "-i","4" , "-t240", "-g0.05"};
+		Properties prop = loadProperties();
+		Options opts = getOptions();
 		boolean isOk = true;
+		CommandLine cmd = null;
 		try {
-			CommandLine cmd = parser.parse(opt, args);
-			if (cmd.hasOption("hola")) {
+			
+			cmd = getCommand(opts, args);
+			isOk = loadCliProperties(prop, cmd);
 
-			}
 		} catch (ParseException e1) {
 			e1.printStackTrace();
 		}
-		if (!isOk) {
-			// automatically generate the help statement
-			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("micp", "bla bla bla bla\n", opt, "\nFooter con ejemplo");
-
+		
+		if (!isOk || cmd.hasOption('h') ) {
+			printHelp(opts);
 			System.exit(1);
 		}
-
-		String instancePath = null;
-		String aulasPath = null;
-		String solutionPath = null;
-
-		if (args.length == 3) {
-			instancePath = args[0];
-			aulasPath = args[1];
-			solutionPath = args[2];
-		}
-
-		if (instancePath == null || aulasPath == null || solutionPath == null) {
-			EventQueue.invokeLater(new Runnable() {
-				public void run() {
-					try {
-						MainApp app = new MainApp();
-						MainFrame window = new MainFrame(app);
-						window.setVisible(true);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			});
+		
+		if (cmd != null && cmd.hasOption('x')) {
+			processCli(prop);
 		} else {
-			try {
-				MainApp app = new MainApp();
-				int cantAulas = -1;
-				try {
-					cantAulas = Integer.parseInt(aulasPath);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				if (cantAulas > 0)
-					app.loadInstanceFCEN(instancePath, cantAulas);
-				else
-					app.loadInstanceFCEN(instancePath, aulasPath);
-
-				app.getRunnable().run();
-				app.saveSolution(solutionPath);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			loadGui(prop);
 		}
+	}
+	
+	/**
+	 * Pinta la ayuda de la aplicacion.
+	 * @param opts
+	 */
+	private static void printHelp(Options opts) {
+		HelpFormatter formatter = new HelpFormatter();
+		formatter.printHelp(
+				// Usage example
+				"micp [OPTIONS]...",
+				// Header
+				"La aplicacion cuenta por defecto, con una interfaz gráfica para operar. También, "
+				+ "dispone de una mecanismo de uso por consola especificando los parametros de "
+				+ "entrada: --aulas --cursos y --solucion.",
+				// Options List
+				opts,
+				// Footer
+				"\nPara realizar un procesamiento por consola se podría ejecutar la aplicacion de "
+				+ "la siguiente manera:"
+				+ "\n    ./micp -a20 -c /ruta/a/instancia_file -s instancia_20.sol -d2 -d4");
 	}
 
 	/**
-	 * Create the application.
+	 * Ejecuta la secuencia de la aplicacion sin interfaz gracica, usando los parametros 
+	 * obligarorios: cursos, aulas y solucion.
+	 * @param prop
 	 */
-	public MainApp() {
-		InitializeProperties();
-	}
-
-	private void InitializeProperties() {
-
-		mProperties = new Properties();
-
-		InputStream input = null;
-
+	private static void processCli(Properties prop) {
+		String instancePath = prop.getProperty("cursos_path", "");
+		String aulasPath = prop.getProperty("aulas_path", "");
+		String solutionPath = prop.getProperty("solucion_path", "");
+		
 		try {
-
-			input = new FileInputStream("config.properties");
-
-			// load a properties file
-			mProperties.load(input);
-
-			// get the property value and print it out
-			System.out.println(mProperties.getProperty("gap_limit"));
-			System.out.println(mProperties.getProperty("time_limit"));
-			System.out.println(mProperties.getProperty("pabellon"));
-
-			String propPabellon = mProperties.getProperty("pabellon");
-			if (propPabellon == null) {
-				mPabellon = DEFAULT_PABELLON;
-			} else {
-				try {
-					int pab = Integer.parseInt(propPabellon);
-					mPabellon = pab;
-				} catch (Exception ex) {
-					mPabellon = DEFAULT_PABELLON;
-				}
+			MicpApp app = new MicpApp(prop);
+			int cantAulas = -1;
+			try {
+				cantAulas = Integer.parseInt(aulasPath);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		} finally {
-			if (input != null) {
+			if (cantAulas > 0)
+				app.loadInstanceFCEN(instancePath, cantAulas);
+			else
+				app.loadInstanceFCEN(instancePath, aulasPath);
+
+			app.optimize();
+			app.saveSolution(solutionPath);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	/**
+	 * Inicia la interfaz grafica de la palicacion. Con las ocnfiguraciones pasadas por parametro y
+	 * por archivo de configuración.
+	 * 
+	 * @param prop Instancia de Properties con las cofiguraciones recibidas.
+	 */
+	private static void loadGui(Properties prop) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
 				try {
-					input.close();
-				} catch (IOException e) {
+					MicpApp app = new MicpApp(prop);
+					MainFrame window = new MainFrame(app);
+					window.setVisible(true);
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-		}
+		});
 	}
 
-	public void close() {
-
-	}
-
-	// -------------------------Se obtiene el contenido del
-	// Archivo----------------//
-	public boolean loadInstanceFCEN(String ruta, int cantAulas) throws FileNotFoundException {
-		List<Aula> aulas = new ArrayList<Aula>();
-		for (int i = 0; i < cantAulas; i++) {
-			aulas.add(new Aula(String.format("%05d", i)));
-		}
-		return loadInstanceFCEN(ruta, aulas);
-	}
-
-	public boolean loadInstanceFCEN(String ruta, String rutaAulas) throws FileNotFoundException {
-		List<Aula> aulas = loadAulasFile(rutaAulas);
-		return loadInstanceFCEN(ruta, aulas);
-	}
-
-	public boolean loadInstanceFCEN(String archivo, List<Aula> aulas) throws FileNotFoundException {
-
-		boolean status = false;
-		// Se lee el archivo de texto y se generan los grafos de conflicto y
-		// relacion.
-		File file = new File(archivo);
-		if (!(file.exists() && file.isFile() && file.canRead()))
-			throw new RuntimeException(
-					"Error de lectura! no se puede abrir el archivo: " + archivo);
-
-		String instanceName = file.getName().split("\\.(?=[^\\.]+$)")[0] + "." + mPabellon;
-
-		FileInputStream fis = new FileInputStream(file);
-		Scanner in = new Scanner(fis);
-
-		List<Clase> clases = new ArrayList<Clase>();
-		int id = 1;
-		int idLinea = 0;
-		while (in.hasNextLine()) {
-			idLinea++;
-			// System.out.println("debug - Leyendo linea "+idLinea);
-			Clase clase = null;
-
-			try {
-				String linea = in.nextLine();
-				if (linea.trim().isEmpty()) {
-					System.out.println("debug - Linea vacia: " + idLinea);
-				} else {
-					try {
-						clase = Clase.createClase(id, linea, Clase.Tipo.FCEN);
-					} catch (Exception e) {
-						System.out.println("debug - Error creando Clase con linea: " + linea);
-					}
-				}
-			} catch (Exception e) {
-				System.out.println("debug - Error Lellendo la linea: " + e);
-			}
-
-			if (clase != null && (mPabellon == 0 || clase.mPabellon == mPabellon)) {
-				clases.add(clase);
-				id++;
-			} else {
-				// if (clase == null)
-				// System.out.println("debug - No se instancio clase: ");
-				// else
-				// System.out.println("debug - No se agrega por ser de otro
-				// pabellon: ");
-				//
-			}
-		}
-
-		in.close();
-		// Cadena de texto donde se guardara el contenido del archivo
-
-		if (!clases.isEmpty()) {
-			Instance<Clase, Aula> instance = new Instance<Clase, Aula>(instanceName, clases, aulas);
-			for (int i = 0; i < clases.size(); ++i) {
-				for (int j = i + 1; j < clases.size(); ++j) {
-					Clase c1 = clases.get(i);
-					Clase c2 = clases.get(j);
-					if (Clase.seSuperponen(c1, c2))
-						instance.addConflicto(c1, c2);
-					else if (Clase.igualMateria(c1, c2))
-						instance.addRelacion(c1, c2);
-				}
-			}
-			mInstance = instance;
-			status = true;
-		} else {
-			System.out.println("# error - No se pudo parserar el archivo " + instanceName);
-			System.out.println("# debug - No se creo una instancia porque no hay cursos por asignar.");
-		}
-		return status;
-	}
-
-	public List<Aula> loadAulasFile(String path) {
-		// Se lee el archivo de texto y se generan los grafos de conflicto y
-		// relacion.
-		FileReader fr = null;
-		BufferedReader br = null;
-		// Cadena de texto donde se guardara el contenido del archivo
-		Set<Aula> aulas = new HashSet<Aula>();
-		try {
-			// ruta puede ser de tipo String o tipo File
-			fr = new FileReader(path);
-			br = new BufferedReader(fr);
-
-			String linea;
-			// Obtenemos el contenido del archivo linea por linea
-			while ((linea = br.readLine()) != null) {
-				if (linea.trim().isEmpty())
-					System.out.println("debug - Linea vacia!");
-				else {
-					aulas.add(new Aula(linea));
-				}
-			}
-		} catch (Exception e) {
-		}
-		// finally se utiliza para que si todo ocurre correctamente o si ocurre
-		// algun error se cierre el archivo que anteriormente abrimos
-		finally {
-			try {
-				br.close();
-			} catch (Exception ex) {
-			}
-		}
-
-		List<Aula> ret = new ArrayList<Aula>();
-		ret.addAll(aulas);
-		return ret;
-	}
-
-	public Runnable getRunnable() {
-		System.out.println("debug - Pabellon: " + mPabellon);
-		if (mInstance == null)
-			throw new RuntimeException("No se pudo crear la instancia. No hay cursos por asignar");
-
-		return new SolveRunnable(mInstance, mProperties);
-
-	}
-
-	public boolean saveSolution(String path) {
-
-		PrintWriter out = null;
-
-		try {
-			out = new PrintWriter(path);
-		} catch (FileNotFoundException | SecurityException e) {
-			e.printStackTrace();
-		}
-
-		if (out != null) {
-			out.println("# SOLUCION ENCONTRADA POR EL MICP: ");
-			for (Clase c : mInstance.getVertices()) {
-				out.println(mInstance.getOptimal(c) + "|" + c.serialize());
-			}
-		} else {
-			System.out.println("======================================== ");
-			System.out.println("== No se pudo abrir el archivo de salida ");
-			for (Clase c : mInstance.getVertices()) {
-				System.out.println(mInstance.getOptimal(c) + "|" + c.serialize());
-			}
-		}
-
-		return true;
-	}
-
-	public Instance<Clase, Aula> getInstancia() {
-		return mInstance;
-	}
-
-	// -----------------------------------------------------------------------------//
 }

@@ -8,12 +8,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.TreeMap;
 
 import org.jgrapht.Graph;
 
-import ar.edu.ungs.tesina.micp.inequalities.InequalitiesHelper;
+import ar.edu.ungs.tesina.micp.inequalities.CustomInequalities;
 import jscip.Constraint;
 import jscip.SCIP_Vartype;
 import jscip.Scip;
@@ -24,64 +23,31 @@ import jscip.Variable;
  * @author yoshknight
  *
  */
-public class MicpScipSolver {
+public class MicpScipSolver<T extends Vertex, U extends Color> {
 
 	private Scip mSolver;
 
-	private Map<ComparablePair<Vertex, Color>, Variable> mVarX;
-	private Map<ComparablePair<Vertex, Vertex>, Variable> mVarY;
+	private Map<ComparableVertexColorPair<T, U>, Variable> mVarX;
+	private Map<ComparableVertexPair<T, T>, Variable> mVarY;
 
 	private int mNSols = 0;
 	private String mName = "";
 	private long mInitSearchingTime, mInitSolvingTime;
 
-	private InequalitiesHelper mInequalitiesHelper;
+	private CustomInequalities<T,U> mCustomInequalities;
 
 	private boolean mIsVerbose = true;
 
-	/**
-	 * Verifica que el Solver pasado por parametro no sea nulo
-	 * 
-	 * Si es nulo Lanza una excepción En caso de que no sea null devuelve una
-	 * instancia de la clase.
-	 * 
-	 * @param solver
-	 *            una implementacion de la interfaz Solver
-	 * @return
-	 */
-	public static MicpScipSolver createMicp(String name, Properties prop) throws RuntimeException {
-		try {
-			System.loadLibrary("jscip");
-
-		} catch (UnsatisfiedLinkError ex) {
-			throw new RuntimeException("No se encontro la libreria jscip.", ex);
-		} catch (Exception ex) {
-			throw new RuntimeException("No se pudo cargar la libreria jscip.", ex);
-		}
-		SolverConfig solverConfig = new SolverConfig(prop);
-
-		Scip solver = new Scip();
-		solver.create("micp_app-" + name);
-
-		solver.hideOutput(!solverConfig.isVerbose());
-
-		solver.setRealParam("limits/time", solverConfig.getTimeLimit());
-		solver.setRealParam("limits/gap", solverConfig.getGapLimit());
-		
-		InequalitiesHelper ineqHelper = new InequalitiesHelper(solverConfig); 
-
-		return new MicpScipSolver(solver, name, solverConfig, ineqHelper);
-	}
 
 	/**
 	 * 
 	 * @param solver
 	 */
-	private MicpScipSolver(Scip solver, String name, SolverConfig solverConfig, InequalitiesHelper inequalitiesHelper) {
+	MicpScipSolver(Scip solver, String name, SolverConfig solverConfig, CustomInequalities<T,U> inequalities) {
 		mIsVerbose = solverConfig.isVerbose();
 		mSolver = solver;
 		mName = name;
-		mInequalitiesHelper = inequalitiesHelper;
+		mCustomInequalities = inequalities;
 	}
 
 	/**
@@ -95,27 +61,27 @@ public class MicpScipSolver {
 	 * @param colors
 	 *            Lista de colores disponibles
 	 */
-	public Map<Vertex, Color> searchOptimal(Graph<Vertex, Edge> conflictGraph,
-			Graph<Vertex, Edge> relationshipGraph, List<Color> colors) {
+	public Map<T, U> searchOptimal(Graph<T, Edge<T>> conflictGraph,
+			Graph<T, Edge<T>> relationshipGraph, List<U> colors) {
 
 		mInitSearchingTime = System.currentTimeMillis();
 
-		List<Vertex> vertices = new ArrayList<Vertex>(conflictGraph.vertexSet());
+		List<T> vertices = new ArrayList<T>(conflictGraph.vertexSet());
 		Collections.sort(vertices);
 
 		// System.out.print( "Vertices: [ " );
-		// for (Vertex v:vertices)
+		// for (T v:vertices)
 		// System.out.print( v+" " );
 		// System.out.println( "]" );
 		// System.out.print( "Colors: [ " );
-		// for (Color c: colors)
+		// for (U c: colors)
 		// System.out.print( c+" " );
 		// System.out.println( "]" );
 		// System.out.println( "CONFLICTO: "+conflictGraph );
 		// System.out.println( "RELACION: "+relationshipGraph );
 		// Variable[][] varX = new Variable[V.size()][colors.size()];
-		mVarX = new TreeMap<ComparablePair<Vertex, Color>, Variable>();
-		mVarY = new TreeMap<ComparablePair<Vertex, Vertex>, Variable>();
+		mVarX = new TreeMap<ComparableVertexColorPair<T, U>, Variable>();
+		mVarY = new TreeMap<ComparableVertexPair<T, T>, Variable>();
 
 		// Se crean las variables binarias e implicitamente se define la función
 		// objetivo.
@@ -123,8 +89,8 @@ public class MicpScipSolver {
 		/**
 		 * 5. varX is Binary {0,1}
 		 */
-		for (Vertex v : vertices) {
-			for (Color c : colors) {
+		for (T v : vertices) {
+			for (U c : colors) {
 				Variable var = mSolver.createVar(v + "-" + c, 0, 1, 0,
 						SCIP_Vartype.SCIP_VARTYPE_BINARY);
 				putVarX(v, c, var);
@@ -134,9 +100,9 @@ public class MicpScipSolver {
 		/**
 		 * 6. varY is Binary {0,1}
 		 */
-		for (Edge e : relationshipGraph.edgeSet()) {
-			Vertex s = relationshipGraph.getEdgeSource(e);
-			Vertex t = relationshipGraph.getEdgeTarget(e);
+		for (Edge<T> e : relationshipGraph.edgeSet()) {
+			T s = relationshipGraph.getEdgeSource(e);
+			T t = relationshipGraph.getEdgeTarget(e);
 
 			if (s.compareTo(t) < 0) {
 				Variable var;
@@ -158,15 +124,15 @@ public class MicpScipSolver {
 		// deshabilitar por
 		// configuracion. por default de usar la primera.
 
-		if ( mInequalitiesHelper != null )
-			mInequalitiesHelper.addInequalities(this, vertices, colors, conflictGraph, relationshipGraph);
+		if ( mCustomInequalities != null )
+			mCustomInequalities.addInequalities(this, vertices, colors, conflictGraph, relationshipGraph);
 
 		// Se busca una solucion optima.
 		Solution sol = solve();
 
 		// Se genera un Map que asocia vertice con color para devolver como
 		// solucion encontrada.
-		Map<Vertex, Color> optimal = readSolution(sol, vertices, colors);
+		Map<T, U> optimal = readSolution(sol, vertices, colors);
 
 		// Se imprime informacion de muestreo de la solucion obtenida.
 		printExecutionData(sol, vertices, colors, conflictGraph, relationshipGraph);
@@ -193,8 +159,8 @@ public class MicpScipSolver {
 	 * @param conflictGraph
 	 * @param relationshipGraph
 	 */
-	private void addMandatoryConstraints(List<Vertex> vertices, List<Color> colors,
-			Graph<Vertex, Edge> conflictGraph, Graph<Vertex, Edge> relationshipGraph) {
+	private void addMandatoryConstraints(List<T> vertices, List<U> colors,
+			Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
 		/**
 		 * 1. Constraint to assure that each vertex has one color. colorFactor
 		 * Verifica: SUMc(Xic) <=1
@@ -202,10 +168,10 @@ public class MicpScipSolver {
 		double[] colorFactor = new double[colors.size()];
 		for (int i = 0; i < colorFactor.length; i++)
 			colorFactor[i] = 1;
-		for (Vertex v : vertices) {
+		for (T v : vertices) {
 			Variable[] varsFromV = new Variable[colors.size()];
 			int indexC = 0;
-			for (Color c : colors) {
+			for (U c : colors) {
 				varsFromV[indexC++] = getVarX(v, c);
 			}
 
@@ -220,10 +186,10 @@ public class MicpScipSolver {
 		 * verifica: Xic + Xjc <= 1
 		 */
 		double[] conflictFactors = { 1, 1 };
-		for (Color c : colors) {
-			for (Edge e : conflictGraph.edgeSet()) {
-				Vertex s = conflictGraph.getEdgeSource(e);
-				Vertex t = conflictGraph.getEdgeTarget(e);
+		for (U c : colors) {
+			for (Edge<T> e : conflictGraph.edgeSet()) {
+				T s = conflictGraph.getEdgeSource(e);
+				T t = conflictGraph.getEdgeTarget(e);
 
 				Variable[] vars = new Variable[2];
 				vars[0] = getVarX(s, c);
@@ -242,10 +208,10 @@ public class MicpScipSolver {
 		 */
 		double[] relationFactor1 = { -1, 1, 1 };
 		double[] relationFactor2 = { 1, -1, 1 };
-		for (Color c : colors) {
-			for (Edge e : relationshipGraph.edgeSet()) {
-				Vertex s = relationshipGraph.getEdgeSource(e);
-				Vertex t = relationshipGraph.getEdgeTarget(e);
+		for (U c : colors) {
+			for (Edge<T> e : relationshipGraph.edgeSet()) {
+				T s = relationshipGraph.getEdgeSource(e);
+				T t = relationshipGraph.getEdgeTarget(e);
 				if (s.compareTo(t) < 0) {
 
 					Variable[] vars = new Variable[3];
@@ -288,18 +254,18 @@ public class MicpScipSolver {
 		return bestSol;
 	}
 
-	private Map<Vertex, Color> readSolution(Solution sol, List<Vertex> vertices,
-			List<Color> colors) {
+	private Map<T, U> readSolution(Solution sol, List<T> vertices,
+			List<U> colors) {
 
-		Map<Vertex, Color> optimal = null;
+		Map<T, U> optimal = null;
 
 		if (sol != null) {
-			optimal = new TreeMap<Vertex, Color>();
+			optimal = new TreeMap<T, U>();
 
-			for (Entry<ComparablePair<Vertex, Color>, Variable> entry : mVarX.entrySet()) {
+			for (Entry<ComparableVertexColorPair<T, U>, Variable> entry : mVarX.entrySet()) {
 				Variable var = entry.getValue();
 				if (mSolver.getSolVal(sol, var) == 1) {
-					ComparablePair<Vertex, Color> key = entry.getKey();
+					ComparableVertexColorPair<T, U> key = entry.getKey();
 
 					optimal.put(key.getFirst(), key.getSecond());
 				}
@@ -308,8 +274,8 @@ public class MicpScipSolver {
 		return optimal;
 	}
 
-	private void printExecutionData(Solution sol, List<Vertex> vertices, List<Color> colors,
-			Graph<Vertex, Edge> conflictGraph, Graph<Vertex, Edge> relationshipGraph) {
+	private void printExecutionData(Solution sol, List<T> vertices, List<U> colors,
+			Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
 
 		String msg = "No Se encontró solución!";
 		String gap = "infinite";
@@ -360,25 +326,25 @@ public class MicpScipSolver {
 		return mSolver;
 	}
 	
-	public void putVarX(Vertex v, Color c, Variable var) {
-		ComparablePair<Vertex, Color> p = new ComparablePair<Vertex, Color>(v, c);
+	public void putVarX(T v, U c, Variable var) {
+		ComparableVertexColorPair<T, U> p = new ComparableVertexColorPair<T, U>(v, c);
 		mVarX.put(p, var);
 	}
 
-	public Variable getVarX(Vertex v, Color c) {
-		return mVarX.get(new ComparablePair<Vertex, Color>(v, c));
+	public Variable getVarX(T v, U c) {
+		return mVarX.get(new ComparableVertexColorPair<T, U>(v, c));
 	}
 
-	public void putVarY(Vertex v1, Vertex v2, Variable var) {
-		ComparablePair<Vertex, Vertex> p = new ComparablePair<Vertex, Vertex>(v1, v2);
+	public void putVarY(T v1, T v2, Variable var) {
+		ComparableVertexPair<T, T> p = new ComparableVertexPair<T, T>(v1, v2);
 		mVarY.put(p, var);
 	}
 
-	public Variable getVarY(Vertex v1, Vertex v2) {
+	public Variable getVarY(T v1, T v2) {
 		if (v1.compareTo(v2) < 0)
-			return mVarY.get(new ComparablePair<Vertex, Vertex>(v1, v2));
+			return mVarY.get(new ComparableVertexPair<T, T>(v1, v2));
 		else
-			return mVarY.get(new ComparablePair<Vertex, Vertex>(v2, v1));
+			return mVarY.get(new ComparableVertexPair<T, T>(v2, v1));
 	}
 
 }

@@ -25,7 +25,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import ar.edu.ungs.tesina.micp.example.MainApp;
+import ar.edu.ungs.tesina.micp.example.MicpApp;
 import ar.edu.ungs.tesina.micp.example.model.Aula;
 import ar.edu.ungs.tesina.micp.example.ui.uimodel.InstanciaTableModel;
 
@@ -43,7 +43,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	static final String ACTION_OPTIMIZAR = "optimizarAction";
 	static final String ACTION_EXPORTAR_SOLUCION = "exportarSolucionAction";
 
-	private MainApp mApp;
+	private MicpApp mApp;
 
 	private JPanel contentPane;
 	private JTable mCursosTable;
@@ -62,7 +62,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
-	public MainFrame(MainApp app) {
+	public MainFrame(MicpApp app) {
 		mApp = app;
 		try {
 			// Cambiamos el Look&Feel
@@ -280,7 +280,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	}
 
 	private void optimizar() {
-		JFrame f = new SolvingFrame(this, mApp.getRunnable());
+		JFrame f = new SolvingFrame(this, mApp.getRunnableSolver());
 		setEnabled(false);
 		f.setVisible(true);
 	}
@@ -310,14 +310,27 @@ public class MainFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	public void resumeFromOptimization() {
+	public void resumeFromOptimization(String message, boolean isCancelled) {
 		setEnabled(true);
-		if (mApp.getInstancia().hasSolution()) {
+		mBtnExportar.setEnabled(false);
+		int icon = JOptionPane.WARNING_MESSAGE;
+		
+		if (message == null || message.trim().isEmpty()) {
+			// muestro el mensaje como está!
+			icon = JOptionPane.ERROR_MESSAGE;
+		} else if (isCancelled) {
+			message = "Asignación cancelada.";
+			
+		} else if (mApp.getInstancia().hasSolution()) {
 			mBtnExportar.setEnabled(true);
-			JOptionPane.showMessageDialog(this, "Asignacion optimizada.");
+			message = "Asignación optimizada.";
+			icon = JOptionPane.INFORMATION_MESSAGE;
+			
 		} else {
-			mBtnExportar.setEnabled(false);
-			JOptionPane.showMessageDialog(this, "La instancia no tiene solucion");
+			message = "La instancia no tiene solución.";
+			
 		}
+		
+		JOptionPane.showMessageDialog(this, message,"Optimización finalizada!",icon);
 	}
 }
