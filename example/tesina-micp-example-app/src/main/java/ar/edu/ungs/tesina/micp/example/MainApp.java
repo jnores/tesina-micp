@@ -105,6 +105,10 @@ public class MainApp {
 	private static boolean loadCliProperties(Properties prop, CommandLine cmd) {
 		if (prop == null) 
 			prop = new Properties();
+		if (cmd == null)
+			return true;
+		
+		
 		if ( cmd.hasOption('x') ) {
 			if ( cmd.hasOption('c') )
 				prop.setProperty("cursos_path", cmd.getOptionValue('c'));
@@ -177,7 +181,7 @@ public class MainApp {
 		if (cmd.hasOption('i'))
 		{
 			String[] cliIneq = cmd.getOptionValues('i');
-			String inequalities = String.join("|",cliIneq);
+			String inequalities = String.join(",",cliIneq);
 
 			prop.setProperty("inequalities_enabled", inequalities);
 		}
@@ -197,15 +201,16 @@ public class MainApp {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		args = new String[]{"--help"};
+		// args = new String[]{"--help"};
 		// args = new String[]{"-x","-cpath/to/cursos","-a","24","-s","path/to/solucion","-i2",
 		//                     "-i","4" , "-t240", "-g0.05"};
+		
 		Properties prop = loadProperties();
 		Options opts = getOptions();
 		boolean isOk = true;
 		CommandLine cmd = null;
+		// FIXME: Esto devuelve cmd = null y rompe todo!!
 		try {
-			
 			cmd = getCommand(opts, args);
 			isOk = loadCliProperties(prop, cmd);
 
@@ -213,7 +218,7 @@ public class MainApp {
 			e1.printStackTrace();
 		}
 		
-		if (!isOk || cmd.hasOption('h') ) {
+		if (!isOk || ( cmd != null && cmd.hasOption('h') ) ) {
 			printHelp(opts);
 			System.exit(1);
 		}

@@ -17,11 +17,8 @@ import jscip.Variable;
 
 public class TriangleDiamondInequalities<T extends Vertex, U extends Color> extends CustomInequalities<T,U> {
 
-	public static final long SEMI_TRIANGLE_INEQUALITIES = 128;
-	public static final long SEMI_DIAMOND_INEQUALITIES = 256;
-
-	public static final long ALL_INEQUALITIES = SEMI_TRIANGLE_INEQUALITIES
-			+ SEMI_DIAMOND_INEQUALITIES;
+	public static final int SEMI_TRIANGLE_INEQUALITIES = 9;
+	public static final int SEMI_DIAMOND_INEQUALITIES = 10;
 
 	public TriangleDiamondInequalities(SolverConfig solverConfig) {
 		super(solverConfig);
@@ -32,15 +29,15 @@ public class TriangleDiamondInequalities<T extends Vertex, U extends Color> exte
 			List<U> colors, Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
 
 		// Si no se selecciono ninguna inequality, se termina el metodo.
-		if ((mInequalitiesEnabled & ALL_INEQUALITIES) == 0)
+		if ( mInequalitiesEnabled.isEmpty() )
 			return;
 
-		if ((mInequalitiesEnabled & SEMI_TRIANGLE_INEQUALITIES) != 0) {
+		if ( mInequalitiesEnabled.contains( SEMI_TRIANGLE_INEQUALITIES ) ) {
 			addSemiTriangleInequalities(micpSolver, vertices, colors, conflictGraph,
 					relationshipGraph);
 		}
 
-		if ((mInequalitiesEnabled & SEMI_DIAMOND_INEQUALITIES) != 0) {
+		if ( mInequalitiesEnabled.contains( SEMI_DIAMOND_INEQUALITIES ) ) {
 			addSemiDiamondInequalities(micpSolver, vertices, colors, conflictGraph,
 					relationshipGraph);
 		}
@@ -193,5 +190,12 @@ public class TriangleDiamondInequalities<T extends Vertex, U extends Color> exte
 				}
 			}
 		}
+	}
+
+	public static boolean mustAddInequalities(List<Integer> mInequalitiesEnabled) {
+		if (mInequalitiesEnabled.isEmpty())
+			return false;
+		return mInequalitiesEnabled.contains(SEMI_TRIANGLE_INEQUALITIES)
+				|| mInequalitiesEnabled.contains(SEMI_DIAMOND_INEQUALITIES);
 	}
 }

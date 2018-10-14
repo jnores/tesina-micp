@@ -22,11 +22,8 @@ import jscip.Variable;
 
 public class ValidInequalities<T extends Vertex, U extends Color> extends CustomInequalities<T,U> {
 
-	public static final long BOUNDING_INEQUALITIES = 512;
-	public static final long REINFORCED_BOUNDING_INEQUALITIES = 1024;
-
-	public static final long ALL_INEQUALITIES = BOUNDING_INEQUALITIES
-			+ REINFORCED_BOUNDING_INEQUALITIES;
+	public static final int BOUNDING_INEQUALITIES = 11;
+	public static final int REINFORCED_BOUNDING_INEQUALITIES = 12;
 
 	public ValidInequalities(SolverConfig solverConfig) {
 		super(solverConfig);
@@ -37,15 +34,15 @@ public class ValidInequalities<T extends Vertex, U extends Color> extends Custom
 			Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
 
 		// Si no se selecciono ninguna inequality, se termina el metodo.
-		if ((mInequalitiesEnabled & ALL_INEQUALITIES) == 0)
+		if ( mInequalitiesEnabled.isEmpty() )
 			return;
 		
-		if ((mInequalitiesEnabled & BOUNDING_INEQUALITIES) != 0) {
+		if ( mInequalitiesEnabled.contains( BOUNDING_INEQUALITIES) ) {
 			addBoundigInequalities(micpSolver, vertices, colors, conflictGraph,
 					relationshipGraph);
 		}
 
-		if ((mInequalitiesEnabled & REINFORCED_BOUNDING_INEQUALITIES) != 0) {
+		if ( mInequalitiesEnabled.contains( REINFORCED_BOUNDING_INEQUALITIES) ) {
 			addReinforcedBoundigInequalities(micpSolver, vertices, colors, conflictGraph,
 					relationshipGraph);
 		}
@@ -164,6 +161,13 @@ public class ValidInequalities<T extends Vertex, U extends Color> extends Custom
 			}	
 		}
 		
+	}
+
+	public static boolean mustAddInequalities(List<Integer> mInequalitiesEnabled) {
+		if (mInequalitiesEnabled.isEmpty())
+			return false;
+		return mInequalitiesEnabled.contains(BOUNDING_INEQUALITIES)
+				|| mInequalitiesEnabled.contains(REINFORCED_BOUNDING_INEQUALITIES);
 	}
 
 }

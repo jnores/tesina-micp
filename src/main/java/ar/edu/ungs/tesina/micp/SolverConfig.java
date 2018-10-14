@@ -1,5 +1,7 @@
 package ar.edu.ungs.tesina.micp;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 // TODO: Cambiar la definiion de ls desigualdades y armarle un factory y/o algun Helper. ahora es id1|id2|id3... 
@@ -7,13 +9,13 @@ public class SolverConfig {
 	static final double DEFAULT_GAP_LIMIT = 0.0;
 	static final int DEFAULT_TIME_LIMIT = 3600;
 	static final boolean DEFAULT_IS_VERBOSE = true; // false;
-	static final long DEFAULT_INEQUALITIES_ENABLED = 24; // WITHOUT_INEQUALITIES
 	private double gapLimit = DEFAULT_GAP_LIMIT;
 	private long timeLimit = DEFAULT_TIME_LIMIT;
 	private boolean isVerbose = DEFAULT_IS_VERBOSE;
-	private long inequalitiesEnabled = DEFAULT_INEQUALITIES_ENABLED;
+	private List<Integer> inequalitiesEnabled;
 
 	public SolverConfig(Properties p) {
+		inequalitiesEnabled = new ArrayList<Integer>();
 		readGapLimit(p);
 		readTimeLimit(p);
 		readVerbose(p);
@@ -74,23 +76,22 @@ public class SolverConfig {
 
 	
 	private void readInequalitiesEnabled(Properties p) {
-		String ineqEnabled = p.getProperty("inequalities_enabled");
-		try {
-			int ineqEnabledValue = Integer.parseInt(ineqEnabled);
-			if (ineqEnabledValue > 0)
-				inequalitiesEnabled = ineqEnabledValue;
-		} catch (Exception e) {
-			inequalitiesEnabled = DEFAULT_INEQUALITIES_ENABLED;
-			if (ineqEnabled == null) {
-				System.out
-						.println("debug - No se configuró un las Inequalities a usar. Uso por default: "
-								+ DEFAULT_INEQUALITIES_ENABLED);
-			} else {
-				System.out.println("debug - No se pudo parsear la configuración de Inequalities a usar (" + ineqEnabled
-						+ "). uso por default: " + DEFAULT_INEQUALITIES_ENABLED);
+		String ineqEnabled = p.getProperty("inequalities_enabled","");
+		
+		String[] aux = ineqEnabled.split(",");
+		int n;
+		System.out.println("Proceso "+ineqEnabled);
+		
+		for (String s: aux) {
+			if ( !s.trim().isEmpty() ) {
+				try {
+					n = Integer.parseInt(s);
+					inequalitiesEnabled.add(n);
+				} catch(NumberFormatException ex) {
+					System.out.println("debug - No se pudo parsear la inequality como entero con el parametro: "+s);
+				}
 			}
-
-		}
+		}	
 	}
 
 	public double getGapLimit() {
@@ -105,7 +106,7 @@ public class SolverConfig {
 		return isVerbose;
 	}
 	
-	public long getInequalitiesEnabled() {
+	public List<Integer> getInequalitiesEnabled() {
 		return inequalitiesEnabled;
 	}
 

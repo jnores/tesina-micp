@@ -18,7 +18,7 @@ abstract public class CustomInequalities<T extends Vertex,U extends Color> {
 	public static final long WITHOUT_INEQUALITIES = 0;
 
 	protected SolverConfig mConfig;
-	protected long mInequalitiesEnabled;
+	protected List<Integer> mInequalitiesEnabled;
 
 	public CustomInequalities(SolverConfig solverConfig) {
 		mConfig = solverConfig;

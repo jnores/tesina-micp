@@ -12,7 +12,7 @@ import ar.edu.ungs.tesina.micp.Vertex;
 
 public class InequalitiesHelper<T extends Vertex,U extends Color> extends CustomInequalities<T,U> {
 	private SolverConfig mConfig;
-	private long mInequalitiesEnabled;
+	private List<Integer> mInequalitiesEnabled;
 
 	public InequalitiesHelper(SolverConfig solverConfig) {
 		super(solverConfig);
@@ -25,31 +25,31 @@ public class InequalitiesHelper<T extends Vertex,U extends Color> extends Custom
 	public void addInequalities(MicpScipSolver<T,U> micpSolver, List<T> vertices, List<U> colors,
 			Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
 		// Si no se selecciono ninguna inequality, se termina el metodo.
-		if (mInequalitiesEnabled <= CustomInequalities.WITHOUT_INEQUALITIES) {
+		if (mInequalitiesEnabled.isEmpty()) {
 			return;
 		}
 
 		CustomInequalities<T,U> ineq = null;
 
-		if ((mInequalitiesEnabled & PartitionedInequalities.ALL_INEQUALITIES) != 0) {
+		if ( PartitionedInequalities.mustAddInequalities(mInequalitiesEnabled)) {
 			ineq = new PartitionedInequalities<T,U>(mConfig);
 			ineq.addInequalities(micpSolver, vertices, colors, conflictGraph, relationshipGraph);
 			ineq = null;
 		}
 
-		if ((mInequalitiesEnabled & CliqueInequalities.ALL_INEQUALITIES) != 0) {
+		if ( CliqueInequalities.mustAddInequalities(mInequalitiesEnabled) ) {
 			ineq = new CliqueInequalities<T,U>(mConfig);
 			ineq.addInequalities(micpSolver, vertices, colors, conflictGraph, relationshipGraph);
 			ineq = null;
 		}
 
-		if ((mInequalitiesEnabled & TriangleDiamondInequalities.ALL_INEQUALITIES) != 0) {
+		if ( TriangleDiamondInequalities.mustAddInequalities(mInequalitiesEnabled) ) {
 			ineq = new TriangleDiamondInequalities<T,U>(mConfig);
 			ineq.addInequalities(micpSolver, vertices, colors, conflictGraph, relationshipGraph);
 			ineq = null;
 		}
 
-		if ((mInequalitiesEnabled & ValidInequalities.ALL_INEQUALITIES) != 0) {
+		if ( ValidInequalities.mustAddInequalities(mInequalitiesEnabled) ) {
 			ineq = new ValidInequalities<T,U>(mConfig);
 			ineq.addInequalities(micpSolver, vertices, colors, conflictGraph, relationshipGraph);
 			ineq = null;

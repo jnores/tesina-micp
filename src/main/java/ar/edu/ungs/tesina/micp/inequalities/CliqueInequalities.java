@@ -20,15 +20,12 @@ import jscip.Constraint;
 import jscip.Variable;
 
 public class CliqueInequalities<T extends Vertex, U extends Color> extends CustomInequalities<T,U> {
-	public static final long VERTEX_CLIQUE_INEQUALITIES = 8;
-	public static final long CLIQUE_PARTITIONED_INEQUALITIES = 16;
-	public static final long SUB_CLIQUE_INEQUALITIES = 32;
-	public static final long TWO_COLOR_SUB_CLIQUE_INEQUALITIES = 64;
+	public static final int VERTEX_CLIQUE_INEQUALITIES = 5;
+	public static final int CLIQUE_PARTITIONED_INEQUALITIES = 6;
+	public static final int SUB_CLIQUE_INEQUALITIES = 7;
+	public static final int TWO_COLOR_SUB_CLIQUE_INEQUALITIES = 8;
 
-	public static final long ALL_INEQUALITIES = VERTEX_CLIQUE_INEQUALITIES
-			+ CLIQUE_PARTITIONED_INEQUALITIES + SUB_CLIQUE_INEQUALITIES
-			+ TWO_COLOR_SUB_CLIQUE_INEQUALITIES;
-
+	
 	public CliqueInequalities(SolverConfig solverConfig) {
 		super(solverConfig);
 	}
@@ -50,7 +47,7 @@ public class CliqueInequalities<T extends Vertex, U extends Color> extends Custo
 			Graph<T, Edge<T>> relationshipGraph) {
 
 		// Si no se selecciono ninguna inequality, se termina el metodo.
-		if ((mInequalitiesEnabled & ALL_INEQUALITIES) == 0)
+		if ( mInequalitiesEnabled.isEmpty() )
 			return;
 
 		// Busco todas las cliques que cumplan con Figure 1.
@@ -77,19 +74,19 @@ public class CliqueInequalities<T extends Vertex, U extends Color> extends Custo
 					}
 					System.out.println(" ]");
 
-					if ((mInequalitiesEnabled & VERTEX_CLIQUE_INEQUALITIES) != 0) {
+					if ( mInequalitiesEnabled.contains( VERTEX_CLIQUE_INEQUALITIES ) ) {
 						addVertexCliqueInequality(micpSolver, v, cliqueVertex);
 					}
 
-					if ((mInequalitiesEnabled & CLIQUE_PARTITIONED_INEQUALITIES) != 0) {
+					if ( mInequalitiesEnabled.contains( CLIQUE_PARTITIONED_INEQUALITIES ) ) {
 						addCliquePartitionedInequality(micpSolver, v, cliqueVertex, colors);
 					}
 
-					if ((mInequalitiesEnabled & SUB_CLIQUE_INEQUALITIES) != 0) {
+					if ( mInequalitiesEnabled.contains( SUB_CLIQUE_INEQUALITIES ) ) {
 						addSubCliqueInequality(micpSolver, v, cliqueVertex, colors);
 					}
 
-					if ((mInequalitiesEnabled & TWO_COLOR_SUB_CLIQUE_INEQUALITIES) != 0) {
+					if ( mInequalitiesEnabled.contains( TWO_COLOR_SUB_CLIQUE_INEQUALITIES ) ) {
 						addTwoColorSubCliqueInequality(micpSolver, v, cliqueVertex, colors);
 					}
 
@@ -330,6 +327,15 @@ public class CliqueInequalities<T extends Vertex, U extends Color> extends Custo
 			throw new RuntimeException("MicpScipSolver.generateD colors less than clique size.");
 
 		return generateColorsSubset(colors, len);
+	}
+
+	public static boolean mustAddInequalities(List<Integer> mInequalitiesEnabled) {
+		if (mInequalitiesEnabled.isEmpty())
+			return false;
+		return mInequalitiesEnabled.contains(CLIQUE_PARTITIONED_INEQUALITIES)
+				|| mInequalitiesEnabled.contains(VERTEX_CLIQUE_INEQUALITIES)
+				|| mInequalitiesEnabled.contains(SUB_CLIQUE_INEQUALITIES)
+				|| mInequalitiesEnabled.contains(TWO_COLOR_SUB_CLIQUE_INEQUALITIES);
 	}
 
 }

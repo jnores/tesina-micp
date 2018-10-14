@@ -21,38 +21,36 @@ import jscip.Variable;
  * @author yoshknight
  *
  */
-public class PartitionedInequalities<T extends Vertex,U extends Color> extends CustomInequalities<T,U> {
+public class PartitionedInequalities<T extends Vertex, U extends Color>
+		extends CustomInequalities<T, U> {
 
-	public static final long PARTITIONED_INEQUALITIES = 1;
-	public static final long THREE_PARTITIONED_INEQUALITIES = 2;
-	public static final long K_PARTITIONED_INEQUALITIES = 4;
-
-	public static final long ALL_INEQUALITIES = PARTITIONED_INEQUALITIES
-			+ THREE_PARTITIONED_INEQUALITIES + K_PARTITIONED_INEQUALITIES;
+	public static final int PARTITIONED_INEQUALITIES = 2;
+	public static final int THREE_PARTITIONED_INEQUALITIES = 3;
+	public static final int K_PARTITIONED_INEQUALITIES = 4;
 
 	public PartitionedInequalities(SolverConfig solverConfig) {
 		super(solverConfig);
 	}
 
 	@Override
-	public void addInequalities(MicpScipSolver<T,U> micpSolver, List<T> vertices,
-			List<U> colors, Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
+	public void addInequalities(MicpScipSolver<T, U> micpSolver, List<T> vertices, List<U> colors,
+			Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
 
 		// Si no se selecciono ninguna inequality, se termina el metodo.
-		if ((mInequalitiesEnabled & ALL_INEQUALITIES) == 0)
+		if (mInequalitiesEnabled.isEmpty())
 			return;
 
-		if ((mInequalitiesEnabled & PARTITIONED_INEQUALITIES) != 0) {
+		if (mInequalitiesEnabled.contains(PARTITIONED_INEQUALITIES)) {
 			addPartitionedInequality(micpSolver, vertices, colors, conflictGraph,
 					relationshipGraph);
 		}
 
-		if ((mInequalitiesEnabled & THREE_PARTITIONED_INEQUALITIES) != 0) {
+		if (mInequalitiesEnabled.contains(THREE_PARTITIONED_INEQUALITIES)) {
 			addThreePartitionedInequality(micpSolver, vertices, colors, conflictGraph,
 					relationshipGraph);
 		}
 
-		if ((mInequalitiesEnabled & K_PARTITIONED_INEQUALITIES) != 0) {
+		if (mInequalitiesEnabled.contains(K_PARTITIONED_INEQUALITIES)) {
 			addKPartitionedInequality(micpSolver, vertices, colors, conflictGraph,
 					relationshipGraph);
 		}
@@ -68,9 +66,8 @@ public class PartitionedInequalities<T extends Vertex,U extends Color> extends C
 	 * @param conflictGraph
 	 * @param relationshipGraph
 	 */
-	private void addPartitionedInequality(MicpScipSolver<T,U> micpSolver, List<T> vertices,
-			List<U> colors, Graph<T, Edge<T>> conflictGraph,
-			Graph<T, Edge<T>> relationshipGraph) {
+	private void addPartitionedInequality(MicpScipSolver<T, U> micpSolver, List<T> vertices,
+			List<U> colors, Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
 
 		int len = colors.size() - 1; // 1 <= len <= |colors|-1
 		Set<U> D = generateColorsSubset(colors, len);
@@ -110,9 +107,8 @@ public class PartitionedInequalities<T extends Vertex,U extends Color> extends C
 
 	}
 
-	private void addThreePartitionedInequality(MicpScipSolver<T,U> micpSolver, List<T> vertices,
-			List<U> colors, Graph<T, Edge<T>> conflictGraph,
-			Graph<T, Edge<T>> relationshipGraph) {
+	private void addThreePartitionedInequality(MicpScipSolver<T, U> micpSolver, List<T> vertices,
+			List<U> colors, Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
 
 		int len = colors.size() - 1; // 2 <= len <= |colors|-1
 		Set<U> D = generateColorsSubset(colors, len);
@@ -168,11 +164,19 @@ public class PartitionedInequalities<T extends Vertex,U extends Color> extends C
 
 	}
 
-	private void addKPartitionedInequality(MicpScipSolver<T,U> micpSolver, List<T> vertices,
+	private void addKPartitionedInequality(MicpScipSolver<T, U> micpSolver, List<T> vertices,
 			List<U> colors, Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
 
 		throw new RuntimeException(
-				"ERROR - Not Implemented Method PartitionedInequalities::addKPartitionedInequality ");
+				"ERROR - Not Implemented Method PartitionedInequalities::addKPartitionedInequality");
+	}
+
+	public static boolean mustAddInequalities(List<Integer> mInequalitiesEnabled) {
+		if (mInequalitiesEnabled.isEmpty())
+			return false;
+		return mInequalitiesEnabled.contains(PARTITIONED_INEQUALITIES)
+				|| mInequalitiesEnabled.contains(THREE_PARTITIONED_INEQUALITIES)
+				|| mInequalitiesEnabled.contains(K_PARTITIONED_INEQUALITIES);
 	}
 
 }
