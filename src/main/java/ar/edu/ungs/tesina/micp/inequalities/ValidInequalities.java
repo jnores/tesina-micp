@@ -83,6 +83,7 @@ public class ValidInequalities<T extends Vertex, U extends Color> extends Custom
 						addInequalities(micpSolver, i,k1,k2,colors);
 					}
 				}
+				
 			}	
 		}
 	}

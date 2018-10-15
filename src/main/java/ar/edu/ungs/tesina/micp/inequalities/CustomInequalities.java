@@ -59,8 +59,8 @@ abstract public class CustomInequalities<T extends Vertex,U extends Color> {
 	 */
 	public Set<U> generateComplement(Collection<U> colors, Collection<U> set) {
 		Set<U> comp = new TreeSet<U>();
-		for (U elem : set)
-			if (!colors.contains(elem))
+		for (U elem : colors)
+			if (!set.contains(elem))
 				comp.add(elem);
 		return comp;
 	}

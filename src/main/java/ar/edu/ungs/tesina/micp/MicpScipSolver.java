@@ -35,6 +35,8 @@ public class MicpScipSolver<T extends Vertex, U extends Color> {
 	private long mInitSearchingTime, mInitSolvingTime;
 
 	private CustomInequalities<T,U> mCustomInequalities;
+	
+	SolverConfig mSolverConfig;
 
 	private boolean mIsVerbose = true;
 
@@ -48,6 +50,7 @@ public class MicpScipSolver<T extends Vertex, U extends Color> {
 		mSolver = solver;
 		mName = name;
 		mCustomInequalities = inequalities;
+		mSolverConfig = solverConfig;
 	}
 
 	/**
@@ -293,7 +296,7 @@ public class MicpScipSolver<T extends Vertex, U extends Color> {
 
 		System.out.println("################################ " + msg);
 		System.out.println(
-				"# instance;|V|;|Eg|;|Eh|;|C|;Finding Time; Solving Time; Solver Time;GAP;Nodes;Obj");
+				"# instance;|V|;|Eg|;|Eh|;|C|;Finding Time; Solving Time; Solver Time;GAP;Nodes;Obj;ineq");
 		System.out.print("# " + mName);
 		System.out.print(";" + vertices.size());
 		System.out.print(";" + conflictGraph.edgeSet().size());
@@ -304,8 +307,21 @@ public class MicpScipSolver<T extends Vertex, U extends Color> {
 		System.out.print(";" + mSolver.getSolvingTime());
 		System.out.print(";" + gap);
 		System.out.print(";" + mSolver.getNNodes());
-		System.out.println(";" + objValue);
+		System.out.print(";" + objValue);
+		System.out.println(";" + getInequalitiesEnabled());
 		System.out.println("################################");
+	}
+
+	private String getInequalitiesEnabled() {
+		String separator = ",";
+		List<Integer> ineqs = mSolverConfig.getInequalitiesEnabled();
+		if (null == ineqs || ineqs.isEmpty()) return "";
+
+	    StringBuilder sb = new StringBuilder(256);
+	    sb.append(ineqs.get(0));
+	    for (int i = 1; i < ineqs.size(); i++) sb.append(separator).append(ineqs.get(i));
+
+	    return sb.toString();
 	}
 
 	public void free() {
@@ -336,7 +352,12 @@ public class MicpScipSolver<T extends Vertex, U extends Color> {
 	}
 
 	public void putVarY(T v1, T v2, Variable var) {
-		ComparableVertexPair<T, T> p = new ComparableVertexPair<T, T>(v1, v2);
+		ComparableVertexPair<T, T> p;
+		if (v1.compareTo(v2) < 0)
+			p = new ComparableVertexPair<T, T>(v1, v2);
+		else
+			p = new ComparableVertexPair<T, T>(v2, v1);
+		
 		mVarY.put(p, var);
 	}
 

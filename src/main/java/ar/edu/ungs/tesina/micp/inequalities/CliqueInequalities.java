@@ -179,14 +179,20 @@ public class CliqueInequalities<T extends Vertex, U extends Color> extends Custo
 
 		// Si tengo menos de 2 elementos en la clique, no es necesario agregar
 		// la restricción.
-		if (clique == null || clique.size() <= 1)
+		// Es necesario que el tamaño de la clique mayor que 2 porque en la seleccion de DcC 
+		// Como uso el borde, |C| - |K'| +1 es igual a |C|
+		if (clique == null || clique.size() <= 2)
 			return;
+		
+		
 		Set<T> subclique = clique;
 		System.out.println("Agrego SubCliqueInequality al vector: " + vi);
 		int jPos = 0;
 		// TODO: Corregir esto pasando un array donde recibir el contenido.
 		T vj = (T) clique.toArray()[jPos];
 		subclique.remove(vj);
+		if (subclique.size() >= colors.size())
+			return;
 
 		// Necesitamos |D| <= |C| - ( |K'| + 1 )
 		Set<U> D = generateColorsSubset(colors, colors.size() - subclique.size() + 1);
@@ -232,6 +238,14 @@ public class CliqueInequalities<T extends Vertex, U extends Color> extends Custo
 		micpSolver.getSolver().releaseCons(constranint);
 	}
 
+	/**
+	 * Let K c V a clique in G and i \in V-K : ik \in Eh \forall k \in K. 
+	 * 
+	 * @param micpSolver
+	 * @param vi
+	 * @param clique
+	 * @param colors
+	 */
 	private void addTwoColorSubCliqueInequality(MicpScipSolver<T,U> micpSolver, T vi,
 			Set<T> clique, List<U> colors) {
 		// TODO Armar la desigualdad correspondiente en base de
@@ -242,7 +256,9 @@ public class CliqueInequalities<T extends Vertex, U extends Color> extends Custo
 		// COMPLICAO!!
 		if (vi == null || clique == null || colors == null)
 			return;
-		if (clique.size() > colors.size())
+		if (clique.size() >=  colors.size())
+			return;
+		if (clique.size() <  2)
 			return;
 
 		System.out.println("Agrego TwoColorSubCliqueInequality al vector: " + vi);

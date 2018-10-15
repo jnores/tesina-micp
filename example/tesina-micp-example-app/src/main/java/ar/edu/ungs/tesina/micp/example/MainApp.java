@@ -3,6 +3,7 @@ package ar.edu.ungs.tesina.micp.example;
 import java.awt.EventQueue;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -271,12 +272,14 @@ public class MainApp {
 			}
 			if (cantAulas > 0)
 				app.loadInstanceFCEN(instancePath, cantAulas);
+				
 			else
 				app.loadInstanceFCEN(instancePath, aulasPath);
 
 			app.optimize();
 			app.saveSolution(solutionPath);
-		} catch (Exception e) {
+		} catch (FileNotFoundException e) {
+			System.out.println("error - No se pudo leer la instancia de archivo.");
 			e.printStackTrace();
 		}
 		

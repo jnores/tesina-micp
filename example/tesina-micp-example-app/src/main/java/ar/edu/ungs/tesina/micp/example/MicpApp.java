@@ -270,8 +270,7 @@ public class MicpApp {
 	 */
 	public void optimize() {
 		MicpScipSolver<Clase,Aula> mMicp = mInstance.createMicp(mProperties);
-		try {
-			
+		try {			
 			mInstance.setSolution(		
 					mMicp.searchOptimal(
 							mInstance.getConflictGraph(),
@@ -279,12 +278,13 @@ public class MicpApp {
 							mInstance.getAulas()
 							)
 					);
+			mMicp.free();
 		} catch (Exception e)
 		{
 			System.out.println("debug - La optimizacion fue interrumpida!");
-			e.printStackTrace();
+			//e.printStackTrace();
 			mMicp.free();
+			throw new RuntimeException("Optimizacion interrumpida.",e);
 		}
-		mMicp.free();
 	}
 }

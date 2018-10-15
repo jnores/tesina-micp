@@ -315,9 +315,10 @@ public class MainFrame extends JFrame implements ActionListener {
 		mBtnExportar.setEnabled(false);
 		int icon = JOptionPane.WARNING_MESSAGE;
 		
-		if (message == null || message.trim().isEmpty()) {
+		if (message != null && !message.trim().isEmpty()) {
 			// muestro el mensaje como está!
 			icon = JOptionPane.ERROR_MESSAGE;
+			
 		} else if (isCancelled) {
 			message = "Asignación cancelada.";
 			

@@ -74,8 +74,10 @@ public class PartitionedInequalities<T extends Vertex, U extends Color>
 		Set<U> Dcomplement = generateComplement(colors, D);
 
 		int cantFactors = 1 + colors.size();
+		if (D.size()+Dcomplement.size() != colors.size())
+			throw new RuntimeException("Los subconjuntos de D estan mal calculados");
 
-		System.out.println("Agrego PartitionedInequality para cada relaion de H: " + cantFactors);
+		System.out.println("Agrego PartitionedInequality para cada relacion de H: " + cantFactors);
 
 		// Yij <= sum Xid' + sum Xjd
 		Variable[] vars = new Variable[cantFactors];
@@ -88,19 +90,32 @@ public class PartitionedInequalities<T extends Vertex, U extends Color>
 			i = 0;
 			factors[i] = 1;
 			vars[i++] = micpSolver.getVarY(vi, vj);
+			
+			if (vars[i-1] == null)
+				System.out.println("debug : la variable Yij es nula! ");
 
 			for (U c : D) {
 				factors[i] = -1;
 				vars[i++] = micpSolver.getVarX(vj, c);
+				if (vars[i-1] == null)
+					System.out.println("debug : la variable Xjc es nula! ");
 			}
 
 			for (U c : Dcomplement) {
 				factors[i] = -1;
 				vars[i++] = micpSolver.getVarX(vi, c);
+				if (vars[i-1] == null)
+					System.out.println("debug : la variable Xic es nula! ");
 			}
+			
+			if ( i < vars.length)
+				throw new RuntimeException("Hay un campo vacio"); 
+			
 
 			Constraint diferentColorsOnConflict = micpSolver.getSolver().createConsLinear(
 					"VertexCliqueInequality-" + vi + "-" + vj, vars, factors, -2, 0);
+			
+			
 			micpSolver.getSolver().addCons(diferentColorsOnConflict);
 			micpSolver.getSolver().releaseCons(diferentColorsOnConflict);
 		}
@@ -116,6 +131,8 @@ public class PartitionedInequalities<T extends Vertex, U extends Color>
 		Set<U> D2 = generateComplement(D, D1);
 
 		int cantFactors = 3 + 2 * D.size();
+		if (D1.size()+D2.size() != D.size())
+			throw new RuntimeException("Los subconjuntos de D1 y D2 estan mal calculados");
 
 		System.out.println("Agrego 3-PartitionedInequality para cada relaion de H: " + cantFactors);
 
@@ -129,33 +146,50 @@ public class PartitionedInequalities<T extends Vertex, U extends Color>
 			T vj = e.getTarget();
 
 			for (T vk : Graphs.neighborListOf(relationshipGraph, vj)) {
-				if (!vk.equals(vi) && !relationshipGraph.containsEdge(vk, vi)) {
+				if (!vk.equals(vi) && relationshipGraph.containsEdge(vk, vi)) {
 
 					i = 0;
 					factors[i] = 1;
 					vars[i++] = micpSolver.getVarY(vi, vj);
+					if (vars[i-1] == null)
+						System.out.println("debug : la variable Yij es nula! ");
 					factors[i] = 1;
 					vars[i++] = micpSolver.getVarY(vj, vk);
+					if (vars[i-1] == null)
+						System.out.println("debug : la variable Yjk es nula! ");
 					factors[i] = 1;
 					vars[i++] = micpSolver.getVarY(vi, vk);
+					if (vars[i-1] == null)
+						System.out.println("debug : la variable Yik es nula! ");
 
 					for (U c : D1) {
 						factors[i] = -2;
 						vars[i++] = micpSolver.getVarX(vj, c);
+						if (vars[i-1] == null)
+							System.out.println("debug : la variable Xid1 es nula! ");
 						factors[i] = 2;
 						vars[i++] = micpSolver.getVarX(vi, c);
+						if (vars[i-1] == null)
+							System.out.println("debug : la variable Xid2 es nula! ");
 					}
 
 					for (U c : D2) {
 						factors[i] = -2;
 						vars[i++] = micpSolver.getVarX(vk, c);
+						if (vars[i-1] == null)
+							System.out.println("debug : la variable Xic es nula! ");
 						factors[i] = 2;
 						vars[i++] = micpSolver.getVarX(vi, c);
+						if (vars[i-1] == null)
+							System.out.println("debug : la variable Xic es nula! ");
 					}
+					
+					if ( i < vars.length)
+						throw new RuntimeException("Hay un campo vacio");
 
 					Constraint diferentColorsOnConflict = micpSolver.getSolver().createConsLinear(
 							"ThreePartitionedInequality-" + vi + "-" + vj + "-" + vk, vars, factors,
-							-4, 3);
+							-micpSolver.getSolver().infinity(), 3);
 					micpSolver.getSolver().addCons(diferentColorsOnConflict);
 					micpSolver.getSolver().releaseCons(diferentColorsOnConflict);
 				}
