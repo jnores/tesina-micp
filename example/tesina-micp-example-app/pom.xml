@@ -12,7 +12,8 @@
   </properties>
 
   <dependencies>
-    
+
+    <!-- modulo tesina-micp desarrollado localmente. -->    
     <dependency>
       <groupId>ar.edu.ungs.tesina</groupId>
       <artifactId>micp</artifactId>
@@ -25,9 +26,15 @@
       <artifactId>commons-cli</artifactId>
       <version>1.4</version>
     </dependency> 
+    
+    <!-- https://mvnrepository.com/artifact/junit/junit -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
 
   </dependencies>
-
-
 
 </project>
