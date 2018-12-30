@@ -28,7 +28,7 @@ public class MicpScipSolver<T extends Vertex, U extends Color> {
 	private Scip mSolver;
 
 	private Map<ComparableVertexColorPair<T, U>, Variable> mVarX;
-	private Map<ComparableVertexPair<T, T>, Variable> mVarY;
+	private Map<ComparableVertexPair<T>, Variable> mVarY;
 
 	private int mNSols = 0;
 	private String mName = "";
@@ -84,7 +84,7 @@ public class MicpScipSolver<T extends Vertex, U extends Color> {
 		// System.out.println( "RELACION: "+relationshipGraph );
 		// Variable[][] varX = new Variable[V.size()][colors.size()];
 		mVarX = new TreeMap<ComparableVertexColorPair<T, U>, Variable>();
-		mVarY = new TreeMap<ComparableVertexPair<T, T>, Variable>();
+		mVarY = new TreeMap<ComparableVertexPair<T>, Variable>();
 
 		// Se crean las variables binarias e implicitamente se define la función
 		// objetivo.
@@ -352,20 +352,20 @@ public class MicpScipSolver<T extends Vertex, U extends Color> {
 	}
 
 	public void putVarY(T v1, T v2, Variable var) {
-		ComparableVertexPair<T, T> p;
+		ComparableVertexPair<T> p;
 		if (v1.compareTo(v2) < 0)
-			p = new ComparableVertexPair<T, T>(v1, v2);
+			p = new ComparableVertexPair<T>(v1, v2);
 		else
-			p = new ComparableVertexPair<T, T>(v2, v1);
+			p = new ComparableVertexPair<T>(v2, v1);
 		
 		mVarY.put(p, var);
 	}
 
 	public Variable getVarY(T v1, T v2) {
 		if (v1.compareTo(v2) < 0)
-			return mVarY.get(new ComparableVertexPair<T, T>(v1, v2));
+			return mVarY.get(new ComparableVertexPair<T>(v1, v2));
 		else
-			return mVarY.get(new ComparableVertexPair<T, T>(v2, v1));
+			return mVarY.get(new ComparableVertexPair<T>(v2, v1));
 	}
 
 }

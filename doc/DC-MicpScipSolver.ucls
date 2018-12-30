@@ -64,23 +64,27 @@
     <display labels="true" multiplicity="true"/>  
   </association>  
   <dependency id="10">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="11">    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="4"/>  
   </dependency>  
-  <association id="11">    
+  <association id="12">    
     <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="12" name="mConfig"/>      
-      <multiplicity id="13" minimum="0" maximum="1">        
+      <attribute id="13" name="mConfig"/>      
+      <multiplicity id="14" minimum="0" maximum="1">        
         <position height="16" width="23" x="438" y="509"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="14">    
+  <association id="15">    
     <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="15" name="mCustomInequalities"/>      
-      <multiplicity id="16" minimum="0" maximum="1"/>    
+      <attribute id="16" name="mCustomInequalities"/>      
+      <multiplicity id="17" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
