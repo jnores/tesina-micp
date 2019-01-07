@@ -28,17 +28,23 @@ En la sección de test se puede encontrar un ejemplo uso de la implementación.
 ## Estado del desarrollo
 Listado de las familias de desigualdades soportadas:
 *  Partitioned Inequalities:
-	* [x] 2. partitioned inequalities
-	* [x] 3. 3-partitioned inequalities
-	* [ ] 4. k-partitioned inequalities
+    * [x] 2. partitioned inequalities
+    * [x] 3. 3-partitioned inequalities
+    * [ ] 4. k-partitioned inequalities
 * Clique Inequalities:
-	* [x] 5. vertex-clique inequalities
-	* [x] 6. clique-partitioned inequalities
-	* [x] 7. sub-clique inequalities
-	* [x] 8. two-color sub-clique inequalities
+    * [x] 5. vertex-clique inequalities
+    * [x] 6. clique-partitioned inequalities
+    * [x] 7. sub-clique inequalities
+    * [x] 8. two-color sub-clique inequalities
 * Triangle and diamonds:
-	* [x] 9. semi-triangle inequalities
-	* [x] 10. semi-diamond inequalities
+    * [x] 9. semi-triangle inequalities
+    * [x] 10. semi-diamond inequalities
 * Valid inequalities:
-	* [x] 11. bounding inequalities
-	* [x] 12. reinforced bounding inequalities 
+    * [x] 11. bounding inequalities
+    * [x] 12. reinforced bounding inequalities 
+
+## ToDo del ejemplo
+ * [ ] Agergar configuracion de los parametros del properties desde la interfaz grafica.
+ * [ ] Setear la configuracion de aulas disponibles al momento de iniciar la optimizacion.
+ * [ ] Agregar la Pantalla con el detalle de los cursos en conflico y los cursos relacionados.
+ * [ ] Ver si se pueden pintar los registros de la tabla cuando se selecciona uno. asi algunos aparecen en rojo y otros en verde.

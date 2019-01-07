@@ -24,7 +24,7 @@ public class MainApp {
 	private static Options getOptions() {
 		Options opts = new Options();
 
-		opts.addOption("x", "No abrir la interfaz gráfica. Depende de -c -a y -s");
+		opts.addOption("x", "Ejecutar resolución sin abrir la interfaz gráfica. Depende de los argumentos -c, -a y -s");
 		opts.addOption("c", "cursos", true, "La ruta al archivo que contiene los cursos con los "
 											+ "horarios en formato de instancia FCEN");
 		opts.addOption("a", "aulas", true, "Puede ser el numero de aulas dispnibles o la ruta al "
@@ -35,7 +35,7 @@ public class MainApp {
 													+ "para agregar más de una desigualdad.[2-12]");
 		// agrego las que se superponen con la configuracion por archivo.
 		opts.addOption("v", "verbose", false, "Imprimir por STDOUT información detallada de la "
-				+ "ejecución");
+												+ "ejecución");
 		
 		opts.addOption("p", "pabellon", true, "Número entero que identifica el pabellon que se "
 												+ "debe procesar. Default: 1");
@@ -249,7 +249,7 @@ public class MainApp {
 				// Footer
 				"\nPara realizar un procesamiento por consola se podría ejecutar la aplicacion de "
 				+ "la siguiente manera:"
-				+ "\n    ./micp -a20 -c /ruta/a/instancia_file -s instancia_20.sol -d2 -d4");
+				+ "\n    java -jar micp.jar -x -a20 -c /ruta/a/instancia_file -s instancia_20.sol -d2 -d4");
 	}
 
 	/**
