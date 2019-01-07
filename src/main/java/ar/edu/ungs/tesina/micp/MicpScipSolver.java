@@ -294,10 +294,10 @@ public class MicpScipSolver<T extends Vertex, U extends Color> {
 		// No pude conseguir leer la cantidad de cortes usados al momento de
 		// encontrar la solución.
 
-		System.out.println("################################ " + msg);
+		System.out.println("#;############################### " + msg);
 		System.out.println(
-				"# instance;|V|;|Eg|;|Eh|;|C|;Finding Time; Solving Time; Solver Time;GAP;Nodes;Obj;ineq");
-		System.out.print("# " + mName);
+				"#; instance;|V|;|Eg|;|Eh|;|C|;Finding Time; Solving Time; Solver Time;GAP;Nodes;Obj;ineq");
+		System.out.print("##; " + mName);
 		System.out.print(";" + vertices.size());
 		System.out.print(";" + conflictGraph.edgeSet().size());
 		System.out.print(";" + relationshipGraph.edgeSet().size());
@@ -309,7 +309,7 @@ public class MicpScipSolver<T extends Vertex, U extends Color> {
 		System.out.print(";" + mSolver.getNNodes());
 		System.out.print(";" + objValue);
 		System.out.println(";" + getInequalitiesEnabled());
-		System.out.println("################################");
+		System.out.println("#;###############################");
 	}
 
 	private String getInequalitiesEnabled() {
