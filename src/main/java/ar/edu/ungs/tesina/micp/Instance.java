@@ -109,7 +109,7 @@ public class Instance<T extends Vertex, U extends Color> extends Observable{
 	 *            una implementacion de la interfaz Solver
 	 * @return
 	 */
-	public MicpScipSolver<T,U> createMicp(Properties mProperties) {
+	public MicpScipSolver<T,U> createMicp(SolverConfig solverConfig) {
 		String name = getName();
 		try {
 			System.loadLibrary("jscip");
@@ -119,7 +119,6 @@ public class Instance<T extends Vertex, U extends Color> extends Observable{
 		} catch (Exception ex) {
 			throw new RuntimeException("No se pudo cargar la libreria jscip.", ex);
 		}
-		SolverConfig solverConfig = new SolverConfig(mProperties);
 
 		Scip solver = new Scip();
 		solver.create("micp_app-" + name);

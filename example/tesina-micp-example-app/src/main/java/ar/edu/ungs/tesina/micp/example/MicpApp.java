@@ -15,14 +15,40 @@ import java.util.Set;
 
 import ar.edu.ungs.tesina.micp.Instance;
 import ar.edu.ungs.tesina.micp.MicpScipSolver;
+import ar.edu.ungs.tesina.micp.SolverConfig;
 import ar.edu.ungs.tesina.micp.example.model.Aula;
 import ar.edu.ungs.tesina.micp.example.model.Clase;
+import ar.edu.ungs.tesina.micp.inequalities.CliqueInequalities;
+import ar.edu.ungs.tesina.micp.inequalities.PartitionedInequalities;
+import ar.edu.ungs.tesina.micp.inequalities.TriangleDiamondInequalities;
+import ar.edu.ungs.tesina.micp.inequalities.ValidInequalities;
 
 public class MicpApp {
+	
+	public static final int INEQ_PARTITIONED = PartitionedInequalities.PARTITIONED_INEQUALITIES;
+	public static final int INEQ_3_PARTITIONED = PartitionedInequalities.THREE_PARTITIONED_INEQUALITIES;
+	public static final int INEQ_K_PARTITIONED = PartitionedInequalities.K_PARTITIONED_INEQUALITIES;
+	
+	public static final int INEQ_VERTEX_CLIQUE = CliqueInequalities.VERTEX_CLIQUE_INEQUALITIES;
+	public static final int INEQ_CLIQUE_PARTITIONED = CliqueInequalities.CLIQUE_PARTITIONED_INEQUALITIES;
+	public static final int INEQ_SUB_CLIQUE = CliqueInequalities.SUB_CLIQUE_INEQUALITIES;
+	public static final int INEQ_2_COLOR_SUB_CLIQUE = CliqueInequalities.TWO_COLOR_SUB_CLIQUE_INEQUALITIES;
+	
+	public static final int INEQ_SEMI_TRIANGLE = TriangleDiamondInequalities.SEMI_TRIANGLE_INEQUALITIES;
+	public static final int INEQ_SEMI_DIAMOND = TriangleDiamondInequalities.SEMI_DIAMOND_INEQUALITIES;
+	
+	public static final int INEQ_BOUNDING = ValidInequalities.BOUNDING_INEQUALITIES;
+	public static final int INEQ_REINFORCED_BOUNDING = ValidInequalities.REINFORCED_BOUNDING_INEQUALITIES;
+	
+	
 	public static final int DEFAULT_PABELLON = 1;
+	
+	private SolverConfig mSolverConfig;
 	private Instance<Clase, Aula> mInstance;
 	private Properties mProperties;
 	private int mPabellon = DEFAULT_PABELLON;
+	
+	
 
 	/**
 	 * Create the application.
@@ -48,11 +74,32 @@ public class MicpApp {
 				mPabellon = DEFAULT_PABELLON;
 			}
 		}
+		mSolverConfig = new SolverConfig(mProperties);
 	}
 
 	public void close() {
 
 	}
+	
+	// ------------------- Funcioness Asociadas a las preferencias de la ejecucion.
+	
+	public boolean isInequalityEnabled(Integer ineq) {
+		return mSolverConfig.isInequalityEnabled(ineq);
+	}
+	
+	public void enableInequality(Integer ineq) {
+		System.out.println("HABILITO " + ineq);
+		mSolverConfig.enableInequality(ineq);
+	}
+	
+	public void disableInequality(Integer ineq) {
+		System.out.println("DESHABILITO " + ineq);
+		mSolverConfig.disableInequality(ineq);
+	}
+	
+	
+	
+	
 
 	// -------------------- Se obtiene el contenido del Archivo ---------------
 	public boolean loadInstanceFCEN(String ruta, int cantAulas) throws FileNotFoundException {
@@ -269,7 +316,7 @@ public class MicpApp {
 	 *  
 	 */
 	public void optimize() {
-		MicpScipSolver<Clase,Aula> mMicp = mInstance.createMicp(mProperties);
+		MicpScipSolver<Clase,Aula> mMicp = mInstance.createMicp(mSolverConfig);
 		try {			
 			mInstance.setSolution(		
 					mMicp.searchOptimal(

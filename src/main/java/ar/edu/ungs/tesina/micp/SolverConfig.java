@@ -8,7 +8,7 @@ import java.util.Properties;
 public class SolverConfig {
 	static final double DEFAULT_GAP_LIMIT = 0.0;
 	static final int DEFAULT_TIME_LIMIT = 3600;
-	static final boolean DEFAULT_IS_VERBOSE = true; // false;
+	static final boolean DEFAULT_IS_VERBOSE = false;
 	private double gapLimit = DEFAULT_GAP_LIMIT;
 	private long timeLimit = DEFAULT_TIME_LIMIT;
 	private boolean isVerbose = DEFAULT_IS_VERBOSE;
@@ -86,7 +86,7 @@ public class SolverConfig {
 			if ( !s.trim().isEmpty() ) {
 				try {
 					n = Integer.parseInt(s);
-					inequalitiesEnabled.add(n);
+					enableInequality(n);
 				} catch(NumberFormatException ex) {
 					System.out.println("debug - No se pudo parsear la inequality como entero con el parametro: "+s);
 				}
@@ -104,6 +104,22 @@ public class SolverConfig {
 
 	public boolean isVerbose() {
 		return isVerbose;
+	}
+	
+	public boolean isInequalityEnabled(Integer ineq) {
+		return inequalitiesEnabled.contains(ineq);
+	}
+	
+	public void enableInequality(Integer ineq) {
+		if ( isInequalityEnabled(ineq) ) {
+			inequalitiesEnabled.add(ineq);
+		}
+	}
+	
+	public void disableInequality(Integer ineq) {
+		int pos;
+		while( (pos = inequalitiesEnabled.indexOf(ineq)) >= 0 )
+			inequalitiesEnabled.remove(pos);
 	}
 	
 	public List<Integer> getInequalitiesEnabled() {

@@ -44,7 +44,10 @@ Listado de las familias de desigualdades soportadas:
     * [x] 12. reinforced bounding inequalities 
 
 ## ToDo del ejemplo
- * [ ] Agergar configuracion de los parametros del properties desde la interfaz grafica.
- * [ ] Setear la configuracion de aulas disponibles al momento de iniciar la optimizacion.
- * [ ] Agregar la Pantalla con el detalle de los cursos en conflico y los cursos relacionados.
- * [ ] Ver si se pueden pintar los registros de la tabla cuando se selecciona uno. asi algunos aparecen en rojo y otros en verde.
+* [ ] Agergar configuracion de los parametros del properties desde la interfaz grafica.
+    * [x] Agregar menu para habilitar y deshagilitar desigualdades
+    * [ ] Configurar tiempo maximo de ejecucion.
+    * [ ] Configurar GAP de corte.
+* [ ] Setear la configuracion de aulas disponibles al momento de iniciar la optimizacion.
+* [ ] Agregar la Pantalla con el detalle de los cursos en conflico y los cursos relacionados.
+* [ ] Ver si se pueden pintar los registros de la tabla cuando se selecciona uno. asi algunos aparecen en rojo y otros en verde.
