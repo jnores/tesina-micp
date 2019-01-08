@@ -27,6 +27,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.text.DefaultFormatter;
 
 import ar.edu.ungs.tesina.micp.example.MicpApp;
+import javax.swing.JToggleButton;
 
 public class PreferenceFrame extends JFrame {
 
@@ -199,7 +200,7 @@ public class PreferenceFrame extends JFrame {
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(null, "Solver", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_1.setBounds(228, 100, 204, 148);
+		panel_1.setBounds(228, 100, 204, 182);
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 
@@ -244,6 +245,24 @@ public class PreferenceFrame extends JFrame {
 			}
 		});
 		panel_1.add(spinner_1);
+		
+		JLabel lblVerbose = new JLabel("Verbose:");
+		lblVerbose.setBounds(12, 135, 70, 15);
+		panel_1.add(lblVerbose);
+		
+		JToggleButton tglbtnActivo = new JToggleButton("Activo");
+		tglbtnActivo.setSelected(mApp.isVerboseMode());
+		tglbtnActivo.addItemListener(new ItemListener() {
+			   public void itemStateChanged(ItemEvent ev) {
+				  if(ev.getStateChange()==ItemEvent.SELECTED){
+					  mApp.setVerboseMode(true);
+			      } else if(ev.getStateChange()==ItemEvent.DESELECTED){
+			    	  mApp.setVerboseMode(false);
+			      }
+			   }
+			});
+		tglbtnActivo.setBounds(100, 130, 89, 25);
+		panel_1.add(tglbtnActivo);
 
 		JButton btnCerrar = new JButton("Cerrar");
 		btnCerrar.addActionListener(new ActionListener() {

@@ -65,7 +65,7 @@ public class SolverConfig {
 		try {
 			if (verbose != null && !verbose.isEmpty()) {
 				boolean verboseValue = Boolean.parseBoolean(verbose);
-				isVerbose = verboseValue;
+				setVerbose(verboseValue);
 			}
 		} catch (Exception e) {
 			isVerbose = DEFAULT_IS_VERBOSE;
@@ -109,6 +109,10 @@ public class SolverConfig {
 
 	public long getTimeLimit() {
 		return timeLimit;
+	}
+
+	public void setVerbose(boolean isVerbose) {
+		this.isVerbose = isVerbose;
 	}
 
 	public boolean isVerbose() {

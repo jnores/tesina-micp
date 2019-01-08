@@ -134,6 +134,17 @@ public class MicpApp {
 		return mPabellon;
 	}
 
+	public boolean isVerboseMode() {
+		// TODO Auto-generated method stub
+		return mSolverConfig.isVerbose();
+	}
+
+	public void setVerboseMode(boolean isVerbose) {
+		System.out.println("CAMBIO DE CONFIGURACION: VERBOSE MODE: "+(isVerbose? "ON" : "OFF"));
+		mSolverConfig.setVerbose(isVerbose);
+		
+	}
+
 	// -------------------- Se obtiene el contenido del Archivo ---------------
 	public boolean loadInstanceFCEN(String ruta, int cantAulas) throws FileNotFoundException {
 		List<Aula> aulas = new ArrayList<Aula>();
