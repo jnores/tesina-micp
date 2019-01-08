@@ -23,6 +23,14 @@ import ar.edu.ungs.tesina.micp.inequalities.PartitionedInequalities;
 import ar.edu.ungs.tesina.micp.inequalities.TriangleDiamondInequalities;
 import ar.edu.ungs.tesina.micp.inequalities.ValidInequalities;
 
+/**
+ * @author yoshknight
+ *
+ */
+/**
+ * @author yoshknight
+ *
+ */
 public class MicpApp {
 	
 	public static final int INEQ_PARTITIONED = PartitionedInequalities.PARTITIONED_INEQUALITIES;
@@ -54,7 +62,7 @@ public class MicpApp {
 	 * Create the application.
 	 */
 	public MicpApp() {
-		this(null);
+		this(new Properties());
 	}
 	
 	/**
@@ -97,9 +105,34 @@ public class MicpApp {
 		mSolverConfig.disableInequality(ineq);
 	}
 	
+	public void setGapLimit(double gap) {
+		System.out.println("Spinner GAP value changed: " + gap);
+		mSolverConfig.setGapLimit(gap);
+	}
 	
+	public double getGapLimit() {
+		return mSolverConfig.getGapLimit();
+	}
+
+	public void seTimeLimit( long time) {
+		System.out.println("Spinner TIME value changed (min): " + time);
+		// COlverConfig maneja tiempos en segundos y la GUI los configura en minutos
+		mSolverConfig.setTimeLimit(time*60);
+	}
 	
+	public long getTimeLimit() {
+		// COlverConfig maneja tiempos en segundos y la GUI los configura en minutos
+		return mSolverConfig.getTimeLimit()/60;
+	}
 	
+	public void setPabellon( int pabellon) {
+		System.out.println("CAMBIO DE PABELLON: "+pabellon);
+		mPabellon = pabellon;
+	}
+	
+	public int getPabellon() {
+		return mPabellon;
+	}
 
 	// -------------------- Se obtiene el contenido del Archivo ---------------
 	public boolean loadInstanceFCEN(String ruta, int cantAulas) throws FileNotFoundException {

@@ -46,8 +46,10 @@ Listado de las familias de desigualdades soportadas:
 ## ToDo del ejemplo
 * [ ] Agergar configuracion de los parametros del properties desde la interfaz grafica.
     * [x] Agregar menu para habilitar y deshagilitar desigualdades
-    * [ ] Configurar tiempo maximo de ejecucion.
-    * [ ] Configurar GAP de corte.
+    * [x] Configurar tiempo maximo de ejecucion.
+    * [x] Configurar GAP de corte.
+    * [x] Configurar pabellon a cargar del archivo de texto.
 * [ ] Setear la configuracion de aulas disponibles al momento de iniciar la optimizacion.
+
 * [ ] Agregar la Pantalla con el detalle de los cursos en conflico y los cursos relacionados.
 * [ ] Ver si se pueden pintar los registros de la tabla cuando se selecciona uno. asi algunos aparecen en rojo y otros en verde.

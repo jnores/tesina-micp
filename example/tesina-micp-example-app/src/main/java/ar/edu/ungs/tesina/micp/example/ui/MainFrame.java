@@ -7,9 +7,10 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
 
-import javax.swing.AbstractButton;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -25,16 +26,13 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.text.DefaultFormatter;
 
 import ar.edu.ungs.tesina.micp.example.MicpApp;
 import ar.edu.ungs.tesina.micp.example.model.Aula;
 import ar.edu.ungs.tesina.micp.example.ui.uimodel.InstanciaTableModel;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JLabel;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
 
 public class MainFrame extends JFrame implements ActionListener {
 
@@ -90,13 +88,19 @@ public class MainFrame extends JFrame implements ActionListener {
 		JMenu mnArchivo = new JMenu("Archivo");
 		menuBar.add(mnArchivo);
 
-		JMenuItem mntmAbrir = new JMenuItem("Abrir");
+		JMenuItem mntmAbrir = new JMenuItem("Cargar aulas");
 		mntmAbrir.setMnemonic('A');
 		mntmAbrir.setActionCommand(ACTION_LOAD_CURSOS);
 		mntmAbrir.addActionListener(this);
 		mnArchivo.add(mntmAbrir);
+		
+		JMenuItem mntmCargarCursos = new JMenuItem("Cargar cursos");
+		mnArchivo.add(mntmCargarCursos);
+		
+		JSeparator separator_2 = new JSeparator();
+		mnArchivo.add(separator_2);
 
-		JMenuItem mntmGuardar = new JMenuItem("Guardar");
+		JMenuItem mntmGuardar = new JMenuItem("Guardar Solución");
 		mntmGuardar.setMnemonic('G');
 		mntmGuardar.setEnabled(false);
 		mnArchivo.add(mntmGuardar);
@@ -117,132 +121,25 @@ public class MainFrame extends JFrame implements ActionListener {
 
 		mnArchivo.add(mntmSalir);
 		
-		JMenu mnDesigualdades = new JMenu("Desigualdades");
-		menuBar.add(mnDesigualdades);
+		JMenu mnInstancia = new JMenu("Instancia");
+		menuBar.add(mnInstancia);
 		
-		JCheckBoxMenuItem chckbxmntmPartitioned = new JCheckBoxMenuItem("Partitioned");
-		mnDesigualdades.add(chckbxmntmPartitioned);
-		chckbxmntmPartitioned.setSelected(mApp.isInequalityEnabled(MicpApp.INEQ_PARTITIONED));
-		chckbxmntmPartitioned.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent itemEvent) {
-				boolean isSelected = itemEvent.getStateChange() == ItemEvent.SELECTED;
-				toggleInequality(MicpApp.INEQ_PARTITIONED, isSelected);
+		JMenuItem mntmPreferencias = new JMenuItem("Preferencias...");
+		mntmPreferencias.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new PreferenceFrame(mApp).setVisible(true);
 			}
 		});
-
-		JCheckBoxMenuItem chckbxmntm3Partitioned = new JCheckBoxMenuItem("3-partitioned");
-		mnDesigualdades.add(chckbxmntm3Partitioned);
-		chckbxmntm3Partitioned.setSelected(mApp.isInequalityEnabled(MicpApp.INEQ_3_PARTITIONED));
-		chckbxmntm3Partitioned.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent itemEvent) {
-				boolean isSelected = itemEvent.getStateChange() == ItemEvent.SELECTED;
-				toggleInequality(MicpApp.INEQ_3_PARTITIONED, isSelected);
-			}
-		});
-
-		
-		JCheckBoxMenuItem chckbxmntmKpartitioned = new JCheckBoxMenuItem("k-partitioned");
-		mnDesigualdades.add(chckbxmntmKpartitioned);
-		app.disableInequality(MicpApp.INEQ_K_PARTITIONED);
-		chckbxmntmKpartitioned.setSelected(false);
-		chckbxmntmKpartitioned.setEnabled(false);
-		
+		mnInstancia.add(mntmPreferencias);
 		
 		JSeparator separator_1 = new JSeparator();
-		mnDesigualdades.add(separator_1);
+		mnInstancia.add(separator_1);
 		
-		JCheckBoxMenuItem chckbxmntmVertexclique = new JCheckBoxMenuItem("Vertex-clique");
-		mnDesigualdades.add(chckbxmntmVertexclique);
-		chckbxmntmVertexclique.setSelected(mApp.isInequalityEnabled(MicpApp.INEQ_VERTEX_CLIQUE));
-		chckbxmntmVertexclique.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent itemEvent) {
-				boolean isSelected = itemEvent.getStateChange() == ItemEvent.SELECTED;
-				toggleInequality(MicpApp.INEQ_VERTEX_CLIQUE, isSelected);
-			}
-		});
-		
-		JCheckBoxMenuItem chckbxmntmCliquepartitioned = new JCheckBoxMenuItem("Clique-partitioned");
-		mnDesigualdades.add(chckbxmntmCliquepartitioned);
-		chckbxmntmCliquepartitioned.setSelected(mApp.isInequalityEnabled(MicpApp.INEQ_CLIQUE_PARTITIONED));
-		chckbxmntmCliquepartitioned.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent itemEvent) {
-				boolean isSelected = itemEvent.getStateChange() == ItemEvent.SELECTED;
-				toggleInequality(MicpApp.INEQ_CLIQUE_PARTITIONED, isSelected);
-			}
-		});
-
-		
-		JCheckBoxMenuItem chckbxmntmSubclique = new JCheckBoxMenuItem("Sub-clique");
-		mnDesigualdades.add(chckbxmntmSubclique);
-		chckbxmntmSubclique.setSelected(mApp.isInequalityEnabled(MicpApp.INEQ_SUB_CLIQUE));
-		chckbxmntmSubclique.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent itemEvent) {
-				boolean isSelected = itemEvent.getStateChange() == ItemEvent.SELECTED;
-				toggleInequality(MicpApp.INEQ_SUB_CLIQUE, isSelected);
-			}
-		});
-		
-		JCheckBoxMenuItem chckbxmntmTwocolorSubclique = new JCheckBoxMenuItem("Two-color sub-clique");
-		mnDesigualdades.add(chckbxmntmTwocolorSubclique);
-		chckbxmntmTwocolorSubclique.setSelected(mApp.isInequalityEnabled(MicpApp.INEQ_2_COLOR_SUB_CLIQUE));
-		chckbxmntmTwocolorSubclique.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent itemEvent) {
-				boolean isSelected = itemEvent.getStateChange() == ItemEvent.SELECTED;
-				toggleInequality(MicpApp.INEQ_2_COLOR_SUB_CLIQUE, isSelected);
-			}
-		});
-		
-		JSeparator separator_2 = new JSeparator();
-		mnDesigualdades.add(separator_2);
-		
-		JCheckBoxMenuItem chckbxmntmSemitriangle = new JCheckBoxMenuItem("Semi-triangle");
-		mnDesigualdades.add(chckbxmntmSemitriangle);
-		chckbxmntmSemitriangle.setSelected(mApp.isInequalityEnabled(MicpApp.INEQ_SEMI_TRIANGLE));
-		chckbxmntmSemitriangle.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent itemEvent) {
-				boolean isSelected = itemEvent.getStateChange() == ItemEvent.SELECTED;
-				toggleInequality(MicpApp.INEQ_SEMI_TRIANGLE, isSelected);
-			}
-		});
-		
-		JCheckBoxMenuItem chckbxmntmSemidiamond = new JCheckBoxMenuItem("Semi-diamond");
-		mnDesigualdades.add(chckbxmntmSemidiamond);
-		chckbxmntmSemidiamond.setSelected(mApp.isInequalityEnabled(MicpApp.INEQ_SEMI_DIAMOND));		
-		chckbxmntmSemidiamond.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent itemEvent) {
-				boolean isSelected = itemEvent.getStateChange() == ItemEvent.SELECTED;
-				toggleInequality(MicpApp.INEQ_SEMI_DIAMOND, isSelected);
-			}
-		});
-		
-		JSeparator separator_3 = new JSeparator();
-		mnDesigualdades.add(separator_3);
-		
-		JCheckBoxMenuItem chckbxmntmBounding = new JCheckBoxMenuItem("Bounding");
-		mnDesigualdades.add(chckbxmntmBounding);
-		chckbxmntmBounding.setSelected(mApp.isInequalityEnabled(MicpApp.INEQ_BOUNDING));
-		chckbxmntmBounding.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent itemEvent) {
-				boolean isSelected = itemEvent.getStateChange() == ItemEvent.SELECTED;
-				toggleInequality(MicpApp.INEQ_BOUNDING, isSelected);
-			}
-		});
-		
-		JCheckBoxMenuItem chckbxmntmReinforcedBounding = new JCheckBoxMenuItem("Reinforced bounding");
-		mnDesigualdades.add(chckbxmntmReinforcedBounding);
-		chckbxmntmReinforcedBounding.setSelected(mApp.isInequalityEnabled(MicpApp.INEQ_REINFORCED_BOUNDING));
-		chckbxmntmReinforcedBounding.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent itemEvent) {
-				boolean isSelected = itemEvent.getStateChange() == ItemEvent.SELECTED;
-				toggleInequality(MicpApp.INEQ_REINFORCED_BOUNDING, isSelected);
-			}
-		});
-
-		JMenu mnAyuda = new JMenu("Ayuda");
-		menuBar.add(mnAyuda);
+		JMenuItem mntmOptimizar = new JMenuItem("Optimizar");
+		mnInstancia.add(mntmOptimizar);
 
 		JMenuItem mntmAcercaDe = new JMenuItem("Acerca de...");
-		mnAyuda.add(mntmAcercaDe);
+		menuBar.add(mntmAcercaDe);
 
 		JPanel panel = new JPanel();
 		panel.setToolTipText("Cantidad de aulas");
@@ -255,6 +152,17 @@ public class MainFrame extends JFrame implements ActionListener {
 
 		mSpinner = new JSpinner();
 		mSpinner.setModel(new SpinnerNumberModel(1, 1, 1000, 1));
+		JComponent comp = mSpinner.getEditor();
+	    JFormattedTextField field = (JFormattedTextField) comp.getComponent(0);
+	    DefaultFormatter formatter = (DefaultFormatter) field.getFormatter();
+	    formatter.setCommitsOnValidEdit(true);
+	    mSpinner.addChangeListener(new ChangeListener() {
+
+	        @Override
+	        public void stateChanged(ChangeEvent e) {
+	            System.out.println( "CAmbio al cantidad de aulas a: " + (Integer) mSpinner.getValue() );
+	        }
+	    });
 		panel_2.add(mSpinner);
 
 		mBtnImportAulas = new JButton("Cargar");
@@ -307,13 +215,6 @@ public class MainFrame extends JFrame implements ActionListener {
 
 	}
 	
-	private void toggleInequality(int ineq, boolean isEnabled) {
-		if (isEnabled) 
-			mApp.enableInequality(ineq);
-		else
-			mApp.disableInequality(ineq);
-	}
-
 	private static String getTitleName() {
 		return APP_NAME;
 	}

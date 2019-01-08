@@ -26,8 +26,7 @@ public class SolverConfig {
 		String gap = p.getProperty("gap_limit");
 		try {
 			double gapValue = Double.parseDouble(gap);
-			if (gapValue > 0)
-				gapLimit = gapValue;
+			setGapLimit(gapValue);
 		} catch (Exception e) {
 			gapLimit = DEFAULT_GAP_LIMIT;
 			if (gap == null) {
@@ -46,8 +45,7 @@ public class SolverConfig {
 		String time = p.getProperty("time_limit");
 		try {
 			int timeValue = Integer.parseInt(time);
-			if (timeValue > 0)
-				timeLimit = timeValue;
+			setTimeLimit(timeValue);
 		} catch (Exception e) {
 			timeLimit = DEFAULT_TIME_LIMIT;
 			if (time == null) {
@@ -93,10 +91,21 @@ public class SolverConfig {
 			}
 		}	
 	}
+	
+	public void setGapLimit(double gap) {
+		if (gap >= 0 && gap <1)
+		gapLimit = gap;
+	}
 
 	public double getGapLimit() {
 		return gapLimit;
 	}
+
+	public void setTimeLimit(long time) {
+		if (time > 0)
+			timeLimit = time;
+	}
+
 
 	public long getTimeLimit() {
 		return timeLimit;
@@ -111,7 +120,7 @@ public class SolverConfig {
 	}
 	
 	public void enableInequality(Integer ineq) {
-		if ( isInequalityEnabled(ineq) ) {
+		if ( ! isInequalityEnabled(ineq) ) {
 			inequalitiesEnabled.add(ineq);
 		}
 	}
@@ -126,5 +135,4 @@ public class SolverConfig {
 		return inequalitiesEnabled;
 	}
 
-	
 }

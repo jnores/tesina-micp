@@ -72,7 +72,7 @@ public class ValidInequalities<T extends Vertex, U extends Color> extends Custom
 			Iterator<Set<T>> it = cliqueFinder.iterator();
 
 			while (it.hasNext()) {
-				System.out.print("---- clique: [");
+
 				Set<T> clique= it.next();
 				if ( clique.contains(j) ) {
 					Collection<T> k2 = clique;
