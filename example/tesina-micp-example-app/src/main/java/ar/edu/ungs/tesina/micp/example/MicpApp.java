@@ -27,36 +27,29 @@ import ar.edu.ungs.tesina.micp.inequalities.ValidInequalities;
  * @author yoshknight
  *
  */
-/**
- * @author yoshknight
- *
- */
 public class MicpApp {
-	
-	public static final int INEQ_PARTITIONED = PartitionedInequalities.PARTITIONED_INEQUALITIES;
-	public static final int INEQ_3_PARTITIONED = PartitionedInequalities.THREE_PARTITIONED_INEQUALITIES;
-	public static final int INEQ_K_PARTITIONED = PartitionedInequalities.K_PARTITIONED_INEQUALITIES;
-	
-	public static final int INEQ_VERTEX_CLIQUE = CliqueInequalities.VERTEX_CLIQUE_INEQUALITIES;
-	public static final int INEQ_CLIQUE_PARTITIONED = CliqueInequalities.CLIQUE_PARTITIONED_INEQUALITIES;
-	public static final int INEQ_SUB_CLIQUE = CliqueInequalities.SUB_CLIQUE_INEQUALITIES;
-	public static final int INEQ_2_COLOR_SUB_CLIQUE = CliqueInequalities.TWO_COLOR_SUB_CLIQUE_INEQUALITIES;
-	
-	public static final int INEQ_SEMI_TRIANGLE = TriangleDiamondInequalities.SEMI_TRIANGLE_INEQUALITIES;
-	public static final int INEQ_SEMI_DIAMOND = TriangleDiamondInequalities.SEMI_DIAMOND_INEQUALITIES;
-	
-	public static final int INEQ_BOUNDING = ValidInequalities.BOUNDING_INEQUALITIES;
-	public static final int INEQ_REINFORCED_BOUNDING = ValidInequalities.REINFORCED_BOUNDING_INEQUALITIES;
-	
-	
+
+	public static final int INEQ_PARTITIONED = PartitionedInequalities.PARTITIONED_INEQUALITIES,
+			INEQ_3_PARTITIONED = PartitionedInequalities.THREE_PARTITIONED_INEQUALITIES,
+			INEQ_K_PARTITIONED = PartitionedInequalities.K_PARTITIONED_INEQUALITIES,
+
+			INEQ_VERTEX_CLIQUE = CliqueInequalities.VERTEX_CLIQUE_INEQUALITIES,
+			INEQ_CLIQUE_PARTITIONED = CliqueInequalities.CLIQUE_PARTITIONED_INEQUALITIES,
+			INEQ_SUB_CLIQUE = CliqueInequalities.SUB_CLIQUE_INEQUALITIES,
+			INEQ_2_COLOR_SUB_CLIQUE = CliqueInequalities.TWO_COLOR_SUB_CLIQUE_INEQUALITIES,
+
+			INEQ_SEMI_TRIANGLE = TriangleDiamondInequalities.SEMI_TRIANGLE_INEQUALITIES,
+			INEQ_SEMI_DIAMOND = TriangleDiamondInequalities.SEMI_DIAMOND_INEQUALITIES,
+
+			INEQ_BOUNDING = ValidInequalities.BOUNDING_INEQUALITIES,
+			INEQ_REINFORCED_BOUNDING = ValidInequalities.REINFORCED_BOUNDING_INEQUALITIES;
+
 	public static final int DEFAULT_PABELLON = 1;
-	
+
 	private SolverConfig mSolverConfig;
 	private Instance<Clase, Aula> mInstance;
 	private Properties mProperties;
 	private int mPabellon = DEFAULT_PABELLON;
-	
-	
 
 	/**
 	 * Create the application.
@@ -64,13 +57,13 @@ public class MicpApp {
 	public MicpApp() {
 		this(new Properties());
 	}
-	
+
 	/**
 	 * Create the application.
 	 */
 	public MicpApp(Properties prop) {
 		mProperties = prop;
-		
+
 		String propPabellon = mProperties.getProperty("pabellon");
 		if (propPabellon == null) {
 			mPabellon = DEFAULT_PABELLON;
@@ -88,48 +81,48 @@ public class MicpApp {
 	public void close() {
 
 	}
-	
+
 	// ------------------- Funcioness Asociadas a las preferencias de la ejecucion.
-	
+
 	public boolean isInequalityEnabled(Integer ineq) {
 		return mSolverConfig.isInequalityEnabled(ineq);
 	}
-	
+
 	public void enableInequality(Integer ineq) {
 		System.out.println("HABILITO " + ineq);
 		mSolverConfig.enableInequality(ineq);
 	}
-	
+
 	public void disableInequality(Integer ineq) {
 		System.out.println("DESHABILITO " + ineq);
 		mSolverConfig.disableInequality(ineq);
 	}
-	
+
 	public void setGapLimit(double gap) {
 		System.out.println("Spinner GAP value changed: " + gap);
 		mSolverConfig.setGapLimit(gap);
 	}
-	
+
 	public double getGapLimit() {
 		return mSolverConfig.getGapLimit();
 	}
 
-	public void seTimeLimit( long time) {
+	public void seTimeLimit(long time) {
 		System.out.println("Spinner TIME value changed (min): " + time);
 		// COlverConfig maneja tiempos en segundos y la GUI los configura en minutos
-		mSolverConfig.setTimeLimit(time*60);
+		mSolverConfig.setTimeLimit(time * 60);
 	}
-	
+
 	public long getTimeLimit() {
 		// COlverConfig maneja tiempos en segundos y la GUI los configura en minutos
-		return mSolverConfig.getTimeLimit()/60;
+		return mSolverConfig.getTimeLimit() / 60;
 	}
-	
-	public void setPabellon( int pabellon) {
-		System.out.println("CAMBIO DE PABELLON: "+pabellon);
+
+	public void setPabellon(int pabellon) {
+		System.out.println("CAMBIO DE PABELLON: " + pabellon);
 		mPabellon = pabellon;
 	}
-	
+
 	public int getPabellon() {
 		return mPabellon;
 	}
@@ -140,9 +133,9 @@ public class MicpApp {
 	}
 
 	public void setVerboseMode(boolean isVerbose) {
-		System.out.println("CAMBIO DE CONFIGURACION: VERBOSE MODE: "+(isVerbose? "ON" : "OFF"));
+		System.out.println("CAMBIO DE CONFIGURACION: VERBOSE MODE: " + (isVerbose ? "ON" : "OFF"));
 		mSolverConfig.setVerbose(isVerbose);
-		
+
 	}
 
 	// -------------------- Se obtiene el contenido del Archivo ---------------
@@ -175,7 +168,8 @@ public class MicpApp {
 		File file = new File(archivo);
 		if (!(file.exists() && file.isFile() && file.canRead()))
 			throw new RuntimeException(
-					"Error de lectura! no se puede abrir el archivo: " + archivo);
+					"Error de lectura! no se puede abrir el archivo: "
+					+ archivo);
 
 		String instanceName = file.getName().split("\\.(?=[^\\.]+$)")[0] + "." + mPabellon;
 
@@ -244,9 +238,11 @@ public class MicpApp {
 	}
 
 	/**
-	 * En caso de especificarse un archivo con las aulas disponibles. por ejemplo para mantener la 
-	 * nomenclatura, se cara los nombres de las aulas y si se obtiene una asignacion optima, se 
-	 * muestran los nombres cargados desde el archivo. 
+	 * En caso de especificarse un archivo con las aulas disponibles. por ejemplo
+	 * para mantener la nomenclatura, se cara los nombres de las aulas y si se
+	 * obtiene una asignacion optima, se muestran los nombres cargados desde el
+	 * archivo.
+	 * 
 	 * @param path Ruta del archivo con los nombres de las aulas.
 	 * @return Un List con todas las aulas leidas.
 	 */
@@ -289,8 +285,9 @@ public class MicpApp {
 
 	/**
 	 * Escribe la asignacion optima encontrada en la ruta pasada por parametro.
+	 * 
 	 * @param path Ruta del archivo donde se desea escribir la solucion.
-	 * @return 
+	 * @return
 	 */
 	public boolean saveSolution(String path) {
 
@@ -320,22 +317,22 @@ public class MicpApp {
 
 	/**
 	 * Getter de la intancia para poder consultarla desde algun Frame.
+	 * 
 	 * @return
 	 */
 	public Instance<Clase, Aula> getInstancia() {
 		return mInstance;
 	}
 
-	// -----------------------------------------------------------------------------//
-	
-	
-	// ----------------------------- Funciones de resolución ------------------------------------//
-	
+	// -----------------------------------------------------------------------------//	
+	// ------------------------- Funciones de resolución ---------------------------//
+
 	/**
-	 * genera una instancia runnable para contener la accion de optimización.
-	 * Se utiliza para iniciar la optimizacion en un Frame independiente y cancelable.
+	 * genera una instancia runnable para contener la accion de optimización. Se
+	 * utiliza para iniciar la optimizacion en un Frame independiente y cancelable.
 	 * 
-	 * @return objeto Runnable para poder resolverlo en un thread separado y asi poder detenerlo.
+	 * @return objeto Runnable para poder resolverlo en un thread separado y asi
+	 *         poder detenerlo.
 	 * 
 	 */
 	public Runnable getRunnableSolver() {
@@ -343,39 +340,35 @@ public class MicpApp {
 		if (mInstance == null)
 			throw new RuntimeException("No se pudo crear la instancia. No hay cursos por asignar");
 
-		//return new SolveRunnable(mInstance, mProperties);
-		return new Runnable(){
+		// return new SolveRunnable(mInstance, mProperties);
+		return new Runnable() {
 
 			@Override
 			public void run() {
 				optimize();
 			}
-			
+
 		};
 	}
 
 	/**
-	 * Logica de optimizacion pra ejecutar en el mismo thread que la aplicación. Util en las 
-	 * ejecuciones no interactivas como puede ser por linea de comandos.
-	 *  
+	 * Logica de optimizacion para ejecutar en el mismo thread que la aplicación.
+	 * Util en las ejecuciones no interactivas como puede ser por linea de comandos.
+	 * 
 	 */
 	public void optimize() {
-		MicpScipSolver<Clase,Aula> mMicp = mInstance.createMicp(mSolverConfig);
-		try {			
-			mInstance.setSolution(		
-					mMicp.searchOptimal(
-							mInstance.getConflictGraph(),
-							mInstance.getRelationshipGraph(),
-							mInstance.getAulas()
-							)
-					);
+		MicpScipSolver<Clase, Aula> mMicp = mInstance.createMicp(mSolverConfig);
+		try {
+			mInstance.setSolution(mMicp.searchOptimal(
+					mInstance.getConflictGraph(),
+					mInstance.getRelationshipGraph(),
+					mInstance.getAulas()));
 			mMicp.free();
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			System.out.println("debug - La optimizacion fue interrumpida!");
-			//e.printStackTrace();
+			// e.printStackTrace();
 			mMicp.free();
-			throw new RuntimeException("Optimizacion interrumpida.",e);
+			throw new RuntimeException("Optimizacion interrumpida.", e);
 		}
 	}
 }
