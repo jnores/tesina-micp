@@ -12,7 +12,7 @@
   </class>  
   <class id="2" language="java" name="ar.edu.ungs.tesina.micp.example.model.Clase" project="example" 
     file="/example/src/main/java/ar/edu/ungs/tesina/micp/example/model/Clase.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="710" y="125"/>    
+    <position height="-1" width="-1" x="710" y="154"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -33,16 +33,16 @@
     <position height="-1" width="-1" x="144" y="170"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <class id="5" language="java" name="ar.edu.ungs.tesina.micp.Instance" project="tesina-micp" 
     file="/tesina-micp/src/main/java/ar/edu/ungs/tesina/micp/Instance.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="144" y="613"/>    
+    <position height="-1" width="-1" x="144" y="578"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
@@ -57,82 +57,86 @@
   </class>  
   <class id="7" language="java" name="ar.edu.ungs.tesina.micp.Color" project="tesina-micp" 
     file="/tesina-micp/src/main/java/ar/edu/ungs/tesina/micp/Color.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="439" y="505"/>    
+    <position height="-1" width="-1" x="439" y="508"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <generalization id="8">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="6"/>  
-  </generalization>  
-  <association id="9">    
-    <bendpoint x="513" y="621"/>    
+  <dependency id="8">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <dependency id="9">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <association id="10">    
     <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="10" name="mVertices">        
-        <position height="0" width="0" x="0" y="0"/>      
+      <attribute id="11" name="mColors">        
+        <position height="16" width="47" x="314" y="575"/>      
       </attribute>      
-      <multiplicity id="11" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
+      <multiplicity id="12" minimum="0" maximum="2147483647">        
+        <position height="14" width="21" x="346" y="560"/>      
       </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="12">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="13" name="mSolution"/>      
-      <multiplicity id="14" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="15">    
+  <association id="13">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="14" name="mSolution">        
+        <position height="16" width="54" x="279" y="515"/>      
+      </attribute>      
+      <multiplicity id="15" minimum="0" maximum="2147483647">        
+        <position height="14" width="21" x="346" y="515"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="16">    
     <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="2"/>  
+    <end type="TARGET" refId="1"/>  
   </dependency>  
-  <nesting id="16">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="3"/>  
-  </nesting>  
-  <dependency id="17">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="3"/>  
-  </dependency>  
-  <generalization id="18">    
+  <generalization id="17">    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="7"/>  
   </generalization>  
+  <generalization id="18">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
   <association id="19">    
+    <bendpoint x="513" y="621"/>    
     <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="20" name="mColors">        
+      <attribute id="20" name="mVertices">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
       <multiplicity id="21" minimum="0" maximum="2147483647">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
+    <end type="TARGET" refId="6" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="22">    
+  <nesting id="22">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="3"/>  
+  </nesting>  
+  <association id="23">    
     <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="23" name="mInstance">        
+      <attribute id="24" name="mInstance">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="24" minimum="0" maximum="1">        
+      <multiplicity id="25" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="25">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="1"/>  
-  </dependency>  
   <classifier-display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    

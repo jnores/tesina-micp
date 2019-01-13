@@ -3,39 +3,39 @@
   associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
   <class id="1" language="java" name="ar.edu.ungs.tesina.micp.MicpScipSolver" project="tesina-micp" 
     file="/tesina-micp/src/main/java/ar/edu/ungs/tesina/micp/MicpScipSolver.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="121" y="229"/>    
+    <position height="-1" width="-1" x="121" y="231"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <class id="2" language="java" name="ar.edu.ungs.tesina.micp.SolverConfig" project="tesina-micp" 
     file="/tesina-micp/src/main/java/ar/edu/ungs/tesina/micp/SolverConfig.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="581" y="480"/>    
+    <position height="-1" width="-1" x="567" y="505"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <class id="3" language="java" name="ar.edu.ungs.tesina.micp.ComparableVertexColorPair" project="tesina-micp" 
     file="/tesina-micp/src/main/java/ar/edu/ungs/tesina/micp/ComparableVertexColorPair.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="559" y="67"/>    
+    <position height="-1" width="-1" x="545" y="132"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <class id="4" language="java" name="ar.edu.ungs.tesina.micp.ComparableVertexPair" project="tesina-micp" 
     file="/tesina-micp/src/main/java/ar/edu/ungs/tesina/micp/ComparableVertexPair.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="572" y="206"/>    
+    <position height="-1" width="-1" x="563" y="251"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
@@ -45,54 +45,63 @@
     <position height="-1" width="-1" x="152" y="570"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <dependency id="6">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="3"/>  
-  </dependency>  
-  <association id="7">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="8" name="mSolverConfig">        
-        <position height="18" width="80" x="355" y="403"/>      
-      </attribute>      
-      <multiplicity id="9" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="10">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="1"/>  
-  </dependency>  
-  <dependency id="11">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="4"/>  
-  </dependency>  
-  <association id="12">    
+  <association id="6">    
+    <bendpoint x="415" y="493"/>    
     <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="13" name="mConfig"/>      
-      <multiplicity id="14" minimum="0" maximum="1">        
-        <position height="16" width="23" x="438" y="509"/>      
+      <attribute id="7" name="mConfig">        
+        <position height="0" width="0" x="-14" y="25"/>      
+      </attribute>      
+      <multiplicity id="8" minimum="0" maximum="1">        
+        <position height="14" width="23" x="421" y="505"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="15">    
+  <dependency id="9">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <association id="10">    
     <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="16" name="mCustomInequalities"/>      
-      <multiplicity id="17" minimum="0" maximum="1"/>    
+      <attribute id="11" name="mCustomInequalities">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="12" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
+  <association id="13">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="14" name="mSolverConfig">        
+        <position height="18" width="80" x="341" y="428"/>      
+      </attribute>      
+      <multiplicity id="15" minimum="0" maximum="1">        
+        <position height="0" width="0" x="-14" y="25"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="16">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="17">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
-    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
-    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+    <attributes public="true" package="false" protected="false" private="false" static="true"/>    
+    <operations public="true" package="false" protected="false" private="false" static="true"/>  
   </classifier-display>  
   <association-display labels="true" multiplicity="true"/>
 </class-diagram>
