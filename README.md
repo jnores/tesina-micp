@@ -49,6 +49,7 @@ Listado de las familias de desigualdades soportadas:
     * [x] Configurar tiempo maximo de ejecucion.
     * [x] Configurar GAP de corte.
     * [x] Configurar pabellon a cargar del archivo de texto.
+    * [x] Configurar limite de memoria maxima de opeeracion del solver.
 * [x] Corregir los diagramas de clase y cambiar List de grafos y colores y nodos por la instancia.
 * [ ] Setear la configuracion de aulas disponibles al momento de iniciar la optimización.
 * [ ] Agregar la Pantalla con el detalle de los cursos en conflico y los cursos relacionados.

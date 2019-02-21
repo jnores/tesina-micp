@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
-import java.util.Properties;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.SimpleGraph;
@@ -127,6 +126,8 @@ public class Instance<T extends Vertex, U extends Color> extends Observable{
 
 		solver.setRealParam("limits/time", solverConfig.getTimeLimit());
 		solver.setRealParam("limits/gap", solverConfig.getGapLimit());
+		solver.setRealParam("limits/memory", solverConfig.getMemoryLimit());
+		
 		
 		InequalitiesHelper<T,U> ineqHelper = new InequalitiesHelper<T,U>(solverConfig); 
 

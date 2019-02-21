@@ -97,6 +97,15 @@ public class MicpApp {
 		System.out.println("DESHABILITO " + ineq);
 		mSolverConfig.disableInequality(ineq);
 	}
+	
+	public double getMemoryLimit() {
+		return mSolverConfig.getMemoryLimit();
+	}
+
+	public void setMemoryLimit(double value) {
+		System.out.println("Spinner MEMORY value changed: " + value);
+		mSolverConfig.setMemoryLimit(value);
+	}
 
 	public void setGapLimit(double gap) {
 		System.out.println("Spinner GAP value changed: " + gap);
@@ -107,7 +116,7 @@ public class MicpApp {
 		return mSolverConfig.getGapLimit();
 	}
 
-	public void seTimeLimit(long time) {
+	public void setTimeLimit(long time) {
 		System.out.println("Spinner TIME value changed (min): " + time);
 		// COlverConfig maneja tiempos en segundos y la GUI los configura en minutos
 		mSolverConfig.setTimeLimit(time * 60);

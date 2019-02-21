@@ -43,6 +43,9 @@ public class MainApp {
 											+ "aceptable con valores entre 0 y 1. Por ejemplo, para"
 											+ " conciderar un gap de 15% se debe poner: '-g 0.15'. "
 											+ "Default: 0");
+		opts.addOption("m", "memory", true, "Memoria máxima utilizable por el solver."
+				+ "Default: 1024");
+
 		opts.addOption("t", "timeout", true, "Tiempo maximo de ejecución del solver en segundos. "
 												+ "Default: 3600");
 		
@@ -131,20 +134,36 @@ public class MainApp {
 			prop.setProperty("verbose", "true");
 		
 		// Valido que sea un decimal valido
-		if (cmd.hasOption('g'))
+		if (cmd.hasOption('m'))
 		{
-			String cliGap = cmd.getOptionValue('g');
-			double gapValue = -1;
+			String cliMemory = cmd.getOptionValue('m');
+			double memoryValue = -1;
 			try {
-				gapValue = Double.parseDouble(cliGap);
+				memoryValue = Double.parseDouble(cliMemory);
 			} catch (Exception e) {
 			}
-			if (gapValue < 0) {
+			if (memoryValue < 0) {
 				return false;
 			} else {
-				prop.setProperty("gap_limit", cliGap);
+				prop.setProperty("memory_limit", cliMemory);
 			}
 		}
+		
+		// Valido que sea un decimal valido
+				if (cmd.hasOption('g'))
+				{
+					String cliGap = cmd.getOptionValue('g');
+					double gapValue = -1;
+					try {
+						gapValue = Double.parseDouble(cliGap);
+					} catch (Exception e) {
+					}
+					if (gapValue < 0) {
+						return false;
+					} else {
+						prop.setProperty("gap_limit", cliGap);
+					}
+				}
 				
 		// Valido que sea un entero valido.
 		if (cmd.hasOption('t'))

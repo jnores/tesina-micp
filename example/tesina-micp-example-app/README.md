@@ -1,4 +1,4 @@
-# tesina-micp
+# Ejemplo de uso de micp
 Implementación en java del modelo de programación lineal entera propuesto en el paper "the maximum-impact coloring polytope" de los  investigadores: Mónica Braga, Diego Delle Donne, Rodrigo Linfati y Javier Marenco.
 
 El solver utilizado es [Scip](http://scip.zib.de/) mediante la interfaz [JSCIPOpt](https://github.com/SCIP-Interfaces/JSCIPOpt)
@@ -24,3 +24,5 @@ Para poder usar el solver en el proyecto es necesario compilar la interfaz JSCIP
 
 ## Ejemplo de uso
 En la sección de test se puede encontrar un ejemplo uso de la implementación.
+
+Se implementa la configuración del limite de memoria disponible para el solver.

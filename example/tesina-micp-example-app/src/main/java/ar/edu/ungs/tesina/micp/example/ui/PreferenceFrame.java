@@ -200,7 +200,7 @@ public class PreferenceFrame extends JFrame {
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(null, "Solver", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_1.setBounds(228, 100, 204, 182);
+		panel_1.setBounds(228, 100, 204, 212);
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 
@@ -220,18 +220,18 @@ public class PreferenceFrame extends JFrame {
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				mApp.seTimeLimit((Integer) spinner.getValue());
+				mApp.setTimeLimit((Integer) spinner.getValue());
 			}
 		});
 		panel_1.add(spinner);
 
 		JLabel lblGapDeCorte = new JLabel("GAP de corte:");
-		lblGapDeCorte.setBounds(12, 83, 115, 15);
+		lblGapDeCorte.setBounds(12, 80, 115, 15);
 		panel_1.add(lblGapDeCorte);
 
 		JSpinner spinner_1 = new JSpinner();
 		spinner_1.setModel(new SpinnerNumberModel(new Float(0), new Float(0), new Float(1), new Float(0.01)));
-		spinner_1.setBounds(119, 105, 73, 20);
+		spinner_1.setBounds(119, 102, 73, 20);
 		JComponent comp_1 = spinner_1.getEditor();
 		JFormattedTextField field_1 = (JFormattedTextField) comp_1.getComponent(0);
 		DefaultFormatter formatter_1 = (DefaultFormatter) field_1.getFormatter();
@@ -247,7 +247,7 @@ public class PreferenceFrame extends JFrame {
 		panel_1.add(spinner_1);
 		
 		JLabel lblVerbose = new JLabel("Verbose:");
-		lblVerbose.setBounds(12, 135, 70, 15);
+		lblVerbose.setBounds(12, 180, 70, 15);
 		panel_1.add(lblVerbose);
 		
 		JToggleButton tglbtnActivo = new JToggleButton("Activo");
@@ -261,8 +261,30 @@ public class PreferenceFrame extends JFrame {
 			      }
 			   }
 			});
-		tglbtnActivo.setBounds(100, 130, 89, 25);
+		tglbtnActivo.setBounds(100, 175, 89, 25);
 		panel_1.add(tglbtnActivo);
+		
+		JLabel lblMemoryLimit = new JLabel("Memoria máxima:");
+		lblMemoryLimit.setBounds(12, 126, 115, 15);
+		panel_1.add(lblMemoryLimit);
+		
+		JSpinner spinner_2 = new JSpinner();
+		spinner_2.setBounds(119, 148, 73, 20);
+		spinner_2.setModel(new SpinnerNumberModel(new Double(1024), new Double(1), null, new Double(1)));
+		
+		JComponent comp_2 = spinner.getEditor();
+		JFormattedTextField field_2 = (JFormattedTextField) comp_2.getComponent(0);
+		DefaultFormatter formatter_2 = (DefaultFormatter) field_2.getFormatter();
+		formatter_2.setCommitsOnValidEdit(true);
+		spinner_2.setValue(mApp.getMemoryLimit());
+		spinner_2.addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				mApp.setMemoryLimit((double) spinner_2.getValue());
+			}
+		});
+		panel_1.add(spinner_2);
 
 		JButton btnCerrar = new JButton("Cerrar");
 		btnCerrar.addActionListener(new ActionListener() {
@@ -270,7 +292,7 @@ public class PreferenceFrame extends JFrame {
 				dispose();
 			}
 		});
-		btnCerrar.setBounds(274, 294, 117, 25);
+		btnCerrar.setBounds(275, 324, 117, 25);
 		contentPane.add(btnCerrar);
 
 		JPanel panel_2 = new JPanel();

@@ -4,22 +4,76 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-// TODO: Cambiar la definiion de ls desigualdades y armarle un factory y/o algun Helper. ahora es id1|id2|id3... 
+/**
+ * Clase encargada de procesar la estructura de un Properties y generar un estado de configuración
+ * válido para la ejecucion del solver. Para esto, se dispone de valores por default de cada 
+ * parametro. Así, de este modo, se puede comenzar a operar sin tener que establecer una 
+ * configuarcioninicial. 
+ *  
+ * @author yoshknight
+ *
+ */
 public class SolverConfig {
 	static final double DEFAULT_GAP_LIMIT = 0.0;
-	static final int DEFAULT_TIME_LIMIT = 3600;
+	static final int DEFAULT_TIME_LIMIT = 3600; // seg
+	static final double DEFAULT_MEMORY_LIMIT = 1024; // MB
 	static final boolean DEFAULT_IS_VERBOSE = false;
+	
+	/**
+	 * solving stops, if the relative gap = |primal - dual|/MIN(|dual|,|primal|) is below the given value
+	 * [Type: real, advanced: FALSE, range: [0,1.79769313486232e+308], default: 0]
+	 */
 	private double gapLimit = DEFAULT_GAP_LIMIT;
+	
+	/**
+	 * maximal time in seconds to run
+	 * [type: real, advanced: FALSE, range: [0,1e+20], default: 1e+20]
+	 */
 	private long timeLimit = DEFAULT_TIME_LIMIT;
+	
+	/**
+	 * maximal memory usage in MB; reported memory usage is lower than real memory usage!
+	 * [type: real, advanced: FALSE, range: [0,8796093022208], default: 8796093022208]
+	 */
+	private double memoryLimit = DEFAULT_MEMORY_LIMIT;
+	
+	/**
+	 * Boolean que determina si se debe ejecutar el solver en modo verbose o no.
+	 */
 	private boolean isVerbose = DEFAULT_IS_VERBOSE;
+	
+	/**
+	 * List que contiene los id de las desigualdades que se deben agregar al modelo.
+	 */
 	private List<Integer> inequalitiesEnabled;
 
 	public SolverConfig(Properties p) {
 		inequalitiesEnabled = new ArrayList<Integer>();
+		readMemoryLimit(p);
 		readGapLimit(p);
 		readTimeLimit(p);
 		readVerbose(p);
 		readInequalitiesEnabled(p);
+	}
+
+	private void readMemoryLimit(Properties p) {
+		String memory = p.getProperty("memory_limit");
+		try {
+			double memoryValue = Double.parseDouble(memory);
+			setMemoryLimit(memoryValue);
+		} catch (Exception e) {
+			gapLimit = DEFAULT_MEMORY_LIMIT;
+			if (memory == null) {
+				System.out
+						.println("debug - No se configuró el paremetor 'memory_limit'. Uso por default: "
+								+ DEFAULT_MEMORY_LIMIT);
+			} else {
+				System.out.println("debug - No se pudo parsear el parametro 'memory_limit' (" 
+						+ memory
+						+ "). uso por default: " + DEFAULT_MEMORY_LIMIT);
+			}
+
+		}
 	}
 
 	private void readGapLimit(Properties p) {
@@ -30,11 +84,10 @@ public class SolverConfig {
 		} catch (Exception e) {
 			gapLimit = DEFAULT_GAP_LIMIT;
 			if (gap == null) {
-				System.out
-						.println("debug - No se configuró un limite para el GAP. Uso por default: "
-								+ DEFAULT_GAP_LIMIT);
+				System.out.println("debug - No se configuró el parametro 'gap_limit'. Uso por"
+						+ " default: " + DEFAULT_GAP_LIMIT);
 			} else {
-				System.out.println("debug - No se pudo parsear la configuración del GAP (" + gap
+				System.out.println("debug - No se pudo parsear el parametro 'gap_limit' (" + gap
 						+ "). uso por default: " + DEFAULT_GAP_LIMIT);
 			}
 
@@ -49,11 +102,10 @@ public class SolverConfig {
 		} catch (Exception e) {
 			timeLimit = DEFAULT_TIME_LIMIT;
 			if (time == null) {
-				System.out
-						.println("debug - No se configuró un limite para el TIME. Uso por default: "
-								+ DEFAULT_TIME_LIMIT);
+				System.out.println("debug - No se configuró el parametro 'time_limit'. Uso por"
+						+ " default: " + DEFAULT_TIME_LIMIT);
 			} else {
-				System.out.println("debug - No se pudo parsear la configuración del TIME (" + time
+				System.out.println("debug - No se pudo parsear el parametro 'time_limit' (" + time
 						+ "). uso por default: " + DEFAULT_TIME_LIMIT);
 			}
 
@@ -86,31 +138,46 @@ public class SolverConfig {
 					n = Integer.parseInt(s);
 					enableInequality(n);
 				} catch(NumberFormatException ex) {
-					System.out.println("debug - No se pudo parsear la inequality como entero con el parametro: "+s);
+					System.out.println("debug - Error en el parametro 'inequalities_enabled'. No se"
+							+ " pudo parsear la inequality como entero con el parametro: "+s);
 				}
 			}
 		}	
 	}
 	
+	public void setMemoryLimit(double memory) {
+		if ( memory > 0 )
+			memoryLimit = memory;
+	}
+	
+	public double getMemoryLimit() {
+		return memoryLimit;
+	}
+
+	
+	
 	public void setGapLimit(double gap) {
 		if (gap >= 0 && gap <1)
-		gapLimit = gap;
+			gapLimit = gap;
 	}
 
 	public double getGapLimit() {
 		return gapLimit;
 	}
 
+	
+	
 	public void setTimeLimit(long time) {
 		if (time > 0)
 			timeLimit = time;
 	}
 
-
 	public long getTimeLimit() {
 		return timeLimit;
 	}
 
+	
+	
 	public void setVerbose(boolean isVerbose) {
 		this.isVerbose = isVerbose;
 	}
@@ -118,6 +185,8 @@ public class SolverConfig {
 	public boolean isVerbose() {
 		return isVerbose;
 	}
+	
+	
 	
 	public boolean isInequalityEnabled(Integer ineq) {
 		return inequalitiesEnabled.contains(ineq);
@@ -137,6 +206,5 @@ public class SolverConfig {
 	
 	public List<Integer> getInequalitiesEnabled() {
 		return inequalitiesEnabled;
-	}
-
+	}	
 }
