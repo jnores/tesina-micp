@@ -118,12 +118,12 @@ public class MicpApp {
 
 	public void setTimeLimit(long time) {
 		System.out.println("Spinner TIME value changed (min): " + time);
-		// COlverConfig maneja tiempos en segundos y la GUI los configura en minutos
+		// SolverConfig maneja tiempos en segundos y la GUI los configura en minutos
 		mSolverConfig.setTimeLimit(time * 60);
 	}
 
 	public long getTimeLimit() {
-		// COlverConfig maneja tiempos en segundos y la GUI los configura en minutos
+		// SolverConfig maneja tiempos en segundos y la GUI los configura en minutos
 		return mSolverConfig.getTimeLimit() / 60;
 	}
 
@@ -137,7 +137,6 @@ public class MicpApp {
 	}
 
 	public boolean isVerboseMode() {
-		// TODO Auto-generated method stub
 		return mSolverConfig.isVerbose();
 	}
 
@@ -371,7 +370,7 @@ public class MicpApp {
 			mInstance.setSolution(mMicp.searchOptimal(
 					mInstance.getConflictGraph(),
 					mInstance.getRelationshipGraph(),
-					mInstance.getAulas()));
+					mInstance.getColors()));
 			mMicp.free();
 		} catch (Exception e) {
 			System.out.println("debug - La optimizacion fue interrumpida!");

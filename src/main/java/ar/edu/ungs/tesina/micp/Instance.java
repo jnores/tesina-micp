@@ -9,10 +9,11 @@ import java.util.Observable;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.SimpleGraph;
 
+import ar.edu.ungs.tesina.micp.inequalities.CustomInequalities;
 import ar.edu.ungs.tesina.micp.inequalities.InequalitiesHelper;
 import jscip.Scip;
 
-public class Instance<T extends Vertex, U extends Color> extends Observable{
+public class Instance<T extends Vertex, U extends Color> extends Observable {
 
 	private String mName;
 	private List<T> mVertices;
@@ -30,8 +31,8 @@ public class Instance<T extends Vertex, U extends Color> extends Observable{
 			throw new InvalidParameterException("Error al crear la instancia. El listado de aulas no puede ser vacio");
 
 		mVertices = vertices;
-		mColors = new ArrayList<U>( colors);
-		EdgeFactory<T> edgeFactory= new EdgeFactory<T>();
+		mColors = new ArrayList<U>(colors);
+		EdgeFactory<T> edgeFactory = new EdgeFactory<T>();
 
 		mConflictGraph = new SimpleGraph<T, Edge<T>>(edgeFactory);
 		mRelationshipGraph = new SimpleGraph<T, Edge<T>>(edgeFactory);
@@ -44,27 +45,28 @@ public class Instance<T extends Vertex, U extends Color> extends Observable{
 	}
 
 	public boolean addConflicto(T c1, T c2) {
+
 		if (mConflictGraph.addEdge(c1, c2) != null) {
 			setChanged();
 			notifyObservers();
 			return true;
-		}
-		else
+		} else {
 			return false;
+		}
 	}
-	
+
 	public boolean addRelacion(T c1, T c2) {
-		if (mRelationshipGraph.addEdge(c1, c2) != null)
-		{
+
+		if (mRelationshipGraph.addEdge(c1, c2) != null) {
 			setChanged();
 			notifyObservers();
 			return true;
-		}
-		else
+		} else {
 			return false;
+		}
 	}
 
-	public List<U> getAulas() {
+	public List<U> getColors() {
 		return mColors;
 	}
 
@@ -93,7 +95,7 @@ public class Instance<T extends Vertex, U extends Color> extends Observable{
 	public U getOptimal(T c) {
 		return (mSolution != null) ? mSolution.get(c) : null;
 	}
-	
+
 	public String getName() {
 		return mName;
 	}
@@ -104,15 +106,21 @@ public class Instance<T extends Vertex, U extends Color> extends Observable{
 	 * Si es nulo Lanza una excepción En caso de que no sea null devuelve una
 	 * instancia de la clase.
 	 * 
-	 * @param solver
-	 *            una implementacion de la interfaz Solver
-	 * @return
+	 * @param solver Una implementacion de la interfaz Solver
+	 * @param ineq   Inscancia de la interfaz CustomIneq. Este puede contener un
+	 *               contenedor de desigualdades o el ineqHelper.
+	 * 
+	 * @return Instancia del MicpScipSolver con los tipos especificados al crear la
+	 *         instancia.
 	 */
-	public MicpScipSolver<T,U> createMicp(SolverConfig solverConfig) {
+	public MicpScipSolver<T, U> createMicp(SolverConfig solverConfig, CustomInequalities<T, U> ineq) {
+		if (solverConfig == null)
+			throw new InvalidParameterException("El parametro solverCOnfig no puede ser nulo");
+
 		String name = getName();
+
 		try {
 			System.loadLibrary("jscip");
-
 		} catch (UnsatisfiedLinkError ex) {
 			throw new RuntimeException("No se encontro la libreria jscip.", ex);
 		} catch (Exception ex) {
@@ -127,11 +135,20 @@ public class Instance<T extends Vertex, U extends Color> extends Observable{
 		solver.setRealParam("limits/time", solverConfig.getTimeLimit());
 		solver.setRealParam("limits/gap", solverConfig.getGapLimit());
 		solver.setRealParam("limits/memory", solverConfig.getMemoryLimit());
-		
-		
-		InequalitiesHelper<T,U> ineqHelper = new InequalitiesHelper<T,U>(solverConfig); 
 
-		return new MicpScipSolver<T,U>(solver, name, solverConfig, ineqHelper);
+		return new MicpScipSolver<T, U>(solver, name, solverConfig, ineq);
 	}
-	
+
+	/**
+	 * 
+	 * @param solver Una implementacion de la interfaz Solver
+	 * @return Instancia del MicpScipSolver con los tipos especificados al crear la
+	 *         instancia.
+	 */
+	public MicpScipSolver<T, U> createMicp(SolverConfig solverConfig) {
+
+		InequalitiesHelper<T, U> ineqHelper = new InequalitiesHelper<T, U>(solverConfig);
+
+		return createMicp(solverConfig, ineqHelper);
+	}
 }
