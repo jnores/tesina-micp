@@ -187,9 +187,8 @@ public class CliqueInequalities<T extends Vertex, U extends Color> extends Custo
 		
 		Set<T> subclique = clique;
 		System.out.println("Agrego SubCliqueInequality al vector: " + vi);
-		int jPos = 0;
-		// TODO: Corregir esto pasando un array donde recibir el contenido.
-		T vj = (T) clique.toArray()[jPos];
+		
+		T vj = clique.iterator().next();
 		subclique.remove(vj);
 		if (subclique.size() >= colors.size())
 			return;
@@ -197,8 +196,8 @@ public class CliqueInequalities<T extends Vertex, U extends Color> extends Custo
 		// Necesitamos |D| <= |C| - ( |K'| + 1 )
 		Set<U> D = generateColorsSubset(colors, colors.size() - subclique.size() + 1);
 		Set<U> Dcomplement = generateComplement(colors, D);
-		// TODO: Corregir esto pasando un array donde recibir el contenido.
-		U c = (U) Dcomplement.toArray()[0];
+
+		U c = Dcomplement.iterator().next();
 
 		int cantFactors = 3 + subclique.size() + D.size() * (1 + subclique.size());
 		Variable[] vars = new Variable[cantFactors];
@@ -264,10 +263,8 @@ public class CliqueInequalities<T extends Vertex, U extends Color> extends Custo
 		System.out.println("Agrego TwoColorSubCliqueInequality al vector: " + vi);
 
 		Set<T> subclique = clique;
-		int jPos = 0;
 		
-		// TODO Ver como corregir este warning
-		T vj = (T) clique.toArray()[jPos];
+		T vj = clique.iterator().next();
 		subclique.remove(vj);
 
 		// D != 0 y |D'| = |K'| Y |D| <= |C| - ( |D'| + 1 )
