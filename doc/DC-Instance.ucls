@@ -3,38 +3,38 @@
   associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
   <class id="1" language="java" name="ar.edu.ungs.tesina.micp.Color" project="tesina-micp" 
     file="/tesina-micp/src/main/java/ar/edu/ungs/tesina/micp/Color.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="465" y="260"/>    
+    <position height="-1" width="-1" x="479" y="281"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <class id="2" language="java" name="ar.edu.ungs.tesina.micp.Instance" project="tesina-micp" 
     file="/tesina-micp/src/main/java/ar/edu/ungs/tesina/micp/Instance.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="385" width="268" x="52" y="13"/>    
+    <position height="300" width="273" x="72" y="37"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <class id="3" language="java" name="ar.edu.ungs.tesina.micp.Vertex" project="tesina-micp" 
     file="/tesina-micp/src/main/java/ar/edu/ungs/tesina/micp/Vertex.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="461" y="93"/>    
+    <position height="-1" width="-1" x="473" y="102"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="false"/>      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
   <association id="4">    
     <end type="SOURCE" refId="2" navigable="false">      
       <attribute id="5" name="mVertices">        
-        <position height="0" width="0" x="190" y="-455"/>      
+        <position height="0" width="0" x="393" y="-794"/>      
       </attribute>      
       <multiplicity id="6" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="190" y="-455"/>      
+        <position height="0" width="0" x="393" y="-794"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
@@ -43,10 +43,10 @@
   <association id="7">    
     <end type="SOURCE" refId="2" navigable="false">      
       <attribute id="8" name="mColors">        
-        <position height="0" width="0" x="193" y="-233"/>      
+        <position height="0" width="0" x="568" y="-376"/>      
       </attribute>      
       <multiplicity id="9" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="193" y="-233"/>      
+        <position height="0" width="0" x="568" y="-376"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="1" navigable="true"/>    

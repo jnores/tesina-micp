@@ -5,8 +5,8 @@
     project="tesina-micp" 
     file="/tesina-micp/src/main/java/ar/edu/ungs/tesina/micp/inequalities/PartitionedInequalities.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="595" y="377"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+    <position height="-1" width="-1" x="374" y="463"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="false" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="false" static="true"/>    
@@ -15,8 +15,8 @@
   <class id="2" language="java" name="ar.edu.ungs.tesina.micp.inequalities.CustomInequalities" project="tesina-micp" 
     file="/tesina-micp/src/main/java/ar/edu/ungs/tesina/micp/inequalities/CustomInequalities.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="343" y="128"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+    <position height="-1" width="-1" x="424" y="187"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="false" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
@@ -25,8 +25,8 @@
   <class id="3" language="java" name="ar.edu.ungs.tesina.micp.inequalities.ValidInequalities" project="tesina-micp" 
     file="/tesina-micp/src/main/java/ar/edu/ungs/tesina/micp/inequalities/ValidInequalities.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="589" y="960"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+    <position height="-1" width="-1" x="695" y="660"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="false" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="false" static="true"/>    
@@ -35,8 +35,8 @@
   <class id="4" language="java" name="ar.edu.ungs.tesina.micp.inequalities.CliqueInequalities" project="tesina-micp" 
     file="/tesina-micp/src/main/java/ar/edu/ungs/tesina/micp/inequalities/CliqueInequalities.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="594" y="583"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+    <position height="-1" width="-1" x="424" y="678"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="false" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="false" static="true"/>    
@@ -46,8 +46,8 @@
     project="tesina-micp" 
     file="/tesina-micp/src/main/java/ar/edu/ungs/tesina/micp/inequalities/TriangleDiamondInequalities.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="594" y="774"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+    <position height="-1" width="-1" x="747" y="454"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="false" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="false" static="true"/>    
@@ -56,59 +56,51 @@
   <class id="6" language="java" name="ar.edu.ungs.tesina.micp.inequalities.InequalitiesHelper" project="tesina-micp" 
     file="/tesina-micp/src/main/java/ar/edu/ungs/tesina/micp/inequalities/InequalitiesHelper.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="955" y="101"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+    <position height="-1" width="-1" x="734" y="189"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="false" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <dependency id="7">    
-    <bendpoint x="959" y="583"/>    
+  <generalization id="7">    
+    <bendpoint x="242" y="582"/>    
+    <bendpoint x="242" y="371"/>    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <generalization id="8">    
     <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="4"/>  
-  </dependency>  
-  <dependency id="8">    
-    <bendpoint x="957" y="375"/>    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="1"/>  
-  </dependency>  
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
   <generalization id="9">    
-    <bendpoint x="218" y="378"/>    
-    <bendpoint x="218" y="238"/>    
-    <end type="SOURCE" refId="1"/>    
+    <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="2"/>  
   </generalization>  
   <dependency id="10">    
-    <bendpoint x="961" y="962"/>    
+    <bendpoint x="866" y="365"/>    
+    <bendpoint x="866" y="586"/>    
     <end type="SOURCE" refId="6"/>    
     <end type="TARGET" refId="3"/>  
   </dependency>  
   <dependency id="11">    
-    <bendpoint x="959" y="781"/>    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="12">    
     <end type="SOURCE" refId="6"/>    
     <end type="TARGET" refId="5"/>  
   </dependency>  
-  <generalization id="12">    
-    <bendpoint x="219" y="585"/>    
-    <bendpoint x="219" y="236"/>    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="2"/>  
-  </generalization>  
   <generalization id="13">    
-    <bendpoint x="218" y="966"/>    
-    <bendpoint x="219" y="237"/>    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="2"/>  
-  </generalization>  
-  <generalization id="14">    
-    <bendpoint x="219" y="774"/>    
-    <bendpoint x="218" y="238"/>    
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="2"/>  
   </generalization>  
-  <generalization id="15">    
+  <dependency id="14">    
     <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <generalization id="15">    
+    <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="2"/>  
   </generalization>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 

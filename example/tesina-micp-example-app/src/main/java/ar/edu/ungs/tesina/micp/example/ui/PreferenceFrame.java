@@ -264,7 +264,7 @@ public class PreferenceFrame extends JFrame {
 		tglbtnActivo.setBounds(100, 175, 89, 25);
 		panel_1.add(tglbtnActivo);
 		
-		JLabel lblMemoryLimit = new JLabel("Memoria máxima:");
+		JLabel lblMemoryLimit = new JLabel("Memoria máxima (MB):");
 		lblMemoryLimit.setBounds(12, 126, 115, 15);
 		panel_1.add(lblMemoryLimit);
 		
