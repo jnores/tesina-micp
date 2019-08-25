@@ -27,9 +27,11 @@ public class PartitionedInequalities<T extends Vertex, U extends Color>
 	public static final int PARTITIONED_INEQUALITIES = 2;
 	public static final int THREE_PARTITIONED_INEQUALITIES = 3;
 	public static final int K_PARTITIONED_INEQUALITIES = 4;
+	
+	protected List<Integer> mInequalitiesEnabled;
 
 	public PartitionedInequalities(SolverConfig solverConfig) {
-		super(solverConfig);
+		mInequalitiesEnabled = solverConfig.getInequalitiesEnabled();
 	}
 
 	@Override
@@ -204,13 +206,4 @@ public class PartitionedInequalities<T extends Vertex, U extends Color>
 		throw new RuntimeException(
 				"ERROR - Not Implemented Method PartitionedInequalities::addKPartitionedInequality");
 	}
-
-	public static boolean mustAddInequalities(List<Integer> mInequalitiesEnabled) {
-		if (mInequalitiesEnabled.isEmpty())
-			return false;
-		return mInequalitiesEnabled.contains(PARTITIONED_INEQUALITIES)
-				|| mInequalitiesEnabled.contains(THREE_PARTITIONED_INEQUALITIES)
-				|| mInequalitiesEnabled.contains(K_PARTITIONED_INEQUALITIES);
-	}
-
 }

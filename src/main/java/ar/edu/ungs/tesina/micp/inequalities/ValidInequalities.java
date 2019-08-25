@@ -25,8 +25,10 @@ public class ValidInequalities<T extends Vertex, U extends Color> extends Custom
 	public static final int BOUNDING_INEQUALITIES = 11;
 	public static final int REINFORCED_BOUNDING_INEQUALITIES = 12;
 
+	protected List<Integer> mInequalitiesEnabled;
+
 	public ValidInequalities(SolverConfig solverConfig) {
-		super(solverConfig);
+		mInequalitiesEnabled = solverConfig.getInequalitiesEnabled();
 	}
 
 	@Override
@@ -163,12 +165,4 @@ public class ValidInequalities<T extends Vertex, U extends Color> extends Custom
 		}
 		
 	}
-
-	public static boolean mustAddInequalities(List<Integer> mInequalitiesEnabled) {
-		if (mInequalitiesEnabled.isEmpty())
-			return false;
-		return mInequalitiesEnabled.contains(BOUNDING_INEQUALITIES)
-				|| mInequalitiesEnabled.contains(REINFORCED_BOUNDING_INEQUALITIES);
-	}
-
 }

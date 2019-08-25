@@ -10,20 +10,12 @@ import org.jgrapht.Graph;
 import ar.edu.ungs.tesina.micp.Color;
 import ar.edu.ungs.tesina.micp.Edge;
 import ar.edu.ungs.tesina.micp.MicpScipSolver;
-import ar.edu.ungs.tesina.micp.SolverConfig;
 import ar.edu.ungs.tesina.micp.Vertex;
 
 abstract public class CustomInequalities<T extends Vertex,U extends Color> {
 	
 	public static final long WITHOUT_INEQUALITIES = 0;
 
-	protected SolverConfig mConfig;
-	protected List<Integer> mInequalitiesEnabled;
-
-	public CustomInequalities(SolverConfig solverConfig) {
-		mConfig = solverConfig;
-		mInequalitiesEnabled = solverConfig.getInequalitiesEnabled();
-	}
 	
 	abstract public void addInequalities(MicpScipSolver<T,U> micpSolver, List<T> vertices, List<U> colors,
 			Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph);

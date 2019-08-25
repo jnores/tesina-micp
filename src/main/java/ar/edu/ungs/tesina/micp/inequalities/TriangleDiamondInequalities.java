@@ -20,8 +20,10 @@ public class TriangleDiamondInequalities<T extends Vertex, U extends Color> exte
 	public static final int SEMI_TRIANGLE_INEQUALITIES = 9;
 	public static final int SEMI_DIAMOND_INEQUALITIES = 10;
 
+	protected List<Integer> mInequalitiesEnabled;
+
 	public TriangleDiamondInequalities(SolverConfig solverConfig) {
-		super(solverConfig);
+		mInequalitiesEnabled = solverConfig.getInequalitiesEnabled();
 	}
 
 	@Override
@@ -190,12 +192,5 @@ public class TriangleDiamondInequalities<T extends Vertex, U extends Color> exte
 				}
 			}
 		}
-	}
-
-	public static boolean mustAddInequalities(List<Integer> mInequalitiesEnabled) {
-		if (mInequalitiesEnabled.isEmpty())
-			return false;
-		return mInequalitiesEnabled.contains(SEMI_TRIANGLE_INEQUALITIES)
-				|| mInequalitiesEnabled.contains(SEMI_DIAMOND_INEQUALITIES);
 	}
 }

@@ -25,9 +25,10 @@ public class CliqueInequalities<T extends Vertex, U extends Color> extends Custo
 	public static final int SUB_CLIQUE_INEQUALITIES = 7;
 	public static final int TWO_COLOR_SUB_CLIQUE_INEQUALITIES = 8;
 
+	protected List<Integer> mInequalitiesEnabled;
 	
 	public CliqueInequalities(SolverConfig solverConfig) {
-		super(solverConfig);
+		mInequalitiesEnabled = solverConfig.getInequalitiesEnabled();
 	}
 
 	/**
@@ -47,7 +48,14 @@ public class CliqueInequalities<T extends Vertex, U extends Color> extends Custo
 			Graph<T, Edge<T>> relationshipGraph) {
 
 		// Si no se selecciono ninguna inequality, se termina el metodo.
-		if ( mInequalitiesEnabled.isEmpty() )
+		if ( mInequalitiesEnabled.isEmpty() 
+				|| ! (
+						mInequalitiesEnabled.contains(CLIQUE_PARTITIONED_INEQUALITIES)
+						|| mInequalitiesEnabled.contains(VERTEX_CLIQUE_INEQUALITIES)
+						|| mInequalitiesEnabled.contains(SUB_CLIQUE_INEQUALITIES)
+						|| mInequalitiesEnabled.contains(TWO_COLOR_SUB_CLIQUE_INEQUALITIES)
+						)
+				)
 			return;
 
 		// Busco todas las cliques que cumplan con Figure 1.
@@ -341,14 +349,4 @@ public class CliqueInequalities<T extends Vertex, U extends Color> extends Custo
 
 		return generateColorsSubset(colors, len);
 	}
-
-	public static boolean mustAddInequalities(List<Integer> mInequalitiesEnabled) {
-		if (mInequalitiesEnabled.isEmpty())
-			return false;
-		return mInequalitiesEnabled.contains(CLIQUE_PARTITIONED_INEQUALITIES)
-				|| mInequalitiesEnabled.contains(VERTEX_CLIQUE_INEQUALITIES)
-				|| mInequalitiesEnabled.contains(SUB_CLIQUE_INEQUALITIES)
-				|| mInequalitiesEnabled.contains(TWO_COLOR_SUB_CLIQUE_INEQUALITIES);
-	}
-
 }

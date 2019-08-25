@@ -24,27 +24,33 @@ public class MainApp {
 	private static Options getOptions() {
 		Options opts = new Options();
 
-		opts.addOption("x", "Ejecutar resolución sin abrir la interfaz gráfica. Depende de los argumentos -c, -a y -s");
+		opts.addOption("x", "Ejecutar resolución sin abrir la interfaz gráfica. Depende de los "
+							+ "argumentos -c, -a y -s");
 		opts.addOption("c", "cursos", true, "La ruta al archivo que contiene los cursos con los "
 											+ "horarios en formato de instancia FCEN");
 		opts.addOption("a", "aulas", true, "Puede ser el numero de aulas dispnibles o la ruta al "
 											+ "archivo que contiene las aulas disponibles");
 		opts.addOption("s", "solucion", true, "La ruta al archivo donde se desea guardar la "
 												+ "solución");
-		opts.addOption("i", "add-inequality", true, "Agregar desigualdad ##. Repetir el parametro "
-													+ "para agregar más de una desigualdad.[2-12]");
+		opts.addOption("i", "add-inequality", true, "Agregar desigualdad ##. Se puede repetir el "
+													+ "parámetro para agregar más de una "
+													+ "desigualdad. Los valores disponibles son el "
+													+ "2, el 3 y del 5 al 12 .");
 		// agrego las que se superponen con la configuracion por archivo.
 		opts.addOption("v", "verbose", false, "Imprimir por STDOUT información detallada de la "
-												+ "ejecución");
+											  + "ejecución del solver. Mediante la interfaz con el "
+											  + "solver se le habilita el modo verbose y se "
+											  + "imprimen las estadísticas de la ejecución y la "
+											  + "mejor solución encontrada.");
 		
 		opts.addOption("p", "pabellon", true, "Número entero que identifica el pabellon que se "
 												+ "debe procesar. Default: 1");
 		opts.addOption("g", "gap", true, "Valor de corte del GAP para conciderar una solucion como "
-											+ "aceptable con valores entre 0 y 1. Por ejemplo, para"
+											+ "aceptable, con valores entre 0 y 1. Por ejemplo, para"
 											+ " conciderar un gap de 15% se debe poner: '-g 0.15'. "
 											+ "Default: 0");
-		opts.addOption("m", "memory", true, "Memoria máxima utilizable por el solver."
-				+ "Default: 1024");
+		opts.addOption("m", "memory", true, "Memoria máxima utilizable por el solver en MB."
+											+ "Default: 1024");
 
 		opts.addOption("t", "timeout", true, "Tiempo maximo de ejecución del solver en segundos. "
 												+ "Default: 3600");

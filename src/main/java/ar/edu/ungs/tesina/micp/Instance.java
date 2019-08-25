@@ -10,7 +10,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.graph.SimpleGraph;
 
 import ar.edu.ungs.tesina.micp.inequalities.CustomInequalities;
-import ar.edu.ungs.tesina.micp.inequalities.InequalitiesHelper;
+import ar.edu.ungs.tesina.micp.inequalities.InequalitiesFactory;
 import jscip.Scip;
 
 public class Instance<T extends Vertex, U extends Color> extends Observable {
@@ -147,8 +147,8 @@ public class Instance<T extends Vertex, U extends Color> extends Observable {
 	 */
 	public MicpScipSolver<T, U> createMicp(SolverConfig solverConfig) {
 
-		InequalitiesHelper<T, U> ineqHelper = new InequalitiesHelper<T, U>(solverConfig);
+		InequalitiesFactory<T, U> ineqHelper = new InequalitiesFactory<T, U>(solverConfig);
 
-		return createMicp(solverConfig, ineqHelper);
+		return createMicp(solverConfig, ineqHelper.createInequalities() );
 	}
 }

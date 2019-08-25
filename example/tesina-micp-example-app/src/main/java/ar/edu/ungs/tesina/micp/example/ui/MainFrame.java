@@ -364,7 +364,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			icon = JOptionPane.INFORMATION_MESSAGE;
 			
 		} else {
-			message = "La instancia no tiene solución.";
+			message = "No se encontró ninguna asignación válida.";
 			
 		}
 		
