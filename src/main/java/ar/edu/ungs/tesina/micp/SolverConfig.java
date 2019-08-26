@@ -146,6 +146,7 @@ public class SolverConfig {
 	}
 	
 	public void setMemoryLimit(double memory) {
+		System.out.println("Spinner MEMORY value changed: " + memory);
 		if ( memory > 0 )
 			memoryLimit = memory;
 	}
@@ -157,6 +158,7 @@ public class SolverConfig {
 	
 	
 	public void setGapLimit(double gap) {
+		System.out.println("Spinner GAP value changed: " + gap);
 		if (gap >= 0 && gap <1)
 			gapLimit = gap;
 	}
@@ -168,6 +170,7 @@ public class SolverConfig {
 	
 	
 	public void setTimeLimit(long time) {
+		System.out.println("Spinner TIME value changed (min): " + time);
 		if (time > 0)
 			timeLimit = time;
 	}
@@ -179,6 +182,7 @@ public class SolverConfig {
 	
 	
 	public void setVerbose(boolean isVerbose) {
+		System.out.println("CAMBIO DE CONFIGURACION: VERBOSE MODE: " + (isVerbose ? "ON" : "OFF"));
 		this.isVerbose = isVerbose;
 	}
 
@@ -193,12 +197,14 @@ public class SolverConfig {
 	}
 	
 	public void enableInequality(Integer ineq) {
+		System.out.println("HABILITO " + ineq);
 		if ( ! isInequalityEnabled(ineq) ) {
 			inequalitiesEnabled.add(ineq);
 		}
 	}
 	
 	public void disableInequality(Integer ineq) {
+		System.out.println("DESHABILITO " + ineq);
 		int pos;
 		while( (pos = inequalitiesEnabled.indexOf(ineq)) >= 0 )
 			inequalitiesEnabled.remove(pos);

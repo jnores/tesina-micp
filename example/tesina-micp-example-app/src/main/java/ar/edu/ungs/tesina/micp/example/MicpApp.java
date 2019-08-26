@@ -83,48 +83,9 @@ public class MicpApp {
 	}
 
 	// ------------------- Funcioness Asociadas a las preferencias de la ejecucion.
-
-	public boolean isInequalityEnabled(Integer ineq) {
-		return mSolverConfig.isInequalityEnabled(ineq);
-	}
-
-	public void enableInequality(Integer ineq) {
-		System.out.println("HABILITO " + ineq);
-		mSolverConfig.enableInequality(ineq);
-	}
-
-	public void disableInequality(Integer ineq) {
-		System.out.println("DESHABILITO " + ineq);
-		mSolverConfig.disableInequality(ineq);
-	}
 	
-	public double getMemoryLimit() {
-		return mSolverConfig.getMemoryLimit();
-	}
-
-	public void setMemoryLimit(double value) {
-		System.out.println("Spinner MEMORY value changed: " + value);
-		mSolverConfig.setMemoryLimit(value);
-	}
-
-	public void setGapLimit(double gap) {
-		System.out.println("Spinner GAP value changed: " + gap);
-		mSolverConfig.setGapLimit(gap);
-	}
-
-	public double getGapLimit() {
-		return mSolverConfig.getGapLimit();
-	}
-
-	public void setTimeLimit(long time) {
-		System.out.println("Spinner TIME value changed (min): " + time);
-		// SolverConfig maneja tiempos en segundos y la GUI los configura en minutos
-		mSolverConfig.setTimeLimit(time * 60);
-	}
-
-	public long getTimeLimit() {
-		// SolverConfig maneja tiempos en segundos y la GUI los configura en minutos
-		return mSolverConfig.getTimeLimit() / 60;
+	public SolverConfig getConfig() {
+		return mSolverConfig;
 	}
 
 	public void setPabellon(int pabellon) {
@@ -136,15 +97,6 @@ public class MicpApp {
 		return mPabellon;
 	}
 
-	public boolean isVerboseMode() {
-		return mSolverConfig.isVerbose();
-	}
-
-	public void setVerboseMode(boolean isVerbose) {
-		System.out.println("CAMBIO DE CONFIGURACION: VERBOSE MODE: " + (isVerbose ? "ON" : "OFF"));
-		mSolverConfig.setVerbose(isVerbose);
-
-	}
 
 	// -------------------- Se obtiene el contenido del Archivo ---------------
 	public boolean loadInstanceFCEN(String ruta, int cantAulas) throws FileNotFoundException {

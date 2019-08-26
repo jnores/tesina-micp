@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
+import javax.swing.JToggleButton;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
@@ -26,8 +27,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.text.DefaultFormatter;
 
+import ar.edu.ungs.tesina.micp.SolverConfig;
 import ar.edu.ungs.tesina.micp.example.MicpApp;
-import javax.swing.JToggleButton;
 
 public class PreferenceFrame extends JFrame {
 
@@ -37,6 +38,8 @@ public class PreferenceFrame extends JFrame {
 	private static final long serialVersionUID = 6890758497251529463L;
 	private JPanel contentPane;
 	private MicpApp mApp;
+	private SolverConfig mConfig;
+	
 
 	/**
 	 * Launch the application.
@@ -59,6 +62,7 @@ public class PreferenceFrame extends JFrame {
 	 */
 	public PreferenceFrame(MicpApp app) {
 		mApp = app;
+		mConfig = mApp.getConfig();
 		try {
 			// Cambiamos el Look&Feel
 			JFrame.setDefaultLookAndFeelDecorated(true);
@@ -85,7 +89,7 @@ public class PreferenceFrame extends JFrame {
 
 		JCheckBox chckbxmntmPartitioned = new JCheckBox("Partitioned");
 		panel.add(chckbxmntmPartitioned);
-		chckbxmntmPartitioned.setSelected(mApp.isInequalityEnabled(MicpApp.INEQ_PARTITIONED));
+		chckbxmntmPartitioned.setSelected(mConfig.isInequalityEnabled(MicpApp.INEQ_PARTITIONED));
 		chckbxmntmPartitioned.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent itemEvent) {
 				boolean isSelected = itemEvent.getStateChange() == ItemEvent.SELECTED;
@@ -95,7 +99,7 @@ public class PreferenceFrame extends JFrame {
 
 		JCheckBox chckbxmntm3Partitioned = new JCheckBox("3-partitioned");
 		panel.add(chckbxmntm3Partitioned);
-		chckbxmntm3Partitioned.setSelected(mApp.isInequalityEnabled(MicpApp.INEQ_3_PARTITIONED));
+		chckbxmntm3Partitioned.setSelected(mConfig.isInequalityEnabled(MicpApp.INEQ_3_PARTITIONED));
 		chckbxmntm3Partitioned.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent itemEvent) {
 				boolean isSelected = itemEvent.getStateChange() == ItemEvent.SELECTED;
@@ -105,7 +109,7 @@ public class PreferenceFrame extends JFrame {
 
 		JCheckBox chckbxmntmKpartitioned = new JCheckBox("k-partitioned");
 		panel.add(chckbxmntmKpartitioned);
-		app.disableInequality(MicpApp.INEQ_K_PARTITIONED);
+		mConfig.disableInequality(MicpApp.INEQ_K_PARTITIONED);
 		chckbxmntmKpartitioned.setSelected(false);
 		chckbxmntmKpartitioned.setEnabled(false);
 
@@ -114,7 +118,7 @@ public class PreferenceFrame extends JFrame {
 
 		JCheckBox chckbxmntmVertexclique = new JCheckBox("Vertex-clique");
 		panel.add(chckbxmntmVertexclique);
-		chckbxmntmVertexclique.setSelected(mApp.isInequalityEnabled(MicpApp.INEQ_VERTEX_CLIQUE));
+		chckbxmntmVertexclique.setSelected(mConfig.isInequalityEnabled(MicpApp.INEQ_VERTEX_CLIQUE));
 		chckbxmntmVertexclique.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent itemEvent) {
 				boolean isSelected = itemEvent.getStateChange() == ItemEvent.SELECTED;
@@ -124,7 +128,7 @@ public class PreferenceFrame extends JFrame {
 
 		JCheckBox chckbxmntmCliquepartitioned = new JCheckBox("Clique-partitioned");
 		panel.add(chckbxmntmCliquepartitioned);
-		chckbxmntmCliquepartitioned.setSelected(mApp.isInequalityEnabled(MicpApp.INEQ_CLIQUE_PARTITIONED));
+		chckbxmntmCliquepartitioned.setSelected(mConfig.isInequalityEnabled(MicpApp.INEQ_CLIQUE_PARTITIONED));
 		chckbxmntmCliquepartitioned.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent itemEvent) {
 				boolean isSelected = itemEvent.getStateChange() == ItemEvent.SELECTED;
@@ -134,7 +138,7 @@ public class PreferenceFrame extends JFrame {
 
 		JCheckBox chckbxmntmSubclique = new JCheckBox("Sub-clique");
 		panel.add(chckbxmntmSubclique);
-		chckbxmntmSubclique.setSelected(mApp.isInequalityEnabled(MicpApp.INEQ_SUB_CLIQUE));
+		chckbxmntmSubclique.setSelected(mConfig.isInequalityEnabled(MicpApp.INEQ_SUB_CLIQUE));
 		chckbxmntmSubclique.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent itemEvent) {
 				boolean isSelected = itemEvent.getStateChange() == ItemEvent.SELECTED;
@@ -144,7 +148,7 @@ public class PreferenceFrame extends JFrame {
 
 		JCheckBox chckbxmntmTwocolorSubclique = new JCheckBox("Two-color sub-clique");
 		panel.add(chckbxmntmTwocolorSubclique);
-		chckbxmntmTwocolorSubclique.setSelected(mApp.isInequalityEnabled(MicpApp.INEQ_2_COLOR_SUB_CLIQUE));
+		chckbxmntmTwocolorSubclique.setSelected(mConfig.isInequalityEnabled(MicpApp.INEQ_2_COLOR_SUB_CLIQUE));
 		chckbxmntmTwocolorSubclique.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent itemEvent) {
 				boolean isSelected = itemEvent.getStateChange() == ItemEvent.SELECTED;
@@ -157,7 +161,7 @@ public class PreferenceFrame extends JFrame {
 
 		JCheckBox chckbxmntmSemitriangle = new JCheckBox("Semi-triangle");
 		panel.add(chckbxmntmSemitriangle);
-		chckbxmntmSemitriangle.setSelected(mApp.isInequalityEnabled(MicpApp.INEQ_SEMI_TRIANGLE));
+		chckbxmntmSemitriangle.setSelected(mConfig.isInequalityEnabled(MicpApp.INEQ_SEMI_TRIANGLE));
 		chckbxmntmSemitriangle.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent itemEvent) {
 				boolean isSelected = itemEvent.getStateChange() == ItemEvent.SELECTED;
@@ -167,7 +171,7 @@ public class PreferenceFrame extends JFrame {
 
 		JCheckBox chckbxmntmSemidiamond = new JCheckBox("Semi-diamond");
 		panel.add(chckbxmntmSemidiamond);
-		chckbxmntmSemidiamond.setSelected(mApp.isInequalityEnabled(MicpApp.INEQ_SEMI_DIAMOND));
+		chckbxmntmSemidiamond.setSelected(mConfig.isInequalityEnabled(MicpApp.INEQ_SEMI_DIAMOND));
 		chckbxmntmSemidiamond.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent itemEvent) {
 				boolean isSelected = itemEvent.getStateChange() == ItemEvent.SELECTED;
@@ -180,7 +184,7 @@ public class PreferenceFrame extends JFrame {
 
 		JCheckBox chckbxmntmBounding = new JCheckBox("Bounding");
 		panel.add(chckbxmntmBounding);
-		chckbxmntmBounding.setSelected(mApp.isInequalityEnabled(MicpApp.INEQ_BOUNDING));
+		chckbxmntmBounding.setSelected(mConfig.isInequalityEnabled(MicpApp.INEQ_BOUNDING));
 		chckbxmntmBounding.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent itemEvent) {
 				boolean isSelected = itemEvent.getStateChange() == ItemEvent.SELECTED;
@@ -190,7 +194,7 @@ public class PreferenceFrame extends JFrame {
 
 		JCheckBox chckbxmntmReinforcedBounding = new JCheckBox("Reinforced bounding");
 		panel.add(chckbxmntmReinforcedBounding);
-		chckbxmntmReinforcedBounding.setSelected(mApp.isInequalityEnabled(MicpApp.INEQ_REINFORCED_BOUNDING));
+		chckbxmntmReinforcedBounding.setSelected(mConfig.isInequalityEnabled(MicpApp.INEQ_REINFORCED_BOUNDING));
 		chckbxmntmReinforcedBounding.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent itemEvent) {
 				boolean isSelected = itemEvent.getStateChange() == ItemEvent.SELECTED;
@@ -215,12 +219,14 @@ public class PreferenceFrame extends JFrame {
 		JFormattedTextField field = (JFormattedTextField) comp.getComponent(0);
 		DefaultFormatter formatter = (DefaultFormatter) field.getFormatter();
 		formatter.setCommitsOnValidEdit(true);
-		spinner.setValue(mApp.getTimeLimit());
+		// SolverConfig maneja tiempos en segundos y la GUI los configura en minutos
+		spinner.setValue( mConfig.getTimeLimit()/60 );
 		spinner.addChangeListener(new ChangeListener() {
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				mApp.setTimeLimit((Integer) spinner.getValue());
+				// SolverConfig maneja tiempos en segundos y la GUI los configura en minutos
+				mConfig.setTimeLimit(((Integer) spinner.getValue() ) * 60 );
 			}
 		});
 		panel_1.add(spinner);
@@ -236,12 +242,12 @@ public class PreferenceFrame extends JFrame {
 		JFormattedTextField field_1 = (JFormattedTextField) comp_1.getComponent(0);
 		DefaultFormatter formatter_1 = (DefaultFormatter) field_1.getFormatter();
 		formatter_1.setCommitsOnValidEdit(true);
-		spinner_1.setValue(mApp.getGapLimit());
+		spinner_1.setValue(mConfig.getGapLimit());
 		spinner_1.addChangeListener(new ChangeListener() {
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				mApp.setGapLimit((Float) spinner_1.getValue());
+				mConfig.setGapLimit((Float) spinner_1.getValue());
 			}
 		});
 		panel_1.add(spinner_1);
@@ -251,13 +257,13 @@ public class PreferenceFrame extends JFrame {
 		panel_1.add(lblVerbose);
 		
 		JToggleButton tglbtnActivo = new JToggleButton("Activo");
-		tglbtnActivo.setSelected(mApp.isVerboseMode());
+		tglbtnActivo.setSelected(mConfig.isVerbose());
 		tglbtnActivo.addItemListener(new ItemListener() {
 			   public void itemStateChanged(ItemEvent ev) {
 				  if(ev.getStateChange()==ItemEvent.SELECTED){
-					  mApp.setVerboseMode(true);
+					  mConfig.setVerbose(true);
 			      } else if(ev.getStateChange()==ItemEvent.DESELECTED){
-			    	  mApp.setVerboseMode(false);
+			    	  mConfig.setVerbose(false);
 			      }
 			   }
 			});
@@ -276,12 +282,12 @@ public class PreferenceFrame extends JFrame {
 		JFormattedTextField field_2 = (JFormattedTextField) comp_2.getComponent(0);
 		DefaultFormatter formatter_2 = (DefaultFormatter) field_2.getFormatter();
 		formatter_2.setCommitsOnValidEdit(true);
-		spinner_2.setValue(mApp.getMemoryLimit());
+		spinner_2.setValue(mConfig.getMemoryLimit());
 		spinner_2.addChangeListener(new ChangeListener() {
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				mApp.setMemoryLimit((double) spinner_2.getValue());
+				mConfig.setMemoryLimit((double) spinner_2.getValue());
 			}
 		});
 		panel_1.add(spinner_2);
@@ -324,8 +330,8 @@ public class PreferenceFrame extends JFrame {
 
 	private void toggleInequality(int ineq, boolean isEnabled) {
 		if (isEnabled)
-			mApp.enableInequality(ineq);
+			mConfig.enableInequality(ineq);
 		else
-			mApp.disableInequality(ineq);
+			mConfig.disableInequality(ineq);
 	}
 }

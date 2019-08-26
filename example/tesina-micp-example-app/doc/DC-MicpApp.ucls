@@ -3,8 +3,8 @@
   associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
   <class id="1" language="java" name="ar.edu.ungs.tesina.micp.Instance" project="tesina-micp" 
     file="/tesina-micp/src/main/java/ar/edu/ungs/tesina/micp/Instance.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="264" y="485"/>    
-    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
+    <position height="-1" width="-1" x="238" y="426"/>    
+    <display autosize="false" stereotype="false" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="false"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
@@ -12,8 +12,8 @@
   </class>  
   <class id="2" language="java" name="ar.edu.ungs.tesina.micp.Vertex" project="tesina-micp" 
     file="/tesina-micp/src/main/java/ar/edu/ungs/tesina/micp/Vertex.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="606" y="480"/>    
-    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
+    <position height="-1" width="-1" x="514" y="354"/>    
+    <display autosize="false" stereotype="false" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="false"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
@@ -21,8 +21,8 @@
   </class>  
   <class id="3" language="java" name="ar.edu.ungs.tesina.micp.Color" project="tesina-micp" 
     file="/tesina-micp/src/main/java/ar/edu/ungs/tesina/micp/Color.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="480" y="481"/>    
-    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
+    <position height="-1" width="-1" x="319" y="354"/>    
+    <display autosize="false" stereotype="false" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="false"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
@@ -31,8 +31,8 @@
   <class id="4" language="java" name="ar.edu.ungs.tesina.micp.example.MicpApp" project="tesina-micp-example-app" 
     file="/tesina-micp-example-app/src/main/java/ar/edu/ungs/tesina/micp/example/MicpApp.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="761" width="516" x="-136" y="-219"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+    <position height="-1" width="-1" x="122" y="161"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
@@ -41,8 +41,8 @@
   <class id="5" language="java" name="ar.edu.ungs.tesina.micp.example.model.Aula" project="tesina-micp-example-app" 
     file="/tesina-micp-example-app/src/main/java/ar/edu/ungs/tesina/micp/example/model/Aula.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="378" y="309"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+    <position height="-1" width="-1" x="319" y="275"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
@@ -51,28 +51,28 @@
   <class id="6" language="java" name="ar.edu.ungs.tesina.micp.example.model.Clase" project="tesina-micp-example-app" 
     file="/tesina-micp-example-app/src/main/java/ar/edu/ungs/tesina/micp/example/model/Clase.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="613" y="137"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+    <position height="-1" width="-1" x="514" y="179"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="true" package="true" protected="true" private="false" static="true"/>    
     </display>  
   </class>  
   <enumeration id="7" language="java" name="ar.edu.ungs.tesina.micp.example.model.Clase.Tipo" 
     project="tesina-micp-example-app" 
     file="/tesina-micp-example-app/src/main/java/ar/edu/ungs/tesina/micp/example/model/Clase.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="368" y="-17"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+    <position height="-1" width="-1" x="319" y="53"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </enumeration>  
   <class id="8" language="java" name="ar.edu.ungs.tesina.micp.MicpBuilder" project="tesina-micp" 
     file="/tesina-micp/src/main/java/ar/edu/ungs/tesina/micp/MicpBuilder.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="203" y="603"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+    <position height="-1" width="-1" x="206" y="534"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
@@ -80,8 +80,8 @@
   </class>  
   <class id="9" language="java" name="ar.edu.ungs.tesina.micp.MicpScipSolver" project="tesina-micp" 
     file="/tesina-micp/src/main/java/ar/edu/ungs/tesina/micp/MicpScipSolver.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="79" y="482"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+    <position height="-1" width="-1" x="111" y="426"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
@@ -90,118 +90,125 @@
   <class id="10" language="java" name="ar.edu.ungs.tesina.micp.inequalities.InequalitiesFactory" project="tesina-micp" 
     file="/tesina-micp/src/main/java/ar/edu/ungs/tesina/micp/inequalities/InequalitiesFactory.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="548" y="618"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+    <position height="-1" width="-1" x="514" y="534"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
   <dependency id="11">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="7"/>  
+    <bendpoint x="370" y="438"/>    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="3"/>  
   </dependency>  
-  <association id="12">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="13" name="mMicpBuilder"/>      
-      <multiplicity id="14" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="15">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="16" name="mColors">        
-        <position height="16" width="42" x="369" y="466"/>      
-      </attribute>      
-      <multiplicity id="17" minimum="0" maximum="2147483647">        
-        <position height="14" width="20" x="404" y="487"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="18">    
+  <dependency id="12">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <dependency id="13">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <nesting id="14">    
+    <bendpoint x="332" y="93"/>    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="7"/>  
+  </nesting>  
+  <generalization id="15">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <dependency id="16">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <dependency id="17">    
     <end type="SOURCE" refId="8"/>    
     <end type="TARGET" refId="10"/>  
   </dependency>  
-  <dependency id="19">    
+  <dependency id="18">    
+    <bendpoint x="323" y="160"/>    
     <end type="SOURCE" refId="4"/>    
     <end type="TARGET" refId="5"/>  
   </dependency>  
-  <association id="20">    
-    <bendpoint x="503" y="529"/>    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="21" name="mVertices">        
-        <position height="16" width="50" x="559" y="521"/>      
+  <dependency id="19">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <generalization id="20">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <association id="21">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="22" name="mInstance">        
+        <position height="0" width="0" x="-26" y="-60"/>      
       </attribute>      
-      <multiplicity id="22" minimum="0" maximum="2147483647">        
-        <position height="14" width="20" x="581" y="508"/>      
+      <multiplicity id="23" minimum="0" maximum="1">        
+        <position height="0" width="0" x="-26" y="-60"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="24">    
+    <bendpoint x="514" y="438"/>    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="25">    
+    <bendpoint x="323" y="160"/>    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="26">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <association id="27">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="28" name="mVertices">        
+        <position height="16" width="50" x="409" y="348"/>      
+      </attribute>      
+      <multiplicity id="29" minimum="0" maximum="2147483647">        
+        <position height="14" width="20" x="429" y="359"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="23">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="2"/>  
-  </generalization>  
-  <association id="24">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="25" name="mInstance"/>      
-      <multiplicity id="26" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="27">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="3"/>  
-  </generalization>  
-  <association id="28">    
+  <association id="30">    
     <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="29" name="mSolution"/>      
-      <multiplicity id="30" minimum="0" maximum="2147483647"/>    
+      <attribute id="31" name="mColors">        
+        <position height="16" width="42" x="243" y="372"/>      
+      </attribute>      
+      <multiplicity id="32" minimum="0" maximum="2147483647">        
+        <position height="14" width="20" x="298" y="374"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="31">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="9"/>  
-  </dependency>  
-  <dependency id="32">    
+  <dependency id="33">    
+    <bendpoint x="323" y="160"/>    
     <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="9"/>  
-  </dependency>  
-  <nesting id="33">    
-    <end type="SOURCE" refId="6"/>    
     <end type="TARGET" refId="7"/>  
-  </nesting>  
+  </dependency>  
   <association id="34">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="35" name="mSolution"/>      
-      <multiplicity id="36" minimum="0" maximum="2147483647"/>    
+    <bendpoint x="31" y="307"/>    
+    <bendpoint x="31" y="446"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="35" name="mMicpBuilder">        
+        <position height="0" width="0" x="-1" y="-69"/>      
+      </attribute>      
+      <multiplicity id="36" minimum="0" maximum="1">        
+        <position height="0" width="0" x="-1" y="-69"/>      
+      </multiplicity>    
     </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
+    <end type="TARGET" refId="8" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="37">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="38" name="mSolution"/>      
-      <multiplicity id="39" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="40">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="6"/>  
-  </dependency>  
-  <dependency id="41">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="1"/>  
-  </dependency>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    
