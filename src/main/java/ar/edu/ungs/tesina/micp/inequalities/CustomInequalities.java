@@ -13,8 +13,6 @@ import ar.edu.ungs.tesina.micp.MicpScipSolver;
 import ar.edu.ungs.tesina.micp.Vertex;
 
 abstract public class CustomInequalities<T extends Vertex,U extends Color> {
-	
-	public static final long WITHOUT_INEQUALITIES = 0;
 
 	
 	abstract public void addInequalities(MicpScipSolver<T,U> micpSolver, List<T> vertices, List<U> colors,

@@ -15,10 +15,8 @@ import ar.edu.ungs.tesina.micp.Vertex;
 import jscip.Constraint;
 import jscip.Variable;
 
-public class TriangleDiamondInequalities<T extends Vertex, U extends Color> extends CustomInequalities<T,U> {
-
-	public static final int SEMI_TRIANGLE_INEQUALITIES = 9;
-	public static final int SEMI_DIAMOND_INEQUALITIES = 10;
+public class TriangleDiamondInequalities<T extends Vertex, U extends Color>
+		extends CustomInequalities<T, U> {
 
 	protected List<Integer> mInequalitiesEnabled;
 
@@ -27,26 +25,26 @@ public class TriangleDiamondInequalities<T extends Vertex, U extends Color> exte
 	}
 
 	@Override
-	public void addInequalities(MicpScipSolver<T,U> micpSolver, List<T> vertices,
-			List<U> colors, Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
+	public void addInequalities(MicpScipSolver<T, U> micpSolver, List<T> vertices, List<U> colors,
+			Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
 
 		// Si no se selecciono ninguna inequality, se termina el metodo.
-		if ( mInequalitiesEnabled.isEmpty() )
+		if (mInequalitiesEnabled.isEmpty())
 			return;
 
-		if ( mInequalitiesEnabled.contains( SEMI_TRIANGLE_INEQUALITIES ) ) {
+		if (mInequalitiesEnabled.contains(DefinedInequalitiesEnum.SEMI_TRIANGLE_INEQUALITIES)) {
 			addSemiTriangleInequalities(micpSolver, vertices, colors, conflictGraph,
 					relationshipGraph);
 		}
 
-		if ( mInequalitiesEnabled.contains( SEMI_DIAMOND_INEQUALITIES ) ) {
+		if (mInequalitiesEnabled.contains(DefinedInequalitiesEnum.SEMI_DIAMOND_INEQUALITIES)) {
 			addSemiDiamondInequalities(micpSolver, vertices, colors, conflictGraph,
 					relationshipGraph);
 		}
 
 	}
 
-	private void addSemiTriangleInequalities(MicpScipSolver<T,U> micpSolver, List<T> vertices,
+	public void addSemiTriangleInequalities(MicpScipSolver<T, U> micpSolver, List<T> vertices,
 			List<U> colors, Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
 
 		for (Edge<T> e : relationshipGraph.edgeSet()) {
@@ -63,8 +61,8 @@ public class TriangleDiamondInequalities<T extends Vertex, U extends Color> exte
 		}
 	}
 
-	private void addSemiTriangleInequalitiesForTriangle(MicpScipSolver<T,U> micpSolver, T vi,
-			T vj, T vk, List<U> colors) {
+	private void addSemiTriangleInequalitiesForTriangle(MicpScipSolver<T, U> micpSolver, T vi, T vj,
+			T vk, List<U> colors) {
 		final double[] factors = { 1, 1, 1, 1, 1, -1, -1 };
 		Variable[] vars = new Variable[7];
 		vars[0] = micpSolver.getVarY(vi, vj);
@@ -92,7 +90,7 @@ public class TriangleDiamondInequalities<T extends Vertex, U extends Color> exte
 
 	}
 
-	private void addSemiDiamondInequalities(MicpScipSolver<T,U> micpSolver, List<T> vertices,
+	public void addSemiDiamondInequalities(MicpScipSolver<T, U> micpSolver, List<T> vertices,
 			List<U> colors, Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
 
 		for (Edge<T> e : conflictGraph.edgeSet()) {
@@ -117,13 +115,13 @@ public class TriangleDiamondInequalities<T extends Vertex, U extends Color> exte
 		}
 	}
 
-	private void addSemiDiamondInequalitiesForDiamond(MicpScipSolver<T,U> micpSolver, T vi,
-			T vj, T vk, T vl, List<U> colors) {
+	private void addSemiDiamondInequalitiesForDiamond(MicpScipSolver<T, U> micpSolver, T vi, T vj,
+			T vk, T vl, List<U> colors) {
 
 		Set<U> Daux = new HashSet<U>(colors);
 		Set<U> D;
 		int len = colors.size() - 3; // 1 <= len <= |colors|-3
-		
+
 		double[] factors;
 		Variable[] vars;
 		int i, cant;
@@ -134,57 +132,51 @@ public class TriangleDiamondInequalities<T extends Vertex, U extends Color> exte
 					Daux.remove(d1);
 					Daux.remove(d2);
 					D = generateColorsSubset(Daux, len);
-					
-					cant = D.size() * 3 + 8 ;
+
+					cant = D.size() * 3 + 8;
 					factors = new double[cant];
 					vars = new Variable[cant];
 					i = 0;
-					
+
 					factors[i] = 1;
 					vars[i++] = micpSolver.getVarY(vi, vj);
-					
+
 					factors[i] = 2;
 					vars[i++] = micpSolver.getVarY(vi, vk);
-					
-					
+
 					factors[i] = -1;
 					vars[i++] = micpSolver.getVarX(vi, d1);
-					
+
 					factors[i] = 1;
 					vars[i++] = micpSolver.getVarX(vk, d1);
-					
-					
+
 					factors[i] = 1;
 					vars[i++] = micpSolver.getVarX(vi, d2);
-					
+
 					factors[i] = -1;
 					vars[i++] = micpSolver.getVarX(vk, d2);
-					
-					
+
 					factors[i] = 1;
 					vars[i++] = micpSolver.getVarX(vl, d1);
-					
+
 					factors[i] = 1;
 					vars[i++] = micpSolver.getVarX(vl, d2);
-					
-
 
 					for (U d : D) {
 						factors[i] = -1;
 						vars[i++] = micpSolver.getVarX(vj, d);
-						
+
 						factors[i] = -1;
 						vars[i++] = micpSolver.getVarX(vk, d);
-						
+
 						factors[i] = 1;
 						vars[i++] = micpSolver.getVarX(vi, d);
 					}
-					
 
 					Constraint diferentColorsOnConflict = micpSolver.getSolver().createConsLinear(
-							"SemiDiamondInequality-V(" + vi + ";" + vj + ";" + vk
-									+ ";" + vl + ") C(" + d1 + ";" + d2 + ")", vars,
-							factors, -micpSolver.getSolver().infinity(), 3);
+							"SemiDiamondInequality-V(" + vi + ";" + vj + ";" + vk + ";" + vl
+									+ ") C(" + d1 + ";" + d2 + ")",
+							vars, factors, -micpSolver.getSolver().infinity(), 3);
 					micpSolver.getSolver().addCons(diferentColorsOnConflict);
 					micpSolver.getSolver().releaseCons(diferentColorsOnConflict);
 					Daux.add(d1);

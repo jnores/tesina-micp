@@ -22,9 +22,6 @@ import jscip.Variable;
 
 public class ValidInequalities<T extends Vertex, U extends Color> extends CustomInequalities<T,U> {
 
-	public static final int BOUNDING_INEQUALITIES = 11;
-	public static final int REINFORCED_BOUNDING_INEQUALITIES = 12;
-
 	protected List<Integer> mInequalitiesEnabled;
 
 	public ValidInequalities(SolverConfig solverConfig) {
@@ -39,12 +36,12 @@ public class ValidInequalities<T extends Vertex, U extends Color> extends Custom
 		if ( mInequalitiesEnabled.isEmpty() )
 			return;
 		
-		if ( mInequalitiesEnabled.contains( BOUNDING_INEQUALITIES) ) {
+		if ( mInequalitiesEnabled.contains( DefinedInequalitiesEnum.BOUNDING_INEQUALITIES) ) {
 			addBoundigInequalities(micpSolver, vertices, colors, conflictGraph,
 					relationshipGraph);
 		}
 
-		if ( mInequalitiesEnabled.contains( REINFORCED_BOUNDING_INEQUALITIES) ) {
+		if ( mInequalitiesEnabled.contains( DefinedInequalitiesEnum.REINFORCED_BOUNDING_INEQUALITIES) ) {
 			addReinforcedBoundigInequalities(micpSolver, vertices, colors, conflictGraph,
 					relationshipGraph);
 		}
@@ -52,7 +49,7 @@ public class ValidInequalities<T extends Vertex, U extends Color> extends Custom
 
 	}
 
-	private void addBoundigInequalities(MicpScipSolver<T,U> micpSolver, List<T> vertices,
+	public void addBoundigInequalities(MicpScipSolver<T,U> micpSolver, List<T> vertices,
 			List<U> colors, Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
 	
 		for (T j: vertices) {
@@ -82,7 +79,7 @@ public class ValidInequalities<T extends Vertex, U extends Color> extends Custom
 					k1.add(j);
 					k2.removeAll(k1);
 					for(T i: setOfI) {
-						addInequalities(micpSolver, i,k1,k2,colors);
+						addBoundInequalities(micpSolver, i,k1,k2,colors);
 					}
 				}
 				
@@ -90,41 +87,7 @@ public class ValidInequalities<T extends Vertex, U extends Color> extends Custom
 		}
 	}
 
-	private void addInequalities(MicpScipSolver<T,U> micpSolver, T vi,
-			Collection<T> k1, Collection<T> k2, Collection<U> D) {
-		
-		
-		int cant = k1.size() + D.size()*(k2.size() + 1 );
-		int min = (D.size() < (k2.size() + 1 ))? D.size() : (k2.size() + 1 ); 
-		
-		Variable[] vars = new Variable[cant];
-		double[] factors = new double[cant];
-		int i = 0;
-		for (T k : k1) {
-			factors[i] = 1;
-			vars[i++] = micpSolver.getVarY(vi, k);
-		}
-		
-		for (U d : D) {
-			for (T k : k2) {
-				
-				factors[i] = 1;
-				vars[i++] = micpSolver.getVarX(k, d);
-			}
-			
-			factors[i] = 1;
-			vars[i++] = micpSolver.getVarX(vi, d);
-		}
-		
-		
-		Constraint constranint = micpSolver.getSolver().createConsLinear(
-				"ReinforcedBoundigInequalities-" + vi + "-" + k1.size(), vars, factors, 0, 1 + min);
-		micpSolver.getSolver().addCons(constranint);
-		micpSolver.getSolver().releaseCons(constranint);
-		
-	}
-
-	private void addReinforcedBoundigInequalities(MicpScipSolver<T,U> micpSolver, List<T> vertices,
+	public void addReinforcedBoundigInequalities(MicpScipSolver<T,U> micpSolver, List<T> vertices,
 			List<U> colors, Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
 		for (T j: vertices) {
 			List<T> setOfI = Graphs.neighborListOf(relationshipGraph, j);
@@ -158,11 +121,47 @@ public class ValidInequalities<T extends Vertex, U extends Color> extends Custom
 								k1.add(v);
 						k2.removeAll(k1);
 						if ( !k2.isEmpty() )
-							addInequalities(micpSolver, i,k1,k2,colors);
+							addBoundInequalities(micpSolver, i,k1,k2,colors);
 					}
 				}
 			}	
 		}
+		
+	}
+	
+
+
+	private void addBoundInequalities(MicpScipSolver<T,U> micpSolver, T vi,
+			Collection<T> k1, Collection<T> k2, Collection<U> D) {
+		
+		
+		int cant = k1.size() + D.size()*(k2.size() + 1 );
+		int min = (D.size() < (k2.size() + 1 ))? D.size() : (k2.size() + 1 ); 
+		
+		Variable[] vars = new Variable[cant];
+		double[] factors = new double[cant];
+		int i = 0;
+		for (T k : k1) {
+			factors[i] = 1;
+			vars[i++] = micpSolver.getVarY(vi, k);
+		}
+		
+		for (U d : D) {
+			for (T k : k2) {
+				
+				factors[i] = 1;
+				vars[i++] = micpSolver.getVarX(k, d);
+			}
+			
+			factors[i] = 1;
+			vars[i++] = micpSolver.getVarX(vi, d);
+		}
+		
+		
+		Constraint constranint = micpSolver.getSolver().createConsLinear(
+				"ReinforcedBoundigInequalities-" + vi + "-" + k1.size(), vars, factors, 0, 1 + min);
+		micpSolver.getSolver().addCons(constranint);
+		micpSolver.getSolver().releaseCons(constranint);
 		
 	}
 }

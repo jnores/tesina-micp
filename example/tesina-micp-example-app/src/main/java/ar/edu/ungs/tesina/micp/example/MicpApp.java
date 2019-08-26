@@ -14,14 +14,12 @@ import java.util.Scanner;
 import java.util.Set;
 
 import ar.edu.ungs.tesina.micp.Instance;
+import ar.edu.ungs.tesina.micp.MicpBuilder;
 import ar.edu.ungs.tesina.micp.MicpScipSolver;
 import ar.edu.ungs.tesina.micp.SolverConfig;
 import ar.edu.ungs.tesina.micp.example.model.Aula;
 import ar.edu.ungs.tesina.micp.example.model.Clase;
-import ar.edu.ungs.tesina.micp.inequalities.CliqueInequalities;
-import ar.edu.ungs.tesina.micp.inequalities.PartitionedInequalities;
-import ar.edu.ungs.tesina.micp.inequalities.TriangleDiamondInequalities;
-import ar.edu.ungs.tesina.micp.inequalities.ValidInequalities;
+import ar.edu.ungs.tesina.micp.inequalities.DefinedInequalitiesEnum;
 
 /**
  * @author yoshknight
@@ -29,24 +27,25 @@ import ar.edu.ungs.tesina.micp.inequalities.ValidInequalities;
  */
 public class MicpApp {
 
-	public static final int INEQ_PARTITIONED = PartitionedInequalities.PARTITIONED_INEQUALITIES,
-			INEQ_3_PARTITIONED = PartitionedInequalities.THREE_PARTITIONED_INEQUALITIES,
-			INEQ_K_PARTITIONED = PartitionedInequalities.K_PARTITIONED_INEQUALITIES,
+	public static final int INEQ_PARTITIONED = DefinedInequalitiesEnum.PARTITIONED_INEQUALITIES,
+			INEQ_3_PARTITIONED = DefinedInequalitiesEnum.THREE_PARTITIONED_INEQUALITIES,
+			INEQ_K_PARTITIONED = DefinedInequalitiesEnum.K_PARTITIONED_INEQUALITIES,
 
-			INEQ_VERTEX_CLIQUE = CliqueInequalities.VERTEX_CLIQUE_INEQUALITIES,
-			INEQ_CLIQUE_PARTITIONED = CliqueInequalities.CLIQUE_PARTITIONED_INEQUALITIES,
-			INEQ_SUB_CLIQUE = CliqueInequalities.SUB_CLIQUE_INEQUALITIES,
-			INEQ_2_COLOR_SUB_CLIQUE = CliqueInequalities.TWO_COLOR_SUB_CLIQUE_INEQUALITIES,
+			INEQ_VERTEX_CLIQUE = DefinedInequalitiesEnum.VERTEX_CLIQUE_INEQUALITIES,
+			INEQ_CLIQUE_PARTITIONED = DefinedInequalitiesEnum.CLIQUE_PARTITIONED_INEQUALITIES,
+			INEQ_SUB_CLIQUE = DefinedInequalitiesEnum.SUB_CLIQUE_INEQUALITIES,
+			INEQ_2_COLOR_SUB_CLIQUE = DefinedInequalitiesEnum.TWO_COLOR_SUB_CLIQUE_INEQUALITIES,
 
-			INEQ_SEMI_TRIANGLE = TriangleDiamondInequalities.SEMI_TRIANGLE_INEQUALITIES,
-			INEQ_SEMI_DIAMOND = TriangleDiamondInequalities.SEMI_DIAMOND_INEQUALITIES,
+			INEQ_SEMI_TRIANGLE = DefinedInequalitiesEnum.SEMI_TRIANGLE_INEQUALITIES,
+			INEQ_SEMI_DIAMOND = DefinedInequalitiesEnum.SEMI_DIAMOND_INEQUALITIES,
 
-			INEQ_BOUNDING = ValidInequalities.BOUNDING_INEQUALITIES,
-			INEQ_REINFORCED_BOUNDING = ValidInequalities.REINFORCED_BOUNDING_INEQUALITIES;
+			INEQ_BOUNDING = DefinedInequalitiesEnum.BOUNDING_INEQUALITIES,
+			INEQ_REINFORCED_BOUNDING = DefinedInequalitiesEnum.REINFORCED_BOUNDING_INEQUALITIES;
 
 	public static final int DEFAULT_PABELLON = 1;
 
 	private SolverConfig mSolverConfig;
+	private MicpBuilder<Clase, Aula> mMicpBuilder;
 	private Instance<Clase, Aula> mInstance;
 	private Properties mProperties;
 	private int mPabellon = DEFAULT_PABELLON;
@@ -76,6 +75,7 @@ public class MicpApp {
 			}
 		}
 		mSolverConfig = new SolverConfig(mProperties);
+		mMicpBuilder = new MicpBuilder<Clase, Aula>();
 	}
 
 	public void close() {
@@ -224,7 +224,7 @@ public class MicpApp {
 		// Cadena de texto donde se guardara el contenido del archivo
 
 		if (!clases.isEmpty()) {
-			Instance<Clase, Aula> instance = new Instance<Clase, Aula>(instanceName, clases, aulas);
+			Instance<Clase, Aula> instance = mMicpBuilder.buildInstance(instanceName, clases, aulas);
 			for (int i = 0; i < clases.size(); ++i) {
 				for (int j = i + 1; j < clases.size(); ++j) {
 					Clase c1 = clases.get(i);
@@ -365,7 +365,7 @@ public class MicpApp {
 	 * 
 	 */
 	public void optimize() {
-		MicpScipSolver<Clase, Aula> mMicp = mInstance.createMicp(mSolverConfig);
+		MicpScipSolver<Clase, Aula> mMicp = mMicpBuilder.buildMicpSolver(mInstance.getName(),mSolverConfig);
 		try {
 			mInstance.setSolution(mMicp.searchOptimal(
 					mInstance.getConflictGraph(),

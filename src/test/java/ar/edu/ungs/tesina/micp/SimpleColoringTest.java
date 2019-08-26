@@ -22,8 +22,10 @@ import jscip.Scip;
  * @author yoshknight
  *
  */
+@SuppressWarnings({"rawtypes","unchecked"})
 public class SimpleColoringTest {
 
+	
 	MicpScipSolver mMicp;
 	/**
 	 * @throws java.lang.Exception
@@ -45,6 +47,7 @@ public class SimpleColoringTest {
 	public void testCreatedObject() {
 		assertNotNull(mMicp);
 	}
+	
 	
 	@Test
 	public void testSimple() {

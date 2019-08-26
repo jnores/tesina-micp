@@ -9,10 +9,6 @@ import java.util.Observable;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.SimpleGraph;
 
-import ar.edu.ungs.tesina.micp.inequalities.CustomInequalities;
-import ar.edu.ungs.tesina.micp.inequalities.InequalitiesFactory;
-import jscip.Scip;
-
 public class Instance<T extends Vertex, U extends Color> extends Observable {
 
 	private String mName;
@@ -21,6 +17,7 @@ public class Instance<T extends Vertex, U extends Color> extends Observable {
 	private Graph<T, Edge<T>> mConflictGraph;
 	private Graph<T, Edge<T>> mRelationshipGraph;
 	private Map<T, U> mSolution;
+	
 
 	public Instance(String name, List<T> vertices, List<U> colors) {
 
@@ -100,55 +97,4 @@ public class Instance<T extends Vertex, U extends Color> extends Observable {
 		return mName;
 	}
 
-	/**
-	 * Verifica que el Solver pasado por parametro no sea nulo
-	 * 
-	 * Si es nulo Lanza una excepción En caso de que no sea null devuelve una
-	 * instancia de la clase.
-	 * 
-	 * @param solver Una implementacion de la interfaz Solver
-	 * @param ineq   Inscancia de la interfaz CustomIneq. Este puede contener un
-	 *               contenedor de desigualdades o el ineqHelper.
-	 * 
-	 * @return Instancia del MicpScipSolver con los tipos especificados al crear la
-	 *         instancia.
-	 */
-	public MicpScipSolver<T, U> createMicp(SolverConfig solverConfig, CustomInequalities<T, U> ineq) {
-		if (solverConfig == null)
-			throw new InvalidParameterException("El parametro solverCOnfig no puede ser nulo");
-
-		String name = getName();
-
-		try {
-			System.loadLibrary("jscip");
-		} catch (UnsatisfiedLinkError ex) {
-			throw new RuntimeException("No se encontro la libreria jscip.", ex);
-		} catch (Exception ex) {
-			throw new RuntimeException("No se pudo cargar la libreria jscip.", ex);
-		}
-
-		Scip solver = new Scip();
-		solver.create("micp_app-" + name);
-
-		solver.hideOutput(!solverConfig.isVerbose());
-
-		solver.setRealParam("limits/time", solverConfig.getTimeLimit());
-		solver.setRealParam("limits/gap", solverConfig.getGapLimit());
-		solver.setRealParam("limits/memory", solverConfig.getMemoryLimit());
-
-		return new MicpScipSolver<T, U>(solver, name, solverConfig, ineq);
-	}
-
-	/**
-	 * 
-	 * @param solver Una implementacion de la interfaz Solver
-	 * @return Instancia del MicpScipSolver con los tipos especificados al crear la
-	 *         instancia.
-	 */
-	public MicpScipSolver<T, U> createMicp(SolverConfig solverConfig) {
-
-		InequalitiesFactory<T, U> ineqHelper = new InequalitiesFactory<T, U>(solverConfig);
-
-		return createMicp(solverConfig, ineqHelper.createInequalities() );
-	}
 }

@@ -24,10 +24,6 @@ import jscip.Variable;
 public class PartitionedInequalities<T extends Vertex, U extends Color>
 		extends CustomInequalities<T, U> {
 
-	public static final int PARTITIONED_INEQUALITIES = 2;
-	public static final int THREE_PARTITIONED_INEQUALITIES = 3;
-	public static final int K_PARTITIONED_INEQUALITIES = 4;
-	
 	protected List<Integer> mInequalitiesEnabled;
 
 	public PartitionedInequalities(SolverConfig solverConfig) {
@@ -42,17 +38,17 @@ public class PartitionedInequalities<T extends Vertex, U extends Color>
 		if (mInequalitiesEnabled.isEmpty())
 			return;
 
-		if (mInequalitiesEnabled.contains(PARTITIONED_INEQUALITIES)) {
+		if (mInequalitiesEnabled.contains(DefinedInequalitiesEnum.PARTITIONED_INEQUALITIES)) {
 			addPartitionedInequality(micpSolver, vertices, colors, conflictGraph,
 					relationshipGraph);
 		}
 
-		if (mInequalitiesEnabled.contains(THREE_PARTITIONED_INEQUALITIES)) {
+		if (mInequalitiesEnabled.contains(DefinedInequalitiesEnum.THREE_PARTITIONED_INEQUALITIES)) {
 			addThreePartitionedInequality(micpSolver, vertices, colors, conflictGraph,
 					relationshipGraph);
 		}
 
-		if (mInequalitiesEnabled.contains(K_PARTITIONED_INEQUALITIES)) {
+		if (mInequalitiesEnabled.contains(DefinedInequalitiesEnum.K_PARTITIONED_INEQUALITIES)) {
 			addKPartitionedInequality(micpSolver, vertices, colors, conflictGraph,
 					relationshipGraph);
 		}
@@ -68,7 +64,7 @@ public class PartitionedInequalities<T extends Vertex, U extends Color>
 	 * @param conflictGraph
 	 * @param relationshipGraph
 	 */
-	private void addPartitionedInequality(MicpScipSolver<T, U> micpSolver, List<T> vertices,
+	public void addPartitionedInequality(MicpScipSolver<T, U> micpSolver, List<T> vertices,
 			List<U> colors, Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
 
 		int len = colors.size() - 1; // 1 <= len <= |colors|-1
@@ -76,7 +72,7 @@ public class PartitionedInequalities<T extends Vertex, U extends Color>
 		Set<U> Dcomplement = generateComplement(colors, D);
 
 		int cantFactors = 1 + colors.size();
-		if (D.size()+Dcomplement.size() != colors.size())
+		if (D.size() + Dcomplement.size() != colors.size())
 			throw new RuntimeException("Los subconjuntos de D estan mal calculados");
 
 		System.out.println("Agrego PartitionedInequality para cada relacion de H: " + cantFactors);
@@ -92,39 +88,37 @@ public class PartitionedInequalities<T extends Vertex, U extends Color>
 			i = 0;
 			factors[i] = 1;
 			vars[i++] = micpSolver.getVarY(vi, vj);
-			
-			if (vars[i-1] == null)
+
+			if (vars[i - 1] == null)
 				System.out.println("debug : la variable Yij es nula! ");
 
 			for (U c : D) {
 				factors[i] = -1;
 				vars[i++] = micpSolver.getVarX(vj, c);
-				if (vars[i-1] == null)
+				if (vars[i - 1] == null)
 					System.out.println("debug : la variable Xjc es nula! ");
 			}
 
 			for (U c : Dcomplement) {
 				factors[i] = -1;
 				vars[i++] = micpSolver.getVarX(vi, c);
-				if (vars[i-1] == null)
+				if (vars[i - 1] == null)
 					System.out.println("debug : la variable Xic es nula! ");
 			}
-			
-			if ( i < vars.length)
-				throw new RuntimeException("Hay un campo vacio"); 
-			
+
+			if (i < vars.length)
+				throw new RuntimeException("Hay un campo vacio");
 
 			Constraint diferentColorsOnConflict = micpSolver.getSolver().createConsLinear(
 					"VertexCliqueInequality-" + vi + "-" + vj, vars, factors, -2, 0);
-			
-			
+
 			micpSolver.getSolver().addCons(diferentColorsOnConflict);
 			micpSolver.getSolver().releaseCons(diferentColorsOnConflict);
 		}
 
 	}
 
-	private void addThreePartitionedInequality(MicpScipSolver<T, U> micpSolver, List<T> vertices,
+	public void addThreePartitionedInequality(MicpScipSolver<T, U> micpSolver, List<T> vertices,
 			List<U> colors, Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
 
 		int len = colors.size() - 1; // 2 <= len <= |colors|-1
@@ -133,7 +127,7 @@ public class PartitionedInequalities<T extends Vertex, U extends Color>
 		Set<U> D2 = generateComplement(D, D1);
 
 		int cantFactors = 3 + 2 * D.size();
-		if (D1.size()+D2.size() != D.size())
+		if (D1.size() + D2.size() != D.size())
 			throw new RuntimeException("Los subconjuntos de D1 y D2 estan mal calculados");
 
 		System.out.println("Agrego 3-PartitionedInequality para cada relaion de H: " + cantFactors);
@@ -153,40 +147,40 @@ public class PartitionedInequalities<T extends Vertex, U extends Color>
 					i = 0;
 					factors[i] = 1;
 					vars[i++] = micpSolver.getVarY(vi, vj);
-					if (vars[i-1] == null)
+					if (vars[i - 1] == null)
 						System.out.println("debug : la variable Yij es nula! ");
 					factors[i] = 1;
 					vars[i++] = micpSolver.getVarY(vj, vk);
-					if (vars[i-1] == null)
+					if (vars[i - 1] == null)
 						System.out.println("debug : la variable Yjk es nula! ");
 					factors[i] = 1;
 					vars[i++] = micpSolver.getVarY(vi, vk);
-					if (vars[i-1] == null)
+					if (vars[i - 1] == null)
 						System.out.println("debug : la variable Yik es nula! ");
 
 					for (U c : D1) {
 						factors[i] = -2;
 						vars[i++] = micpSolver.getVarX(vj, c);
-						if (vars[i-1] == null)
+						if (vars[i - 1] == null)
 							System.out.println("debug : la variable Xid1 es nula! ");
 						factors[i] = 2;
 						vars[i++] = micpSolver.getVarX(vi, c);
-						if (vars[i-1] == null)
+						if (vars[i - 1] == null)
 							System.out.println("debug : la variable Xid2 es nula! ");
 					}
 
 					for (U c : D2) {
 						factors[i] = -2;
 						vars[i++] = micpSolver.getVarX(vk, c);
-						if (vars[i-1] == null)
+						if (vars[i - 1] == null)
 							System.out.println("debug : la variable Xic es nula! ");
 						factors[i] = 2;
 						vars[i++] = micpSolver.getVarX(vi, c);
-						if (vars[i-1] == null)
+						if (vars[i - 1] == null)
 							System.out.println("debug : la variable Xic es nula! ");
 					}
-					
-					if ( i < vars.length)
+
+					if (i < vars.length)
 						throw new RuntimeException("Hay un campo vacio");
 
 					Constraint diferentColorsOnConflict = micpSolver.getSolver().createConsLinear(
@@ -200,7 +194,7 @@ public class PartitionedInequalities<T extends Vertex, U extends Color>
 
 	}
 
-	private void addKPartitionedInequality(MicpScipSolver<T, U> micpSolver, List<T> vertices,
+	public void addKPartitionedInequality(MicpScipSolver<T, U> micpSolver, List<T> vertices,
 			List<U> colors, Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
 
 		throw new RuntimeException(

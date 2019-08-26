@@ -19,14 +19,11 @@ import ar.edu.ungs.tesina.micp.Vertex;
 import jscip.Constraint;
 import jscip.Variable;
 
-public class CliqueInequalities<T extends Vertex, U extends Color> extends CustomInequalities<T,U> {
-	public static final int VERTEX_CLIQUE_INEQUALITIES = 5;
-	public static final int CLIQUE_PARTITIONED_INEQUALITIES = 6;
-	public static final int SUB_CLIQUE_INEQUALITIES = 7;
-	public static final int TWO_COLOR_SUB_CLIQUE_INEQUALITIES = 8;
+public class CliqueInequalities<T extends Vertex, U extends Color>
+		extends CustomInequalities<T, U> {
 
 	protected List<Integer> mInequalitiesEnabled;
-	
+
 	public CliqueInequalities(SolverConfig solverConfig) {
 		mInequalitiesEnabled = solverConfig.getInequalitiesEnabled();
 	}
@@ -43,19 +40,16 @@ public class CliqueInequalities<T extends Vertex, U extends Color> extends Custo
 	 * @param relationshipGraph
 	 */
 	@Override
-	public void addInequalities(MicpScipSolver<T,U> micpSolver, List<T> vertices,
-			List<U> colors, Graph<T, Edge<T>> conflictGraph,
-			Graph<T, Edge<T>> relationshipGraph) {
+	public void addInequalities(MicpScipSolver<T, U> micpSolver, List<T> vertices, List<U> colors,
+			Graph<T, Edge<T>> conflictGraph, Graph<T, Edge<T>> relationshipGraph) {
 
 		// Si no se selecciono ninguna inequality, se termina el metodo.
-		if ( mInequalitiesEnabled.isEmpty() 
-				|| ! (
-						mInequalitiesEnabled.contains(CLIQUE_PARTITIONED_INEQUALITIES)
-						|| mInequalitiesEnabled.contains(VERTEX_CLIQUE_INEQUALITIES)
-						|| mInequalitiesEnabled.contains(SUB_CLIQUE_INEQUALITIES)
-						|| mInequalitiesEnabled.contains(TWO_COLOR_SUB_CLIQUE_INEQUALITIES)
-						)
-				)
+		if (mInequalitiesEnabled.isEmpty() || !(mInequalitiesEnabled
+				.contains(DefinedInequalitiesEnum.CLIQUE_PARTITIONED_INEQUALITIES)
+				|| mInequalitiesEnabled.contains(DefinedInequalitiesEnum.VERTEX_CLIQUE_INEQUALITIES)
+				|| mInequalitiesEnabled.contains(DefinedInequalitiesEnum.SUB_CLIQUE_INEQUALITIES)
+				|| mInequalitiesEnabled
+						.contains(DefinedInequalitiesEnum.TWO_COLOR_SUB_CLIQUE_INEQUALITIES)))
 			return;
 
 		// Busco todas las cliques que cumplan con Figure 1.
@@ -82,19 +76,23 @@ public class CliqueInequalities<T extends Vertex, U extends Color> extends Custo
 					}
 					System.out.println(" ]");
 
-					if ( mInequalitiesEnabled.contains( VERTEX_CLIQUE_INEQUALITIES ) ) {
+					if (mInequalitiesEnabled
+							.contains(DefinedInequalitiesEnum.VERTEX_CLIQUE_INEQUALITIES)) {
 						addVertexCliqueInequality(micpSolver, v, cliqueVertex);
 					}
 
-					if ( mInequalitiesEnabled.contains( CLIQUE_PARTITIONED_INEQUALITIES ) ) {
+					if (mInequalitiesEnabled
+							.contains(DefinedInequalitiesEnum.CLIQUE_PARTITIONED_INEQUALITIES)) {
 						addCliquePartitionedInequality(micpSolver, v, cliqueVertex, colors);
 					}
 
-					if ( mInequalitiesEnabled.contains( SUB_CLIQUE_INEQUALITIES ) ) {
+					if (mInequalitiesEnabled
+							.contains(DefinedInequalitiesEnum.SUB_CLIQUE_INEQUALITIES)) {
 						addSubCliqueInequality(micpSolver, v, cliqueVertex, colors);
 					}
 
-					if ( mInequalitiesEnabled.contains( TWO_COLOR_SUB_CLIQUE_INEQUALITIES ) ) {
+					if (mInequalitiesEnabled
+							.contains(DefinedInequalitiesEnum.TWO_COLOR_SUB_CLIQUE_INEQUALITIES)) {
 						addTwoColorSubCliqueInequality(micpSolver, v, cliqueVertex, colors);
 					}
 
@@ -104,8 +102,7 @@ public class CliqueInequalities<T extends Vertex, U extends Color> extends Custo
 
 	}
 
-	private void addVertexCliqueInequality(MicpScipSolver<T,U> micpSolver, T v,
-			Set<T> clique) {
+	public void addVertexCliqueInequality(MicpScipSolver<T, U> micpSolver, T v, Set<T> clique) {
 
 		// Si tengo menos de 2 elementos en la clique, no es necesario agregar
 		// la restricción.
@@ -129,8 +126,8 @@ public class CliqueInequalities<T extends Vertex, U extends Color> extends Custo
 		micpSolver.getSolver().releaseCons(constranint);
 	}
 
-	private void addCliquePartitionedInequality(MicpScipSolver<T,U> micpSolver, T v,
-			Set<T> clique, List<U> colors) {
+	public void addCliquePartitionedInequality(MicpScipSolver<T, U> micpSolver, T v, Set<T> clique,
+			List<U> colors) {
 		// TODO reescribir la funcion para poder armar la constraint
 		// dinamicamente.
 		// if clique.size() == 1, use el theorem 7
@@ -179,7 +176,7 @@ public class CliqueInequalities<T extends Vertex, U extends Color> extends Custo
 
 	}
 
-	private void addSubCliqueInequality(MicpScipSolver<T,U> micpSolver, T vi, Set<T> clique,
+	public void addSubCliqueInequality(MicpScipSolver<T, U> micpSolver, T vi, Set<T> clique,
 			List<U> colors) {
 
 		if (vi == null || clique == null || colors == null)
@@ -187,15 +184,15 @@ public class CliqueInequalities<T extends Vertex, U extends Color> extends Custo
 
 		// Si tengo menos de 2 elementos en la clique, no es necesario agregar
 		// la restricción.
-		// Es necesario que el tamaño de la clique mayor que 2 porque en la seleccion de DcC 
+		// Es necesario que el tamaño de la clique mayor que 2 porque en la
+		// seleccion de DcC
 		// Como uso el borde, |C| - |K'| +1 es igual a |C|
 		if (clique == null || clique.size() <= 2)
 			return;
-		
-		
+
 		Set<T> subclique = clique;
 		System.out.println("Agrego SubCliqueInequality al vector: " + vi);
-		
+
 		T vj = clique.iterator().next();
 		subclique.remove(vj);
 		if (subclique.size() >= colors.size())
@@ -246,14 +243,14 @@ public class CliqueInequalities<T extends Vertex, U extends Color> extends Custo
 	}
 
 	/**
-	 * Let K c V a clique in G and i \in V-K : ik \in Eh \forall k \in K. 
+	 * Let K c V a clique in G and i \in V-K : ik \in Eh \forall k \in K.
 	 * 
 	 * @param micpSolver
 	 * @param vi
 	 * @param clique
 	 * @param colors
 	 */
-	private void addTwoColorSubCliqueInequality(MicpScipSolver<T,U> micpSolver, T vi,
+	public void addTwoColorSubCliqueInequality(MicpScipSolver<T, U> micpSolver, T vi,
 			Set<T> clique, List<U> colors) {
 		// TODO Armar la desigualdad correspondiente en base de
 		// CliquePartitionedInequality.
@@ -263,25 +260,25 @@ public class CliqueInequalities<T extends Vertex, U extends Color> extends Custo
 		// COMPLICAO!!
 		if (vi == null || clique == null || colors == null)
 			return;
-		if (clique.size() >=  colors.size())
+		if (clique.size() >= colors.size())
 			return;
-		if (clique.size() <  2)
+		if (clique.size() < 2)
 			return;
 
 		System.out.println("Agrego TwoColorSubCliqueInequality al vector: " + vi);
 
 		Set<T> subclique = clique;
-		
+
 		T vj = clique.iterator().next();
 		subclique.remove(vj);
 
 		// D != 0 y |D'| = |K'| Y |D| <= |C| - ( |D'| + 1 )
 		Set<U> Dprima = generateColorsSubset(colors, subclique.size());
 		Set<U> D = generateComplement(colors, Dprima); // Esto no deberia
-															// ser un
-															// complement.
-															// deberia tener una
-															// antidad random
+														// ser un
+														// complement.
+														// deberia tener una
+														// antidad random
 
 		int cantFactors = 1 + subclique.size() + colors.size()
 				+ Dprima.size() * (2 + subclique.size());
@@ -315,10 +312,10 @@ public class CliqueInequalities<T extends Vertex, U extends Color> extends Custo
 		for (U c : Dprima) {
 			factors[i] = -1;
 			vars[i++] = micpSolver.getVarX(vi, c);
-			
+
 			factors[i] = 2;
 			vars[i++] = micpSolver.getVarX(vj, c);
-			
+
 			for (T auxV : subclique) {
 				factors[i] = 1;
 				vars[i++] = micpSolver.getVarX(auxV, c);
